@@ -9,6 +9,7 @@ screen = pygame.display.set_mode((400, 300))
 #On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
+
 run = True
 
 #Tant que le jeu tourne
@@ -19,8 +20,10 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    #<-> Mettre la logique du programme <->
+    #On desine un rectange rouge
+    rect = pygame.draw.rect(screen, (255,0,0),  pygame.Rect(100, 200, 100, 100))
 
+    #<-> Mettre la logique du programme <->
 
     #<-> Fin de la logique <->
 
