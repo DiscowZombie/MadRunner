@@ -4,10 +4,38 @@ import pygame
 pygame.init()
 
 #On charge une fenetre de 400 par 300
-screen = pygame.display.set_mode((400, 300))
+screen = pygame.display.set_mode((640, 480))
+screen.fill((255, 255, 255))
+pygame.display.set_caption("MadRunner")
+
+ImageMenu = pygame.image.load("menu_fond.png").convert_alpha()
+pygame.display.set_icon(ImageMenu) # Icone du jeu
 
 #On charge l'horloge de pygame
 clock = pygame.time.Clock()
+
+#Le bel effet d'apparition
+for i in range(1, 101):
+    """on peut utiliser ces 3 lignes pour completement renouveler l'ecran, mais je trouve que ca donnait un resultat moins beau, tu peux essayer"""
+    #a = pygame.Surface((640,480)) # une surface
+    #a.fill((255,255,255))
+    #fenetre.blit(a,(0,0)) # position finale: 220 sur 100
+
+    Surface = pygame.Surface((200,200)) # la surface ou on va mettre le titre du jeu et l'image du jeu
+    Surface.fill((255,255,255))
+    Surface.set_alpha(int(2.55*i)) # alpha finale: 255 (opaque)
+
+    Texte = pygame.font.SysFont("arial", int(0.44*i)) # taille finale du font: 44
+    SurfaceTexte = Texte.render("Mad Runner", True, (0,0,0))
+    Surface.blit(SurfaceTexte,(100 - i,0)) # position finale: 0 sur 0
+
+    Icone = pygame.transform.scale(ImageMenu,(2*i,int(1.2*i))) # taille finale: 200 sur 120
+    Surface.blit(Icone,(100 - i,140 - int(0.6*i))) # position finale: 0 sur 80
+
+    screen.blit(Surface,(220,120)) # position finale: 220 sur 120
+    pygame.display.flip() # acutalise ce qui doit etre affichee
+
+    #time.sleep(0.1) # j'utilisait ca pour voir si l'animation etait assez fluide ou pas
 
 
 run = True
@@ -19,9 +47,6 @@ while run:
         #Si on appuie sur la croix pour fermer le programme
         if event.type == pygame.QUIT:
             run = False
-
-    #On desine un rectange rouge
-    rect = pygame.draw.rect(screen, (255,0,0),  pygame.Rect(100, 200, 100, 100))
 
     #<-> Mettre la logique du programme <->
 
