@@ -1,3 +1,4 @@
 .idea/
 venv/
 Thumbs.db
+__pycache__/
