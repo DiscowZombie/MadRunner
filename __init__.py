@@ -31,6 +31,10 @@ while run:
         #Si on appuie sur la croix pour fermer le programme
         if event.type == pygame.QUIT:
             run = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            functions.click_souris(event.dict['pos'], event.dict['button'])
+        elif event.type == pygame.KEYDOWN:
+            functions.click_clavier(event)
 
     #<-> Mettre la logique du programme <->
 
