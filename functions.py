@@ -95,3 +95,8 @@ def click_clavier(event):
     for k, v in event.dict.items():
         print(k, v)
     print()
+
+
+def isvalidint(supposedint):
+    var = True if (supposedint is not None and int(supposedint) is not None) else False
+    return var

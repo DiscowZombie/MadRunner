@@ -44,8 +44,9 @@ while run:
 
     # On met à jour l'écran
     pygame.display.flip()
-    # On limite à 60 fps
-    clock.tick(settings.Settings().getsetting("limit_fps"))
+    # On limite à 60 fps ou à la valeur en config si elle est valide
+    # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
+    clock.tick(settings.Settings().getsetting("limit_fps") if functions.isvalidint(settings.Settings().getsetting("limit_fps")) else 60)
 
 # On quitte le module
 pygame.quit()
