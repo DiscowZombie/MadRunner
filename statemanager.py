@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class StateEnum(Enum):
     """
     Une énumration des états de jeu
@@ -9,15 +10,16 @@ class StateEnum(Enum):
     SETTINGS_MENU = "",
     PLAYING = ""
 
-class StateManager:
 
-    laststate = None #None = Null (on peut utiliser if... is None)
+class StateManager:
+    laststate = None  # None = Null (on peut utiliser if... is None)
 
     """
     Change l'état de jeu
     <p>
     :param state - L'état de jeu (un StateEnum ou None)
     """
+
     @staticmethod
     def setstate(state):
         StateManager.laststate = state
@@ -25,4 +27,3 @@ class StateManager:
     @staticmethod
     def getstate():
         return StateManager.laststate
-
