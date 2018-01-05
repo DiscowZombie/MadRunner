@@ -55,13 +55,9 @@ def drawmenu(pygame, screen):
 
     i = 0
     for bouton in ["Jouer", "Statistiques", "Paramètres"]:
-<<<<<<< HEAD
-        toolbox.Button().createOnMainWindow(pygame, bouton, SurfaceTrans, constantes.GRAY, constantes.BLACK, i, 24, True, True, 0)
-        i+=1
-=======
-        toolbox.Button().createonmainwindow(pygame, bouton, surfacetrans, constantes.GRAY, constantes.BLACK, i)
+        toolbox.Button().createonmainwindow(pygame, bouton, surfacetrans, constantes.GRAY, constantes.BLACK, i, 24,
+                                            True, True, 0)
         i += 1
->>>>>>> 963e8167634566f3825aa1196c550ca9f520f469
 
     screen.blit(surfacetrans, (120, 150))
     # RAPPELS:
@@ -80,7 +76,7 @@ def click_souris(coords, button):
     # 5: Scroll vers le bas
     x = coords[0]
     y = coords[1]
-    if x >= 80 and x <= 560: # 480 + 80
+    if x >= 80 and x <= 560:  # 480 + 80
         """
         On clique sur un bouton du menu, ou du moins à l'endroit ou il doit y avoir les boutons du menu principal
         Par la suite, il faudra vérifier si on est dans le menu principal ou pas !!!
