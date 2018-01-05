@@ -1,17 +1,17 @@
-#Les imports extérieur
+#Les imports extérieurs
 import pygame
 from pygame.locals import *
 import time
 #Nos imports interieur
 import functions
 
-#On itialise le module
+#On initialise le module
 pygame.init()
 
-#On charge une fenetre de 640 par 480
+#On charge une fenêtre de 640 par 480
 screen = pygame.display.set_mode((640, 480))
 screen.fill((255, 255, 255))
-pygame.display.set_caption("MadRunner")
+pygame.display.set_caption("Mad Runner")
 
 ImageMenu = pygame.image.load("assets/img/menu_fond.png").convert_alpha()
 pygame.display.set_icon(ImageMenu) # Icone du jeu
@@ -19,7 +19,7 @@ pygame.display.set_icon(ImageMenu) # Icone du jeu
 #On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
-functions.drawstarting(pygame, ImageMenu, screen, time)
+functions.drawstarting(pygame, screen, ImageMenu, time)
 functions.drawmenu(pygame, screen)
 
 run = True
