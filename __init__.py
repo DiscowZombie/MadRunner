@@ -4,6 +4,8 @@ from pygame.locals import *
 import time
 # Nos imports interieur
 import functions
+# Quelques utilitaires
+import toolbox
 # Les options
 import settings
 
@@ -21,8 +23,8 @@ pygame.display.set_icon(ImageMenu) # Icone du jeu
 # On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
-functions.drawstarting(pygame, screen, ImageMenu, time)
-functions.drawmenu(pygame, screen)
+gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time)
+gamethread.start()
 
 run = True
 
@@ -43,7 +45,7 @@ while run:
     # <-> Fin de la logique <->
 
     # On met à jour l'écran
-    pygame.display.flip()
+    time.sleep(0.01)
     # On limite à 60 fps ou à la valeur en config si elle est valide
     # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
     clock.tick(settings.Settings().getsetting("limit_fps") if functions.isvalidint(settings.Settings().getsetting("limit_fps")) else 60)

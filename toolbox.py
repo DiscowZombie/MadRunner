@@ -1,4 +1,5 @@
 import functions as f
+from threading import Thread
 
 
 class Button:
@@ -46,3 +47,16 @@ class Button:
         texte = pygame.font.SysFont('Arial', 25)
         positionx, positiony = f.centretexte(texte.size(name), (400, 50))
         surface_bouton.blit(texte.render(str(name), True, couleur_text), (positionx, 75 + positiony))
+
+class RunGame(Thread):
+
+    def __init__(self, pygame, screen, ImageMenu, time):
+        Thread.__init__(self)
+        self.pygame = pygame
+        self.screen = screen
+        self.ImageMenu = ImageMenu
+        self.time = time
+
+    def run(self):
+        f.drawstarting(self.pygame, self.screen, self.ImageMenu, self.time)
+        f.drawmenu(self.pygame, self.screen)
