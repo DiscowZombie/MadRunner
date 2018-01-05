@@ -2,3 +2,4 @@
 venv/
 Thumbs.db
 __pycache__/
+test.py/

@@ -4,6 +4,8 @@ from pygame.locals import *
 import time
 #Nos imports interieur
 import functions
+#Les options
+import settings
 
 #On initialise le module
 pygame.init()
@@ -43,7 +45,7 @@ while run:
     #On met à jour l'écran
     pygame.display.flip()
     #On limite à 60 fps
-    clock.tick(60)
+    clock.tick(settings.Settings().getSetting("limit_fps"))
 
 #On quitte le module
 pygame.quit()

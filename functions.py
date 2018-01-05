@@ -1,10 +1,10 @@
 import constantes
+import toolbox
 
 def CentreTexte(textsize,espace): # utilitaire pour center un texte ! Retourne la position x et y du texte
     return int(espace[0]/2 - textsize[0]/2),int(espace[1]/2 - textsize[1]/2)
 
 """On déssine la belle apparition du logo"""
-
 def drawstarting(pygame, screen, ImageMenu, time):
     def drawtitle(i, reverse):  # i va de 0 (debut de l'animation) a 100 (fin de l'animation)
         alpha = None
@@ -44,23 +44,17 @@ def drawstarting(pygame, screen, ImageMenu, time):
 
 
 """On déssine le menu : Jouer, Statistiques, Paramètres"""
-
 def drawmenu(pygame, screen):
     fond = pygame.image.load("assets/img/background_temporaire.jpg").convert()
     screen.blit(fond, (0, 0))
     SurfaceTrans = pygame.Surface([400,200], pygame.SRCALPHA, 32) # la surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
     SurfaceTrans = SurfaceTrans.convert_alpha() # il faut cependant que la surface a un arrière plan transparent
-    couleurbouton = (192, 192, 192)  # gris
-    couleurtexte = (0,0,0) # noir
-    i = 0 # i correspond au numéro du bouton
+
+    i = 0
     for bouton in ["Jouer", "Statistiques", "Paramètres"]:
-        """Param : screen, color, (x,y,width,height), thickness"""
-        """Formule plus simple non ?"""
-        pygame.draw.rect(SurfaceTrans, couleurbouton, [0, 75*i, 400, 50], 0)
-        texte = pygame.font.SysFont('Arial', 25)
-        positionx,positiony = CentreTexte(texte.size(bouton),(400,50))
-        SurfaceTrans.blit(texte.render(str(bouton), True, couleurtexte), (positionx, 75*i + positiony))
-        i += 1
+        toolbox.Button().createOnMainWindow(pygame, bouton, SurfaceTrans, constantes.GRAY, constantes.BLACK, i)
+        i+=1
+
     screen.blit(SurfaceTrans,(120,150))
     # RAPPELS:
     # position x des boutons: 120 à 520
