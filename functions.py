@@ -55,8 +55,13 @@ def drawmenu(pygame, screen):
 
     i = 0
     for bouton in ["Jouer", "Statistiques", "Paramètres"]:
+<<<<<<< HEAD
+        toolbox.Button().createOnMainWindow(pygame, bouton, SurfaceTrans, constantes.GRAY, constantes.BLACK, i, 24, True, True, 0)
+        i+=1
+=======
         toolbox.Button().createonmainwindow(pygame, bouton, surfacetrans, constantes.GRAY, constantes.BLACK, i)
         i += 1
+>>>>>>> 963e8167634566f3825aa1196c550ca9f520f469
 
     screen.blit(surfacetrans, (120, 150))
     # RAPPELS:
