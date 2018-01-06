@@ -4,8 +4,8 @@ from pygame.locals import *
 import time
 # Nos imports interieur
 import functions
-# Gérer l'affichage
-import View
+# Gère les contrôles
+import Controller
 # Quelques utilitaires
 import toolbox
 # Les options
@@ -25,32 +25,20 @@ pygame.display.set_icon(ImageMenu) # Icone du jeu
 # On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
-viewthread = View.View(pygame)
-viewthread.start()
+controls = Controller.Controller()
 
-gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time, viewthread)
+gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time)
 gamethread.start()
 
-run = True
+running = True
 
-# Tant que le jeu tourne
-while run:
+while running:
     # Les events:
-    for event in pygame.event.get():
-        # Si on appuie sur la croix pour fermer le programme
-        if event.type == pygame.QUIT:
-            run = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            functions.click_souris(event.dict['pos'], event.dict['button'])
-        elif event.type == pygame.KEYDOWN:
-            functions.click_clavier(event)
 
-    # <-> Mettre la logique du programme <->
+    running = controls.CheckEvents()
 
-    # <-> Fin de la logique <->
-
-    # On met à jour l'écran
     time.sleep(0.01)
+
     # On limite à 60 fps ou à la valeur en config si elle est valide
     # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
     clock.tick(settings.Settings().getsetting("limit_fps") if functions.isvalidint(settings.Settings().getsetting("limit_fps")) else 60)

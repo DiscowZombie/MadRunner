@@ -28,7 +28,7 @@ class Button:
     :param centeredy - Le texte est-il centré sur l'axe y ?
     :param offset - Le nombre de pixels de décalage par rapport à sa position normale
     """
-    def __init__(self, pygame, name, surface_bouton, posx, posy, width, height, couleur_bouton, bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
+    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton, bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
         pygame.draw.rect(surface_bouton, couleur_bouton, [posx, posy, width, height], bordersize)
         texte = pygame.font.SysFont(font, font_size)
         if centeredx or centeredy:
@@ -42,8 +42,8 @@ class Button:
 
         surface_bouton.blit(texte.render(str(name), True, couleur_text),(positionx + offset, posy + positiony))
 
-        self.x = posx
-        self.y = posy
+        self.x = surface_position[0] + posx
+        self.y = surface_position[1] + posy
         self.width = width
         self.height = height
         self.text = name
@@ -57,19 +57,20 @@ class Button:
     def destroy(self):
         print()
 
-    def clicked(self):
-        print()
+    def getButtons(self):
+        global boutons
+        return boutons
+
 
 class RunGame(Thread):
 
-    def __init__(self, pygame, screen, ImageMenu, time, viewthread):
+    def __init__(self, pygame, screen, ImageMenu, time):
         Thread.__init__(self)
         self.pygame = pygame
         self.screen = screen
         self.ImageMenu = ImageMenu
         self.time = time
-        self.viewthread = viewthread
 
     def run(self):
-        f.drawstarting(self.pygame, self.screen, self.ImageMenu, self.time, self.viewthread)
+        f.drawstarting(self.pygame, self.screen, self.ImageMenu, self.time)
         f.drawmenu(self.pygame, self.screen)
