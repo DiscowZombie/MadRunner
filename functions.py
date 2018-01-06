@@ -5,6 +5,13 @@ import toolbox
 def centretexte(textsize, espace):  # Utilitaire pour center un texte ! Retourne la position x et y du texte
     return int(espace[0] / 2 - textsize[0] / 2), int(espace[1] / 2 - textsize[1] / 2)
 
+def checkmousebouton(mousepos, buttonx, buttony, buttonwidth, buttonheight): # Utilitaire pour savoir si la souris se trouve dedans un bouton
+    posx, posy = mousepos[0], mousepos[1]
+    minx, maxx = buttonx, buttonx + buttonwidth
+    miny, maxy = buttony, buttony + buttonheight
+    if posx >= minx and posx <= maxx and posy >= miny and posy <= maxy:
+        return True
+    return False
 
 # On déssine la balle apparition du logo
 def drawstarting(pygame, screen, imagemenu, time):
@@ -49,45 +56,26 @@ def drawstarting(pygame, screen, imagemenu, time):
 def drawmenu(pygame, screen):
     fond = pygame.image.load("assets/img/background_temporaire.jpg").convert()
     screen.blit(fond, (0, 0))
-    surfacetrans = pygame.Surface([400, 200], pygame.SRCALPHA,
+    POSITION_SURFACE = (120, 150)
+    TAILLE_SURFACE = [400, 200]
+    surfacetrans = pygame.Surface(TAILLE_SURFACE, pygame.SRCALPHA,
                                   32)  # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
     surfacetrans = surfacetrans.convert_alpha()  # Il faut cependant que la surface a un arrière plan transparent
 
     i = 0
     for bouton in ["Jouer", "Statistiques", "Paramètres"]:
-        toolbox.Button().createonmainwindow(pygame, bouton, surfacetrans, constantes.GRAY, constantes.BLACK, i, 24,
-                                            True, True, 0)
+        POSX = 0
+        POSY = 75 * i
+        WIDTH = 400
+        HEIGHT = 50
+        toolbox.Button(pygame, bouton, surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0, constantes.BLACK , "Arial", 24, True, True, 0)
         i += 1
 
-    screen.blit(surfacetrans, (120, 150))
+    screen.blit(surfacetrans, POSITION_SURFACE)
     # RAPPELS:
     # position x des boutons: 120 à 520
     # position y: jouer: 150 à 200 , statistiques: 225 à 275 , paramètres: 300 à 350
     pygame.display.flip()
-
-
-# Fonction appeler lorsque l'on fait un clique avec l'un des trois boutons de la souris"""
-def click_souris(coords, button):
-    # RAPPEL, boutons possible:
-    # 1: Clique gauche
-    # 2: Clique milieu (scroll)
-    # 3: Clique droit
-    # 4: Scroll vers le haut
-    # 5: Scroll vers le bas
-    x = coords[0]
-    y = coords[1]
-    if x >= 80 and x <= 560:  # 480 + 80
-        """
-        On clique sur un bouton du menu, ou du moins à l'endroit ou il doit y avoir les boutons du menu principal
-        Par la suite, il faudra vérifier si on est dans le menu principal ou pas !!!
-        """
-        if x >= 120 and x <= 520:
-            if y >= 150 and y <= 200:
-                print("Clique sur le premier bouton (Jouer)")
-            elif y >= 225 and y <= 275:
-                print("Clique sur le deuxième bouton (Statistiques)")
-            elif y >= 300 and y <= 350:
-                print("Clique sur le troisème bouton (Paramètres)")
 
 
 def click_clavier(event):

@@ -1,14 +1,13 @@
 import functions as f
+
 from threading import Thread
 
+boutons = []
 
 class Button:
     """
     La méthode constructeur
     """
-
-    def __init__(self):
-        print()
 
     """
     Créer des boutons facilement
@@ -16,21 +15,24 @@ class Button:
     :param pygame - PyGame
     :param name - Le texte dans le bouton
     :param surface_bouton - La surface ou seront les boutons
-    :param couleur - La couleur du bouton
+    :param posx - La position x du bouton (par rapport à la gauche)
+    :param posy - La position y du bouton (par rapport au haut)
+    :param width - La largeur du bouton
+    :param height - La hauteur du bouton
+    :param couleur_bouton - La couleur du bouton
+    :param bordersize - La taille de la bordure (si c'est 0 c'est rempli)
     :param couleur_texte - La couleur du texte
-    :param bouton_id - Le numéro du bouton
-    :param font_size - La taille du font du texte
+    :param font - Le font du texte
+    :param font_size -La taille du font
     :param centeredx - Le texte est-il centré sur l'axe x ?
     :param centeredy - Le texte est-il centré sur l'axe y ?
     :param offset - Le nombre de pixels de décalage par rapport à sa position normale
     """
-
-    def createonmainwindow(self, pygame, name, surface_bouton, couleur_bouton, couleur_text, bouton_id, font_size,
-                           centeredx, centeredy, offset):
-        pygame.draw.rect(surface_bouton, couleur_bouton, [0, 75 * bouton_id, 400, 50], 0)
-        texte = pygame.font.SysFont('Arial', font_size)
+    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton, bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
+        pygame.draw.rect(surface_bouton, couleur_bouton, [posx, posy, width, height], bordersize)
+        texte = pygame.font.SysFont(font, font_size)
         if centeredx or centeredy:
-            positionx, positiony = f.centretexte(texte.size(name), (400, 50))
+            positionx, positiony = f.centretexte(texte.size(name), (width, height))
             if not centeredx:
                 positionx = 0
             if not centeredy:
@@ -38,15 +40,27 @@ class Button:
         else:
             positionx, positiony = 0, 0
 
-        surface_bouton.blit(texte.render(str(name), True, couleur_text),
-                            (positionx + offset, 75 * bouton_id + positiony))
+        surface_bouton.blit(texte.render(str(name), True, couleur_text),(positionx + offset, posy + positiony))
 
-    @staticmethod
-    def create(pygame, name, surface_bouton, couleur_bouton, couleur_text):
-        pygame.draw.rect(surface_bouton, couleur_bouton, [0, 75, 400, 50], 0)
-        texte = pygame.font.SysFont('Arial', 25)
-        positionx, positiony = f.centretexte(texte.size(name), (400, 50))
-        surface_bouton.blit(texte.render(str(name), True, couleur_text), (positionx, 75 + positiony))
+        self.x = surface_position[0] + posx
+        self.y = surface_position[1] + posy
+        self.width = width
+        self.height = height
+        self.text = name
+
+        global boutons
+        boutons.append(self)
+
+    def Tween(self, posx, posy, width, height, duration): # transition linéaire
+        print()
+
+    def destroy(self):
+        print()
+
+    def getButtons(self):
+        global boutons
+        return boutons
+
 
 class RunGame(Thread):
 
