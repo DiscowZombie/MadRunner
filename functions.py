@@ -5,13 +5,16 @@ import toolbox
 def centretexte(textsize, espace):  # Utilitaire pour center un texte ! Retourne la position x et y du texte
     return int(espace[0] / 2 - textsize[0] / 2), int(espace[1] / 2 - textsize[1] / 2)
 
-def checkmousebouton(mousepos, buttonx, buttony, buttonwidth, buttonheight): # Utilitaire pour savoir si la souris se trouve dedans un bouton
+
+def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
+                     buttonheight):  # Utilitaire pour savoir si la souris se trouve dedans un bouton
     posx, posy = mousepos[0], mousepos[1]
     minx, maxx = buttonx, buttonx + buttonwidth
     miny, maxy = buttony, buttony + buttonheight
     if posx >= minx and posx <= maxx and posy >= miny and posy <= maxy:
         return True
     return False
+
 
 # On déssine la balle apparition du logo
 def drawstarting(pygame, screen, imagemenu, time):
@@ -68,7 +71,8 @@ def drawmenu(pygame, screen):
         POSY = 75 * i
         WIDTH = 400
         HEIGHT = 50
-        toolbox.Button(pygame, bouton, surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0, constantes.BLACK , "Arial", 24, True, True, 0)
+        toolbox.Button(pygame, bouton, surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
+                       constantes.BLACK, "Arial", 24, True, True, 0)
         i += 1
 
     screen.blit(surfacetrans, POSITION_SURFACE)

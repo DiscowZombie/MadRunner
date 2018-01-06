@@ -2,12 +2,13 @@ import pygame
 import toolbox
 import functions
 
+
 class Controller:
 
     def __init__(self):
         self.PressingKeys = []
 
-    def CheckEvents(self):
+    def checkevents(self):
         for event in pygame.event.get():
             # Si on appuie sur la croix pour fermer le programme
             if event.type == pygame.QUIT:
@@ -19,7 +20,7 @@ class Controller:
                 # 3: Clique droit
                 # 4: Scroll vers le haut
                 # 5: Scroll vers le bas
-                if event.button == 1: # clic gauche
+                if event.button == 1:  # clic gauche
                     boutons = toolbox.Button.getButtons(self)
                     mousepos = event.pos
                     for bouton in boutons:
@@ -30,7 +31,3 @@ class Controller:
             elif event.type == pygame.KEYDOWN:
                 print("ok")
         return True
-
-
-
-

@@ -5,7 +5,7 @@ import time
 # Nos imports interieur
 import functions
 # Gère les contrôles
-import Controller
+import controller
 # Quelques utilitaires
 import toolbox
 # Les options
@@ -25,7 +25,7 @@ pygame.display.set_icon(ImageMenu) # Icone du jeu
 # On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
-controls = Controller.Controller()
+controls = controller.Controller()
 
 gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time)
 gamethread.start()
@@ -35,7 +35,7 @@ running = True
 while running:
     # Les events:
 
-    running = controls.CheckEvents()
+    running = controls.checkevents()
 
     time.sleep(0.01)
 
