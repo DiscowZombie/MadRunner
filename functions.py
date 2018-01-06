@@ -7,7 +7,7 @@ def centretexte(textsize, espace):  # Utilitaire pour center un texte ! Retourne
 
 
 # On déssine la balle apparition du logo
-def drawstarting(pygame, screen, imagemenu, time):
+def drawstarting(pygame, screen, imagemenu, time, viewthread):
     def drawtitle(i, reverse):  # i va de 0 (debut de l'animation) a 100 (fin de l'animation)
         alpha = None
         if reverse:
@@ -31,16 +31,18 @@ def drawstarting(pygame, screen, imagemenu, time):
         surface.blit(icone, (100 - i, 140 - int(0.6 * i)))  # position finale: 0 sur 80
 
         screen.blit(surface, (220, 120))  # position finale: 220 sur 120
-        pygame.display.flip()  # acutalise ce qui doit etre affichee
+        #pygame.display.flip()  # acutalise ce qui doit etre affichee
 
     # Le bel effet d'apparition
     for i in range(1, 101):
-        drawtitle(i, False)
+        viewthread.WaitFlip(drawtitle, i, False)
+        #drawtitle(i, False)
 
     time.sleep(2)
 
     for i in range(1, 101):
-        drawtitle(i, True)
+        viewthread.WaitFlip(drawtitle, i, False)
+        #drawtitle(i, True)
 
     time.sleep(0.5)
 
@@ -55,15 +57,18 @@ def drawmenu(pygame, screen):
 
     i = 0
     for bouton in ["Jouer", "Statistiques", "Paramètres"]:
-        toolbox.Button().createonmainwindow(pygame, bouton, surfacetrans, constantes.GRAY, constantes.BLACK, i, 24,
-                                            True, True, 0)
+        POSX = 0
+        POSY = 75 * i
+        WIDTH = 400
+        HEIGHT = 50
+        toolbox.Button(pygame, bouton, surfacetrans, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0, constantes.BLACK , "Arial", 24, True, True, 0)
         i += 1
 
     screen.blit(surfacetrans, (120, 150))
     # RAPPELS:
     # position x des boutons: 120 à 520
     # position y: jouer: 150 à 200 , statistiques: 225 à 275 , paramètres: 300 à 350
-    pygame.display.flip()
+    #pygame.display.flip()
 
 
 # Fonction appeler lorsque l'on fait un clique avec l'un des trois boutons de la souris"""

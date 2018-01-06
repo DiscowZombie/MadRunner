@@ -5,10 +5,10 @@ class StateEnum(Enum):
     """
     Une énumration des états de jeu
     """
-    MAIN_MENU = "",
-    STATS_MENU = "",
-    SETTINGS_MENU = "",
-    PLAYING = ""
+    MAIN_MENU = "main_menu",
+    STATS_MENU = "stats_menu",
+    SETTINGS_MENU = "settings_menu",
+    PLAYING = "playing"
 
 
 class StateManager:

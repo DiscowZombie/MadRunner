@@ -4,6 +4,8 @@ from pygame.locals import *
 import time
 # Nos imports interieur
 import functions
+# Gérer l'affichage
+import View
 # Quelques utilitaires
 import toolbox
 # Les options
@@ -23,7 +25,10 @@ pygame.display.set_icon(ImageMenu) # Icone du jeu
 # On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
-gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time)
+viewthread = View.View(pygame)
+viewthread.start()
+
+gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time, viewthread)
 gamethread.start()
 
 run = True
