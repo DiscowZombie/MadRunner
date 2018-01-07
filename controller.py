@@ -5,8 +5,9 @@ import functions
 
 class Controller:
 
-    def __init__(self):
-        self.PressingKeys = []
+    def __init__(self,view):
+        self.pressing_buttons = {}
+        self.view = view
 
     def checkevents(self):
         for event in pygame.event.get():
@@ -20,14 +21,19 @@ class Controller:
                 # 3: Clique droit
                 # 4: Scroll vers le haut
                 # 5: Scroll vers le bas
-                if event.button == 1:  # clic gauche
-                    boutons = toolbox.Button.getButtons(self)
-                    mousepos = event.pos
-                    for bouton in boutons:
-                        IsIn = functions.checkmousebouton(mousepos, bouton.x, bouton.y, bouton.width, bouton.height)
-                        if IsIn:
-                            print("clic sur bouton avec texte " + bouton.text)
+                button_number = event.button
+                self.pressing_buttons["Mouse" + str(button_number)] = True
+                if button_number == 1:  # clic gauche
+                    self.view.mousebutton1down(event.pos)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                button_number = event.button
+                self.pressing_buttons["Mouse" + str(button_number)] = False
+                if button_number == 1:  # clic gauche
+                    self.view.mousebutton1up(event.pos)
 
             elif event.type == pygame.KEYDOWN:
                 print("ok")
         return True
+
+    def getpressingbuttons(self):
+        return self.pressing_buttons

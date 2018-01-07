@@ -5,7 +5,7 @@ from threading import Thread
 boutons = []
 
 
-class Button:
+class Button(object):
     """
     La méthode constructeur
     """
@@ -50,11 +50,18 @@ class Button:
         self.width = width
         self.height = height
         self.text = name
+        self.mousein = False
+        self.clicking = False
 
         global boutons
         boutons.append(self)
 
-    def Tween(self, posx, posy, width, height, duration):  # transition linéaire
+    def __setattr__(self, attr_name, attr_value): # dès qu'on chage la valeur d'un attribut...
+        object.__setattr__(self, attr_name, attr_value) # on lui met la valeur correspondante
+        if attr_name == "mousein" and attr_value:
+            print("clic sur " + self.text)
+
+    def tween(self, posx, posy, width, height, duration):  # transition linéaire
         print()
 
     def destroy(self):
