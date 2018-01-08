@@ -1,0 +1,32 @@
+Cahier des charges / Fonctionnalités du jeu
+
+    Nom du jeu: Mad Runner (coureur fou)
+    Faire une introduction au jeu: Affichage du logo du jeu ansi que de son titre de manière progressive
+    Menu avec 3 choix : Jouer, Statistiques, Paramètres
+    2 choix de jeu: 1 joueur ou 2 joueurs
+    3 modes de jeu: "400m", "400m haie", "Course infinie"
+    3 difficultés: facile, moyen, difficile
+    Appuyer sur des touches du clavier pour obtenir des avantages lorsque cette touche s'affiche sur l'écran
+    Avantages possibles: courrir plus vite (mais énergie qui se finit plus vite), plus d'énergie, plus d'endurance (énergie qui se finit plus lentement)
+    Le courreur sera affiché en haut de l'écran (environ 3/4 de la hauteur), et les touches à appuyer en bas (prend le reste de la hauteur)
+    Barre d'énergie en haut au milieu
+    Vitesse en km × h-¹ en haut à gauche
+    Les avantages disparaissent au bout d'un certain temps, et plus la difficulté est élevé, plus ils disparaissent vite
+    Les avantages disparaissent plus vite au fur et à mesure qu'on avance dans la course
+    Vers la fin de la course, mettre plein d'avantages à la suite pour confondre le joueur surtout dans 400m haie
+    Dans "Course infinie", mettre les avantages de plus en plus vite
+    Mettre tout de même une limite du nombre d'avantages qui peuvent être mis à la fois
+    Si on se trompe de touche, on fait le contraire de l'avantage
+    Personnage qui évolue avec l'expérience: personnage en surpoids et non-sportif au début (court pas vite et dépense plus d'énergie), puis amélioration sur le personnage (perdre du poids, être plus sportif et donc utiliser moins d'énergie)
+    Différent décors pour la course (arrière plan): Jeux Olympiques, Athènes, Forêt
+    Dans "Course infinie", le courreur est coursé par quelque chose qui dépend du décor
+    Idées de courseurs: pour le décor Jeux Olymiques: une foule de personnes en colère, pour Athènes: un combattant avec une épée, pour la forêt: des loups
+    Dans "Course infinie", le jeu s'arrête lorque le courreur est rattrapé par le courseur
+    Le courseur court de plus en plus vite
+    Le mode "Course" infinie" aura des obstacles qui dépendent du décor
+    Dans le "400m haie" et "Course infinie", appuyer sur Espace pour sauter et éviter les haies ou les obstacles, mais cela consomme de l'énergie. Si on rate une haie, on perd de la vitesse
+    Dans le mode 2 joueurs, le gagant est celui qui arrive en premier à l'arrivé, et dans "Course infinie", c'est celui qui survie le plus longtemps
+    Le score dans "400m" et "400m haie" est le temps mis pour tout parcourir, et dans "Course infinie", c'est la distance parcourue
+    Tableau des scores en ligne (dans le jeu + dans un site web) du meilleur score parmi tous les joueurs), dans la section Statistiques (au menu principal)
+    Tableau des scores local (meilleur score personnel)
+    Possibilité de régler la musique du jeu (le désactiver ou l'activer)
