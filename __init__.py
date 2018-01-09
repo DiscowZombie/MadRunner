@@ -29,6 +29,7 @@ clock = pygame.time.Clock()
 
 view = view.View()
 controls = controller.Controller(view)
+view.addcontrollerobject(controls)
 
 gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time)
 gamethread.start()

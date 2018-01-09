@@ -41,7 +41,7 @@ def drawstarting(pygame, screen, imagemenu, time):
         surface.blit(icone, (100 - i, 140 - int(0.6 * i)))  # position finale: 0 sur 80
 
         screen.blit(surface, (220, 120))  # position finale: 220 sur 120
-        pygame.display.flip()  # acutalise ce qui doit etre affichee
+        pygame.display.update()  # acutalise ce qui doit etre affichee
 
     # Le bel effet d'apparition
     for i in range(1, 101):
@@ -65,21 +65,25 @@ def drawmenu(pygame, screen):
                                   32)  # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
     surfacetrans = surfacetrans.convert_alpha()  # Il faut cependant que la surface a un arrière plan transparent
 
-    i = 0
-    for bouton in ["Jouer", "Statistiques", "Paramètres"]:
-        POSX = 0
-        POSY = 75 * i
-        WIDTH = 400
-        HEIGHT = 50
-        toolbox.Button(pygame, bouton, surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
+    POSX = 0
+    POSY = 0
+    WIDTH = 400
+    HEIGHT = 50
+
+    toolbox.BJouer(pygame, "Jouer", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
                        constantes.BLACK, "Arial", 24, True, True, 0)
-        i += 1
+    POSY += 75
+    toolbox.BStats(pygame, "Statistiques", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
+                       constantes.BLACK, "Arial", 24, True, True, 0)
+    POSY += 75
+    toolbox.BParam(pygame, "Paramètres", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
+                       constantes.BLACK, "Arial", 24, True, True, 0)
 
     screen.blit(surfacetrans, POSITION_SURFACE)
     # RAPPELS:
     # position x des boutons: 120 à 520
     # position y: jouer: 150 à 200 , statistiques: 225 à 275 , paramètres: 300 à 350
-    pygame.display.flip()
+    pygame.display.update()
 
 
 def click_clavier(event):

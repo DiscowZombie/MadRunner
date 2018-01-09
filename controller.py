@@ -5,8 +5,9 @@ import functions
 
 class Controller:
 
+    pressing_buttons = {}
+
     def __init__(self,view):
-        self.pressing_buttons = {}
         self.view = view
 
     def checkevents(self):
@@ -22,12 +23,12 @@ class Controller:
                 # 4: Scroll vers le haut
                 # 5: Scroll vers le bas
                 button_number = event.button
-                self.pressing_buttons["Mouse" + str(button_number)] = True
+                Controller.pressing_buttons["Mouse" + str(button_number)] = True
                 if button_number == 1:  # clic gauche
                     self.view.mousebutton1down(event.pos)
             elif event.type == pygame.MOUSEBUTTONUP:
                 button_number = event.button
-                self.pressing_buttons["Mouse" + str(button_number)] = False
+                Controller.pressing_buttons["Mouse" + str(button_number)] = False
                 if button_number == 1:  # clic gauche
                     self.view.mousebutton1up(event.pos)
 
@@ -35,5 +36,9 @@ class Controller:
                 print("ok")
         return True
 
-    def getpressingbuttons(self):
-        return self.pressing_buttons
+    def getpressingbuttons(cls):
+        return Controller.pressing_buttons
+
+    getpressingbuttons = classmethod(getpressingbuttons)
+
+

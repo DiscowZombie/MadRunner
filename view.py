@@ -7,12 +7,15 @@ class View:
         print("setup view")
 
     def mousebutton1down(self, position):  # click gauche
-        boutons = toolbox.Button.getButtons(self)
+        boutons = toolbox.Button.getButtons()
         for bouton in boutons:
             bouton.mousein = f.checkmousebouton(position, bouton.x, bouton.y, bouton.width, bouton.height)
 
     def mousebutton1up(self, position):
         print("plus en train de click")
+
+    def addcontrollerobject(self, controller):
+        self.controller = controller
 
     @staticmethod
     def createbouton(pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,

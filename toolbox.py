@@ -1,5 +1,6 @@
 import functions as f
 import view
+import controller
 
 from threading import Thread
 
@@ -42,15 +43,10 @@ class Button(object):
         self.width = width
         self.height = height
         self.text = name
-        self.mousein = False
+        self.ismousein = False
         self.clicking = False
 
         Button.boutons.append(self)
-
-    def __setattr__(self, attr_name, attr_value):  # dès qu'on chage la valeur d'un attribut...
-        object.__setattr__(self, attr_name, attr_value)  # on lui met la valeur correspondante
-        if attr_name == "mousein" and attr_value:
-            print("clic sur " + self.text)
 
     def tween(self, posx, posy, width, height, duration):  # transition linéaire
         print()
@@ -58,29 +54,44 @@ class Button(object):
     def destroy(self):
         print()
 
-    def getButtons(self):
+    def getButtons(cls):
         return Button.boutons
+
+    def getmousein(self):
+        return self.ismousein
+
+    def setmousein(self, isin):
+        self.ismousein = isin
+        if isin:
+            # vérifie si on est en train de cliquer dessus
+            if controller.Controller.getpressingbuttons()["Mouse1"]:
+                self.button1down()
+
+    getButtons = classmethod(getButtons)
+    mousein = property(getmousein, setmousein)
 
 
 class BJouer(Button):
-    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
-                 bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
-        Button.__init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
-                        bordersize, couleur_text, font, font_size, centeredx, centeredy, offset)
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+        print("vous avez cliquer sur moi !! JOUER MAINTENANT")
 
 
-def BParam(Button):
-    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
-                 bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
-        Button.__init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
-                        bordersize, couleur_text, font, font_size, centeredx, centeredy, offset)
+class BParam(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
 
+    def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+        print("vous avez cliquer sur moi !! PARAMETRES MAINTENANT")
 
-def BStats(Button):
-    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
-                 bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
-        Button.__init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
-                        bordersize, couleur_text, font, font_size, centeredx, centeredy, offset)
+class BStats(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+        print("vous avez cliquer sur moi !! STATISTIQUES MAINTENANT")
 
 
 class RunGame(Thread):
