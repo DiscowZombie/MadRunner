@@ -1,11 +1,12 @@
 import functions as f
+import view
 
 from threading import Thread
 
-boutons = []
-
 
 class Button(object):
+    boutons = []
+
     """
     La méthode constructeur
     """
@@ -32,18 +33,9 @@ class Button(object):
 
     def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
                  bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
-        pygame.draw.rect(surface_bouton, couleur_bouton, [posx, posy, width, height], bordersize)
-        texte = pygame.font.SysFont(font, font_size)
-        if centeredx or centeredy:
-            positionx, positiony = f.centretexte(texte.size(name), (width, height))
-            if not centeredx:
-                positionx = 0
-            if not centeredy:
-                positiony = 0
-        else:
-            positionx, positiony = 0, 0
-
-        surface_bouton.blit(texte.render(str(name), True, couleur_text), (positionx + offset, posy + positiony))
+        view.View.createbouton(pygame, name, surface_bouton, surface_position, posx, posy, width, height,
+                               couleur_bouton,
+                               bordersize, couleur_text, font, font_size, centeredx, centeredy, offset)
 
         self.x = surface_position[0] + posx
         self.y = surface_position[1] + posy
@@ -53,11 +45,10 @@ class Button(object):
         self.mousein = False
         self.clicking = False
 
-        global boutons
-        boutons.append(self)
+        Button.boutons.append(self)
 
-    def __setattr__(self, attr_name, attr_value): # dès qu'on chage la valeur d'un attribut...
-        object.__setattr__(self, attr_name, attr_value) # on lui met la valeur correspondante
+    def __setattr__(self, attr_name, attr_value):  # dès qu'on chage la valeur d'un attribut...
+        object.__setattr__(self, attr_name, attr_value)  # on lui met la valeur correspondante
         if attr_name == "mousein" and attr_value:
             print("clic sur " + self.text)
 
@@ -68,12 +59,31 @@ class Button(object):
         print()
 
     def getButtons(self):
-        global boutons
-        return boutons
+        return Button.boutons
+
+
+class BJouer(Button):
+    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
+                 bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
+        Button.__init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
+                        bordersize, couleur_text, font, font_size, centeredx, centeredy, offset)
+
+
+def BParam(Button):
+    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
+                 bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
+        Button.__init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
+                        bordersize, couleur_text, font, font_size, centeredx, centeredy, offset)
+
+
+def BStats(Button):
+    def __init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
+                 bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
+        Button.__init__(self, pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
+                        bordersize, couleur_text, font, font_size, centeredx, centeredy, offset)
 
 
 class RunGame(Thread):
-
     def __init__(self, pygame, screen, ImageMenu, time):
         Thread.__init__(self)
         self.pygame = pygame
