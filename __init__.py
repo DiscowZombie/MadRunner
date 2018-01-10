@@ -27,7 +27,7 @@ pygame.display.set_icon(ImageMenu) # Icone du jeu
 # On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
-view = view.View()
+view = view.View(pygame, screen)
 controls = controller.Controller(view)
 view.addcontrollerobject(controls)
 

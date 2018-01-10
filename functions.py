@@ -1,7 +1,3 @@
-import constantes
-import toolbox
-
-
 def centretexte(textsize, espace):  # Utilitaire pour center un texte ! Retourne la position x et y du texte
     return int(espace[0] / 2 - textsize[0] / 2), int(espace[1] / 2 - textsize[1] / 2)
 
@@ -53,38 +49,6 @@ def drawstarting(pygame, screen, imagemenu, time):
         drawtitle(i, True)
 
     time.sleep(0.5)
-
-
-# On déssine le menu : Jouer, Statistiques, Paramètres
-def drawmenu(pygame, screen):
-    fond = pygame.image.load("assets/img/background_temporaire.jpg").convert()
-    screen.blit(fond, (0, 0))
-    POSITION_SURFACE = (120, 150)
-    TAILLE_SURFACE = [400, 200]
-    surfacetrans = pygame.Surface(TAILLE_SURFACE, pygame.SRCALPHA,
-                                  32)  # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
-    surfacetrans = surfacetrans.convert_alpha()  # Il faut cependant que la surface a un arrière plan transparent
-
-    POSX = 0
-    POSY = 0
-    WIDTH = 400
-    HEIGHT = 50
-
-    toolbox.BJouer(pygame, "Jouer", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
-                       constantes.BLACK, "Arial", 24, True, True, 0)
-    POSY += 75
-    toolbox.BStats(pygame, "Statistiques", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
-                       constantes.BLACK, "Arial", 24, True, True, 0)
-    POSY += 75
-    toolbox.BParam(pygame, "Paramètres", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
-                       constantes.BLACK, "Arial", 24, True, True, 0)
-
-    screen.blit(surfacetrans, POSITION_SURFACE)
-    # RAPPELS:
-    # position x des boutons: 120 à 520
-    # position y: jouer: 150 à 200 , statistiques: 225 à 275 , paramètres: 300 à 350
-    pygame.display.update()
-
 
 def click_clavier(event):
     print('== > Evenement : ', event.type)

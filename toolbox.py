@@ -1,10 +1,26 @@
 import functions as f
 import view
 import controller
+import constantes
+import pygame
 
 from threading import Thread
 
+class RunGame(Thread):
+    def __init__(self, pygame, screen, ImageMenu, time):
+        Thread.__init__(self)
+        self.pygame = pygame
+        self.screen = screen
+        self.ImageMenu = ImageMenu
+        self.time = time
 
+    def run(self):
+        f.drawstarting(self.pygame, self.screen, self.ImageMenu, self.time)
+        view.View.drawmainmenu()
+
+""""""""""""""""""""""""
+""" GERE LES BOUTONS """
+""""""""""""""""""""""""
 class Button(object):
     boutons = []
 
@@ -48,10 +64,12 @@ class Button(object):
 
         Button.boutons.append(self)
 
-    def tween(self, posx, posy, width, height, duration):  # transition linéaire
-        print()
+    def __del__(self):
+        if self in Button.boutons:
+            Button.boutons.remove(self) # on l'enlève de nos tables de boutons avant de le détruire
+        del self
 
-    def destroy(self):
+    def tween(self, posx, posy, width, height, duration):  # transition linéaire
         print()
 
     def getButtons(cls):
@@ -76,32 +94,63 @@ class BJouer(Button):
         Button.__init__(*arguments)
 
     def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
-        print("vous avez cliquer sur moi !! JOUER MAINTENANT")
+        view.View.drawmenu() # on dessine le menu par dessus
 
+        POSITION_SURFACE = (120,165)
+        TAILLE_SURFACE = [400,150]
+        surfacetrans = pygame.Surface(TAILLE_SURFACE, pygame.SRCALPHA,
+                                  32)  # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
+        surfacetrans = surfacetrans.convert_alpha()  # Il faut cependant que la surface a un arrière plan transparent
+
+        POSX = 0
+        POSY = 0
+        WIDTH = 400
+        HEIGHT = 50
+
+        B1Joueur(pygame, "1 joueur", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
+                       constantes.BLACK, "Arial", 24, True, True, 0)
+        POSY += 75
+        B2Joueurs(pygame, "2 joueurs", surfacetrans, POSITION_SURFACE, POSX, POSY, WIDTH, HEIGHT, constantes.GRAY, 0,
+                       constantes.BLACK, "Arial", 24, True, True, 0)
+
+        view.View.drawreturn()
+
+        view.View.screen.blit(surfacetrans, POSITION_SURFACE)
+
+        pygame.display.update()
 
 class BParam(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
     def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
-        print("vous avez cliquer sur moi !! PARAMETRES MAINTENANT")
+        view.View.drawmenu()
 
 class BStats(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
     def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
-        print("vous avez cliquer sur moi !! STATISTIQUES MAINTENANT")
+        view.View.drawmenu()
 
+class B1Joueur(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
 
-class RunGame(Thread):
-    def __init__(self, pygame, screen, ImageMenu, time):
-        Thread.__init__(self)
-        self.pygame = pygame
-        self.screen = screen
-        self.ImageMenu = ImageMenu
-        self.time = time
+    def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+        view.View.drawmenu()
 
-    def run(self):
-        f.drawstarting(self.pygame, self.screen, self.ImageMenu, self.time)
-        f.drawmenu(self.pygame, self.screen)
+class B2Joueurs(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+        view.View.drawmenu()
+
+class BRetour(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self): # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+        view.View.drawmenu()
+        view.View.drawmainmenu()
