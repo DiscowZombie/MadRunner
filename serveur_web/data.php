@@ -1,27 +1,30 @@
 <?php
 
-require_once("databases.php");
+require_once("config/databases.php");
 
-$q = $pdo->prepare("SELECT * FROM data");
-$q->execute();
-
-while($q->hasNext()){
-	print($q->next());
-}
-
-$q->close();
-
-
-if(isset($id)){
+// Si il y a un Id dans l'url
+if(isset($_GET["id"]) AND !empty($_GET["id"])){
 	$id = $_GET["id"];
 
-	$jsontxt = array()
-	$jsontxt['id']; = $id;
-	$jsontxt['pseudo'] = "Guest";
+	// On prépare le Json
+	$jsontxt = array();
 
+	// On prépare la requête
+	$q = $pdo->prepare("SELECT * FROM data WHERE id = ?");
+	$q->execute([$id]);
+
+	while($row = $q->fetch(PDO::FETCH_OBJ)){
+		$jsontxt['id'] = $row->id;
+		$jsontxt['pseudo'] = $row->pseudo;
+	}
+
+	$q->closeCursor();
+
+	# On écrit dans le fichier json
 	$fp = fopen('data.json', 'w');
-	fwrite($fp, $jsontxt)
-	fclose($fp)
+	fwrite($fp, json_encode($jsontxt));
+	fclose($fp);
 
 	header("Location: data.json");
+
 }
