@@ -34,15 +34,16 @@ passed = 0
 while running:
     # Les events:
 
-    running = controller.Controller.checkevents() # vérifie les interactions pour peut être modifier des infos du model
+    running = controller.Controller.checkevents()  # vérifie les interactions pour peut être modifier des infos du model
 
     if running:
-        view.View.updatescreen(passed) # puis on update tout ça
+        view.View.updatescreen(passed)  # puis on update tout ça
         statemanager.StateManager.setstatetime(passed)
 
         # On limite à 60 fps ou à la valeur en config si elle est valide
         # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
-        passed = clock.tick(settings.Settings().getsetting("limit_fps") if functions.isvalidint(settings.Settings().getsetting("limit_fps")) else 60)
+        passed = clock.tick(settings.Settings().get_conf_setting("limit_fps") if functions.isvalidint(
+            settings.Settings().get_conf_setting("limit_fps")) else 60)
 
 # On quitte le module
 pygame.quit()

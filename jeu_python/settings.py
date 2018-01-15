@@ -23,7 +23,7 @@ class BDDManager:
 
 class Settings:
 
-    def __init__():
+    def __init__(self):
         print()
 
     def get_conf_setting(self, setting_path):
