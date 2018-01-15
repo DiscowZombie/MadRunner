@@ -11,45 +11,6 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
         return True
     return False
 
-
-# On déssine la balle apparition du logo
-def drawstarting(pygame, screen, imagemenu, time):
-    def drawtitle(i, reverse):  # i va de 0 (debut de l'animation) a 100 (fin de l'animation)
-        alpha = None
-        if reverse:
-            a = pygame.Surface((640, 480))  # une surface
-            a.fill((255, 255, 255))
-            screen.blit(a, (0, 0))
-            alpha = 255 - int(2.55 * i)
-            i = 100
-        else:
-            alpha = int(2.55 * i)
-
-        surface = pygame.Surface((225, 225))  # la surface ou on va mettre le titre du jeu et l'image du jeu
-        surface.fill((255, 255, 255))
-        surface.set_alpha(alpha)  # alpha finale: 255 (opaque)
-
-        texte = pygame.font.SysFont("arial", int(0.44 * i))  # taille finale du font: 44
-        surfacetexte = texte.render("Mad Runner", True, (0, 0, 0))
-        surface.blit(surfacetexte, (100 - i, 0))  # position finale: 0 sur 0
-
-        icone = pygame.transform.scale(imagemenu, (2 * i, int(1.2 * i)))  # taille finale: 200 sur 120
-        surface.blit(icone, (100 - i, 140 - int(0.6 * i)))  # position finale: 0 sur 80
-
-        screen.blit(surface, (220, 120))  # position finale: 220 sur 120
-        pygame.display.update()  # acutalise ce qui doit etre affichee
-
-    # Le bel effet d'apparition
-    for i in range(1, 101):
-        drawtitle(i, False)
-
-    time.sleep(2)
-
-    for i in range(1, 101):
-        drawtitle(i, True)
-
-    time.sleep(0.5)
-
 def click_clavier(event):
     print('== > Evenement : ', event.type)
     for k, v in event.dict.items():

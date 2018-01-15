@@ -1,51 +1,48 @@
 # Les imports extérieurs
 import pygame
-from pygame.locals import *
-import time
-# Nos imports interieur
+# Utilitaires
 import functions
-# Gère les contrôles
-import controller
+# Gère les informations du jeu
+import toolbox
 # Gère ce qui est affiché
 import view
-# Quelques utilitaires
-import toolbox
+# Gère les contrôles
+import controller
 # Les options
 import settings
+# l'état du jeu
+import statemanager
 
 # On initialise le module
 pygame.init()
 
-# On charge une fenêtre de 640 par 480
-screen = pygame.display.set_mode((640, 480))
-screen.fill((255, 255, 255))
-pygame.display.set_caption("Mad Runner")
-
-ImageMenu = pygame.image.load("assets/img/menu_fond.png").convert_alpha()
-pygame.display.set_icon(ImageMenu) # Icone du jeu
-
 # On charge l'horloge de pygame
 clock = pygame.time.Clock()
 
-view = view.View(pygame, screen)
-controls = controller.Controller(view)
-view.addcontrollerobject(controls)
+# initialisation de la partie "model" du model/view/controller
+toolbox.Model(pygame)
 
-gamethread = toolbox.RunGame(pygame, screen, ImageMenu, time)
-gamethread.start()
+# intitialisation de la partie "view" du model/view/controller
+view.View(pygame)
+
+# initialisation de la partie "controller" de model/view/controller
+controller.Controller(pygame, view)
 
 running = True
+passed = 0
 
 while running:
     # Les events:
 
-    running = controls.checkevents()
+    running = controller.Controller.checkevents() # vérifie les interactions pour peut être modifier des infos du model
 
-    time.sleep(0.01)
+    if running:
+        view.View.updatescreen(passed) # puis on update tout ça
+        statemanager.StateManager.setstatetime(passed)
 
-    # On limite à 60 fps ou à la valeur en config si elle est valide
-    # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
-    clock.tick(settings.Settings().getsetting("limit_fps") if functions.isvalidint(settings.Settings().getsetting("limit_fps")) else 60)
+        # On limite à 60 fps ou à la valeur en config si elle est valide
+        # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
+        passed = clock.tick(settings.Settings().getsetting("limit_fps") if functions.isvalidint(settings.Settings().getsetting("limit_fps")) else 60)
 
 # On quitte le module
 pygame.quit()

@@ -1,16 +1,15 @@
-import pygame
-import toolbox
-import functions
-
-
 class Controller:
 
     pressing_buttons = {}
+    pygame = None
+    view = None
 
-    def __init__(self,view):
-        self.view = view
+    def __init__(self, pygame, view):
+        Controller.pygame = pygame
+        Controller.view = view
 
-    def checkevents(self):
+    def checkevents(cls):
+        pygame = Controller.pygame
         for event in pygame.event.get():
             # Si on appuie sur la croix pour fermer le programme
             if event.type == pygame.QUIT:
@@ -25,12 +24,12 @@ class Controller:
                 button_number = event.button
                 Controller.pressing_buttons["Mouse" + str(button_number)] = True
                 if button_number == 1:  # clic gauche
-                    self.view.mousebutton1down(event.pos)
+                    Controller.view.mousebutton1down(event.pos)
             elif event.type == pygame.MOUSEBUTTONUP:
                 button_number = event.button
                 Controller.pressing_buttons["Mouse" + str(button_number)] = False
                 if button_number == 1:  # clic gauche
-                    self.view.mousebutton1up(event.pos)
+                    Controller.view.mousebutton1up(event.pos)
 
             elif event.type == pygame.KEYDOWN:
                 print("ok")
@@ -39,6 +38,5 @@ class Controller:
     def getpressingbuttons(cls):
         return Controller.pressing_buttons
 
+    checkevents = classmethod(checkevents)
     getpressingbuttons = classmethod(getpressingbuttons)
-
-

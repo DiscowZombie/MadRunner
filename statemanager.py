@@ -5,25 +5,39 @@ class StateEnum(Enum):
     """
     Une énumration des états de jeu
     """
+    INITIALISATION = "init"
+    INTRO = "intro"
     MAIN_MENU = "main_menu",
+    PLAYERNUM = "num_player"
+    MAP_AND_DIFF = "map_diff"
     STATS_MENU = "stats_menu",
     SETTINGS_MENU = "settings_menu",
     PLAYING = "playing"
 
 
 class StateManager:
-    laststate = None  # None = Null (on peut utiliser if... is None)
+    laststate = StateEnum.INITIALISATION
+    statetime = 0
+    referancetimer = 0
 
     """
-    Change l'état de jeu
-    <p>
     :param state - L'état de jeu (un StateEnum ou None)
     """
 
-    @staticmethod
-    def setstate(state):
-        StateManager.laststate = state
+    def setstate(cls, newstate):
+        StateManager.laststate = newstate
+        StateManager.statetime = 0
 
-    @staticmethod
-    def getstate():
+    def getstate(cls):
         return StateManager.laststate
+
+    def setstatetime(cls, passed):
+        StateManager.statetime += passed
+
+    def getstatetime(cls):
+        return StateManager.statetime
+
+    setstate = classmethod(setstate)
+    getstate = classmethod(getstate)
+    setstatetime = classmethod(setstatetime)
+    getstatetime = classmethod(getstatetime)
