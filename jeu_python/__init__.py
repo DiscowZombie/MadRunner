@@ -3,7 +3,7 @@ import pygame
 # Utilitaires
 import functions
 # Gère les informations du jeu
-import toolbox
+import model
 # Gère ce qui est affiché
 import view
 # Gère les contrôles
@@ -20,7 +20,7 @@ pygame.init()
 clock = pygame.time.Clock()
 
 # initialisation de la partie "model" du model/view/controller
-toolbox.Model(pygame)
+model.Model(pygame)
 
 # intitialisation de la partie "view" du model/view/controller
 view.View(pygame)
