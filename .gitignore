@@ -3,3 +3,4 @@ venv/
 Thumbs.db
 __pycache__/
 jeu_python/test.py
+serveur_web/config/config.json
