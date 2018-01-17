@@ -1,3 +1,5 @@
+import model
+
 class Controller:
 
     pressing_buttons = {}
@@ -24,13 +26,12 @@ class Controller:
                 button_number = event.button
                 Controller.pressing_buttons["Mouse" + str(button_number)] = True
                 if button_number == 1:  # clic gauche
-                    Controller.view.mousebutton1down(event.pos)
+                    model.Model.mousebutton1down(event.pos)
             elif event.type == pygame.MOUSEBUTTONUP:
                 button_number = event.button
                 Controller.pressing_buttons["Mouse" + str(button_number)] = False
                 if button_number == 1:  # clic gauche
-                    Controller.view.mousebutton1up(event.pos)
-
+                    model.Model.mousebutton1up(event.pos)
             elif event.type == pygame.KEYDOWN:
                 print("ok")
         return True

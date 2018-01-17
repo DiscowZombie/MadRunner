@@ -7,11 +7,11 @@ class StateEnum(Enum):
     """
     INITIALISATION = "init"
     INTRO = "intro"
-    MAIN_MENU = "main_menu",
+    MAIN_MENU = "main_menu"
     PLAYERNUM = "num_player"
     MAP_AND_DIFF = "map_diff"
-    STATS_MENU = "stats_menu",
-    SETTINGS_MENU = "settings_menu",
+    STATS_MENU = "stats_menu"
+    SETTINGS_MENU = "settings_menu"
     PLAYING = "playing"
 
 
