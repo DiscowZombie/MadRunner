@@ -12,7 +12,6 @@ import constantes
 class Button(uielement.UIelement):
     boutons = []
 
-
     """
     :param text - Le texte sur le bouton
     :param couleur_text - La couleur du texte
@@ -77,7 +76,7 @@ class BJouer(Button):
 
     def button1down(self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYERNUM)
-        for button in Button.boutons:
+        for button in list(Button.boutons):
             button.__del__()
         for surf in surface.Surface.getSurfaces():
             surf.__del__()
@@ -147,10 +146,30 @@ class BParam(Button):
 
     def button1down(self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.SETTINGS_MENU)
-        for button in Button.boutons:
+        for button in list(Button.boutons):
             button.__del__()
         for surf in surface.Surface.getSurfaces():
             surf.__del__()
+
+        POSITION_SURFACE = (0, 0)
+        POSITION_X = 0
+        POSITION_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                              ECART, view.View.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
+                              HAUTEUR, COULEUR, BORDURE)
 
 
 class BStats(Button):
@@ -159,10 +178,30 @@ class BStats(Button):
 
     def button1down(self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.STATS_MENU)
-        for button in Button.boutons:
+        for button in list(Button.boutons):
             button.__del__()
         for surf in surface.Surface.getSurfaces():
             surf.__del__()
+
+        POSITION_SURFACE = (0, 0)
+        POSITION_X = 0
+        POSITION_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                              ECART, view.View.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
+                              HAUTEUR, COULEUR, BORDURE)
 
 
 class B1Joueur(Button):
@@ -171,10 +210,30 @@ class B1Joueur(Button):
 
     def button1down(self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
-        for button in Button.boutons:
+        for button in list(Button.boutons):
             button.__del__()
         for surf in surface.Surface.getSurfaces():
             surf.__del__()
+
+        POSITION_SURFACE = (0, 0)
+        POSITION_X = 0
+        POSITION_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                              ECART, view.View.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
+                              HAUTEUR, COULEUR, BORDURE)
 
 
 class B2Joueurs(Button):
@@ -183,10 +242,30 @@ class B2Joueurs(Button):
 
     def button1down(self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
-        for button in Button.boutons:
+        for button in list(Button.boutons):
             button.__del__()
         for surf in surface.Surface.getSurfaces():
             surf.__del__()
+
+        POSITION_SURFACE = (0, 0)
+        POSITION_X = 0
+        POSITION_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                              ECART, view.View.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
+                              HAUTEUR, COULEUR, BORDURE)
 
 
 menu_states = [  # les états du jeu qui font retourner au menu principale lorsqu'on clique sur retour
@@ -200,7 +279,7 @@ class BRetour(Button):
         Button.__init__(*arguments)
 
     def button1down(self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
-        for button in Button.boutons:
+        for button in list(Button.boutons):
             button.__del__()
         for surf in surface.Surface.getSurfaces():
             surf.__del__()

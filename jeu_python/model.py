@@ -23,7 +23,7 @@ class Model:
         Model.pygame = pygame
 
     def mousebutton1down(cls, position):  # click gauche
-        for bouton in button.Button.getButtons():
+        for bouton in list(button.Button.getButtons()):
             bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.width, bouton.height)
 
     def mousebutton1up(cls, position):
@@ -123,7 +123,6 @@ class Model:
         Model.main_menu()
 
     def main_menu(cls):
-        print("main menu")
         # creation de l'image du menu
         REPERTOIRE = "assets/img/background_temporaire.jpg"
         POSITION_SURFACE = (0, 0)
