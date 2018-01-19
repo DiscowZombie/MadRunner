@@ -49,7 +49,7 @@ class UIelement:
             "passed": 0
         }
 
-        if otherattr:  # pour ajouter des autres attricuts à transitionner, mettre dans dans une liste un dictionnaire avec son nom ["name"] et sa valeur ["value"]
+        if otherattr:  # pour ajouter des autres attributs à transitionner, mettre dans dans une liste un dictionnaire avec son nom ["name"] et sa valeur ["value"]
             if not "otherattr" in self.tweendata:
                 self.tweendata["otherattr"] = []
 

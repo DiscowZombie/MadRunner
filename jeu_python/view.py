@@ -89,6 +89,8 @@ class View:
                     functiontorun = obj.create
                 elif classname == "Button":
                     functiontorun = obj.create
+                elif classname == "Checkbox":
+                    functiontorun = obj.create
 
                 for obj in UIelements[classname]:
                     functiontorun()
@@ -98,7 +100,7 @@ class View:
                             for referancename in obj.referance:
                                 obj.parentsurface.blit(obj.referance[referancename], (obj.x, obj.y))
                         else:
-                            if classname == "Button": # exception pour les boutons qui ne vont pas être blité comme les autres
+                            if classname == "Button":  # exception pour les boutons qui ne vont pas être blité comme les autres...
                                 if obj.textcenteredx or obj.textcenteredy:
                                     positionx, positiony = f.centretexte(obj.textreferance.size(obj.text), (obj.width, obj.height))
                                     if not obj.textcenteredx:
@@ -109,6 +111,20 @@ class View:
                                      positionx, positiony = 0, 0
 
                                 obj.parentsurface.blit(obj.referance, (positionx, obj.y + positiony))
+                            elif classname == "Checkbox":  # ... et les checkbox aussi
+                                if obj.textcenteredx or obj.textcenteredy:
+                                    positionx, positiony = f.centretexte(obj.textreferance.size(obj.text), (obj.width, obj.height))
+                                    if not obj.textcenteredx:
+                                        positionx = 0
+                                    if not obj.textcenteredy:
+                                        positiony = 0
+                                else:
+                                     positionx, positiony = 0, 0
+
+                                obj.parentsurface.blit(obj.referance, (positionx + obj.textoffset, obj.y + positiony))
+
+                                if obj.checked:
+                                    obj.parentsurface.blit(obj.checkreferance, (obj.x, obj.y))
                             else:
                                 obj.parentsurface.blit(obj.referance, (obj.x, obj.y))
 

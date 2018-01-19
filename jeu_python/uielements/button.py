@@ -7,18 +7,22 @@ import statemanager
 from uielements import image
 from uielements import surface
 from uielements import text
+from uielements import checkbox
 import constantes
+
 
 class Button(uielement.UIelement):
     boutons = []
 
     """
     :param text - Le texte sur le bouton
+    :param antialias - Y a-t-il l'anti-alias ou pas ?
     :param couleur_text - La couleur du texte
     :param font - Le font du texte
     :param font_size - La taille du font
     :param centeredx - Le texte est-il centré sur l'axe x ?
     :param centeredy - Le texte est-il centré sur l'axe y ?
+    :param backgroundcolor - La couleur d'arrière plan de la surface sur laquelle le texte va être mis
     :param offset - Le nombre de pixel de décalage du texte sur l'axe x
     :param *UIargs - Tous les paramètres d'un élément graphique (voir classe "UIelement")
     """
@@ -215,6 +219,46 @@ class B1Joueur(Button):
         for surf in surface.Surface.getSurfaces():
             surf.__del__()
 
+
+        POSITION_SURFACE = (0, 0)
+        POSITION_X = 50
+        POSITION_Y = 100
+        LARGEUR = 200
+        HAUTEUR = 200
+        COULEUR = constantes.WHITE
+        BORDURE = 0  # rempli
+        ALPHA = 255  # opaque
+        CONVERT_ALPHA = True
+
+        surface_carte = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
+                                HAUTEUR, COULEUR,
+                                BORDURE)  # creation de la l'objet surface où on va mettre les choix de cartes
+
+
+        POSITION_SURFACE = (POSITION_X, POSITION_Y)
+        POSITION_X = 0
+        POSITION_Y = 0
+        LARGEUR = LARGEUR
+        HAUTEUR = 50
+        COULEUR = constantes.BLACK
+        BOXSIZE = 30
+        ANTIALIAS = False
+        COULEUR_TEXTE = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = False
+        CENTRE_Y = True
+        ARRIERE_PLAN = None
+        ECART = 10
+        BORDURE = 3  # rempli
+
+        check_jo = checkbox.Checkbox(BOXSIZE, "Jeux Olympiques", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,surface_carte.referance, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR, HAUTEUR, COULEUR, BORDURE)
+        POSITION_Y += 75
+        check_athenes = checkbox.Checkbox(BOXSIZE, "Athènes", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,surface_carte.referance, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR, HAUTEUR, COULEUR, BORDURE)
+        POSITION_Y += 75
+        check_foret = checkbox.Checkbox(BOXSIZE, "Forêt", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,surface_carte.referance, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR, HAUTEUR, COULEUR, BORDURE)
+
+
         POSITION_SURFACE = (0, 0)
         POSITION_X = 0
         POSITION_Y = 0
@@ -234,6 +278,7 @@ class B1Joueur(Button):
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                               ECART, view.View.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
                               HAUTEUR, COULEUR, BORDURE)
+
 
 
 class B2Joueurs(Button):

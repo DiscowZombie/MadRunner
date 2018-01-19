@@ -18,10 +18,10 @@ class Image(uielement.UIelement):
 
         Image.images.append(self)
 
-    def create(self, resize):
+    def create(self, resize, xresize = None, yresize = None):
         image = view.View.pygame.image.load(self.imagepath).convert_alpha()
         if resize:
-            image = view.View.pygame.transform.scale(image, (self.width, self.height))
+            image = view.View.pygame.transform.scale(image, (xresize or self.width, yresize or self.height))
         return image
 
     def draw(self):
