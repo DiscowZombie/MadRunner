@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 16 Janvier 2018 à 19:39
+-- Généré le :  Sam 20 Janvier 2018 à 13:47
 -- Version du serveur :  5.7.14
 -- Version de PHP :  7.0.10
 
@@ -37,7 +37,7 @@ CREATE TABLE `data` (
 --
 
 INSERT INTO `data` (`id`, `pseudo`, `password`) VALUES
-(1, 'DiscowZombie', ''),
+(1, 'DiscowZombie', '123456'),
 (2, 'homermafia', '');
 
 -- --------------------------------------------------------
@@ -70,15 +70,34 @@ INSERT INTO `score` (`id`, `user_id`, `score`, `date`) VALUES
 
 CREATE TABLE `sessions` (
   `uuid` varchar(255) NOT NULL,
-  `user_id` int(8) NOT NULL
+  `user_id` int(8) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `sessions`
 --
 
-INSERT INTO `sessions` (`uuid`, `user_id`) VALUES
-('abcd', 1);
+INSERT INTO `sessions` (`uuid`, `user_id`, `ip`, `date`) VALUES
+('abcd', 1, '', '2018-01-17 14:11:02'),
+('$2y$10$hTnTHVlYLrHXIAjmE5xkD.J70BZmEckKd0qQbfiSEE6bsqucklccW', 1, '::1', '2018-01-20 12:54:00'),
+('$2y$10$rUhUOeQjz7Mxp1sEz8MnZen0dysgXb/sLimX/Om4JhDxX8o3LgAzK', 1, '::1', '2018-01-20 12:55:52'),
+('$2y$10$UKC60/JC3njlCNma3MoOGOWeL3Ivv4JI5jh4aQjSWl8r16ZZcaA4e', 1, '::1', '2018-01-20 12:56:29'),
+('$2y$10$A.g8O4HAEvP9CCNXvNjj/eGIP.qhoaKSCepdxzdTFeNCjaupurIbi', 1, '::1', '2018-01-20 12:56:51'),
+('$2y$10$kMSKW3LUbQm3ew4gMJAvHOM9DGVqA9m4iZdWRpum50QPcE4/fP1t6', 1, '::1', '2018-01-20 12:56:52'),
+('$2y$10$a1MXN2.xYGyLO30ysRfFnOyZ06Jd2vZQwJ5zVa71S5VnlVlDXIhOO', 1, '::1', '2018-01-20 12:57:23'),
+('$2y$10$wteJ62ZrDI8zQ55NK8UPxeLXc8bF74xtHAX4oO9nT0w85nII89dCS', 1, '::1', '2018-01-20 13:00:17'),
+('$2y$10$h5R3sBn3./1vwG.9BvSzi.dY/IiezNrWVynzqRC8dy0xux5K8KMLC', 1, '::1', '2018-01-20 13:00:39'),
+('$2y$10$V7EQiNtz5UoqIMZRtnxnM.lcwvf8oNIhVLwNe69i1FeFJZmF6Voq2', 1, '::1', '2018-01-20 13:01:48'),
+('$2y$10$egSz86tBy5.qjJfn9lgXKONwFmFibe47Vy/CPSbK0mXcqgYw4WkAm', 1, '::1', '2018-01-20 13:06:36'),
+('$2y$10$BF7DaAB0ngexka0ZZRJe6.MdQvJOUsLb/g5GyI.w7Qy0Fw3t1BxGW', 1, '::1', '2018-01-20 13:06:37'),
+('$2y$10$1akx6mHBxvEru7Jh2SHcJuQk4jkA0qTpd9swXExaLCeyko8EFhbM.', 1, '::1', '2018-01-20 13:09:51'),
+('$2y$10$B4TPgCLYLIGix87roT7c7ei.BDGD7QDxOpcKWeAAv9L9slX7V9DoG', 1, '::1', '2018-01-20 13:10:41'),
+('$2y$10$8MOo/MJsMD9MEt7uI260L.tiz1dwjfD.jAeVp0TnhLNZGowa7sbEC', 1, '::1', '2018-01-20 13:12:35'),
+('$2y$10$im7gJcZTNeD237l/9VpdfupLjwOzURSCn7u/PgvQOeJb9WOu3ARDe', 1, '::1', '2018-01-20 13:13:08'),
+('$2y$10$iQAwv.VStGaSkmdYHf5c1.h4NEHvG1pg7mzcJzmi0bxYGV39hcQGG', 1, '::1', '2018-01-20 13:14:53'),
+('$2y$10$RdZmVkUtii5ikDQrY2edu.c/XEEmhclKoKSKgIN7d3V4fybZMynKq', 1, '::1', '2018-01-20 13:16:48');
 
 --
 -- Index pour les tables exportées

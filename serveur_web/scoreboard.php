@@ -1,6 +1,11 @@
 <?php
 
-require_once("config/databases.php");
+// On importe ce que l'on as besoin
+require("includes/constants.php");
+require_once("includes/databases.php");
+
+
+/** == DEBUT PARTIE SQL == **/
 
 // On recupère les meilleures scores
 $q = $pdo->prepare("SELECT user_id, score, date FROM score ORDER BY score DESC LIMIT 3");
@@ -20,47 +25,13 @@ while($row = $q->fetch(PDO::FETCH_OBJ)){
 
 $q->closeCursor();
 
+/** == FIN PARTIE SQL == **/
+
+
+// On définit les variables propres à notre page
+$page_title = "Tableau de bord";
+
+// On affiche la page
+include("views/scoreboard.view.php");
+
 ?>
-
-
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <title>Scoreboard | Mad Runner</title>
-  </head>
-  <body>
-
-    <table>
-     <tr>
-         <td></td>
-         <td style="text-align: center;">
-           <b>UserId: <?= $scoreboard[1]["user_id"] ?></b>
-           <br/>
-           <?= $scoreboard[1]["score"] ?> points
-           <br/>
-           <?= date_format(date_create($scoreboard[1]["date"]), 'd M Y - H:i') ?>
-         </td>
-         <td></td>
-     </tr>
-     <tr>
-         <td style="text-align: center;">
-           <b>UserId: <?= $scoreboard[2]["user_id"] ?></b>
-           <br/>
-           <?= $scoreboard[2]["score"] ?> points
-           <br/>
-           <?= date_format(date_create($scoreboard[2]["date"]), 'd M Y - H:i') ?>
-         </td>
-         <td></td>
-         <td style="text-align: center;">
-           <b>UserId: <?= $scoreboard[3]["user_id"] ?></b>
-           <br/>
-           <?= $scoreboard[3]["score"] ?> points
-           <br/>
-           <?= date_format(date_create($scoreboard[3]["date"]), 'd M Y - H:i') ?>
-         </td>
-     </tr>
-    </table>
-
-  </body>
-</html>

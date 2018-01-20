@@ -1,6 +1,6 @@
 <?php
 
-require_once("config/databases.php");
+require_once("includes/databases.php");
 
 // Si il y a un Id dans l'url
 if(isset($_GET["key"]) AND !empty($_GET["key"]) AND isset($_GET["score"]) AND !empty($_GET["score"])){

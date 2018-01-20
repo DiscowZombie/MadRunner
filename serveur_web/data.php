@@ -1,6 +1,6 @@
 <?php
 
-require_once("config/databases.php");
+require_once("includes/databases.php");
 
 // Si il y a un Id dans l'url
 if(isset($_GET["id"]) AND !empty($_GET["id"])){
@@ -21,10 +21,10 @@ if(isset($_GET["id"]) AND !empty($_GET["id"])){
 	$q->closeCursor();
 
 	# On écrit dans le fichier json
-	$fp = fopen('data.json', 'w');
+	$fp = fopen('secure/data.json', 'w');
 	fwrite($fp, json_encode($jsontxt));
 	fclose($fp);
 
-	header("Location: data.json");
+	header("Location: secure/data.json");
 
 }
