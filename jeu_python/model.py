@@ -8,6 +8,7 @@ import uielements.text as text
 import uielements.surface as surface
 import uielements.button as button
 import uielements.image as image
+import uielements.checkbox as checkbox
 
 class Model:
     pygame = None
@@ -25,6 +26,9 @@ class Model:
     def mousebutton1down(cls, position):  # click gauche
         for bouton in list(button.Button.getButtons()):
             bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.width, bouton.height)
+        for checkboxe in checkbox.Checkbox.getCheckboxes():
+            if f.checkmousebouton(position, checkboxe.absx, checkboxe.absy + int(checkboxe.height/2 - checkboxe.boxsize/2), checkboxe.boxsize, checkboxe.boxsize):  # si on est en train de cliquer dessus
+                checkboxe.check()
 
     def mousebutton1up(cls, position):
         print("plus en train de click")

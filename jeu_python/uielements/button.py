@@ -253,11 +253,13 @@ class B1Joueur(Button):
         BORDURE = 3  # rempli
 
         check_jo = checkbox.Checkbox(BOXSIZE, "Jeux Olympiques", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,surface_carte.referance, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR, HAUTEUR, COULEUR, BORDURE)
+        check_jo.check()
         POSITION_Y += 75
         check_athenes = checkbox.Checkbox(BOXSIZE, "Athènes", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,surface_carte.referance, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR, HAUTEUR, COULEUR, BORDURE)
         POSITION_Y += 75
         check_foret = checkbox.Checkbox(BOXSIZE, "Forêt", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,surface_carte.referance, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR, HAUTEUR, COULEUR, BORDURE)
 
+        checkbox.Checkbox.linkcheckboxes(check_jo, check_athenes, check_foret) # ces checbox sont liés, càd, si l'un se fait coché, les autres seront décochés
 
         POSITION_SURFACE = (0, 0)
         POSITION_X = 0

@@ -124,7 +124,7 @@ class View:
                                 obj.parentsurface.blit(obj.referance, (positionx + obj.textoffset, obj.y + positiony))
 
                                 if obj.checked:
-                                    obj.parentsurface.blit(obj.checkreferance, (obj.x, obj.y))
+                                    obj.parentsurface.blit(obj.checkreferance, (obj.x, obj.y + int(obj.height/2 - obj.boxsize/2)))
                             else:
                                 obj.parentsurface.blit(obj.referance, (obj.x, obj.y))
 

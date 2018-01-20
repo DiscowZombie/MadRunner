@@ -42,11 +42,21 @@ class Checkbox(uielement.UIelement):
         self.textcenteredy = centeredy
         self.backgroundcolor = backgroundcolor
         self.textoffset = boxsize + offset
+        self.imagepath = "assets/img/coche.png"
         self.checked = False
         self.clicking = False
+        self.linkedcheckboxes = []  # ceci est une liste des checkbox qui sont "liés" à celui-ci, c'est à dire, si ce checkbox est coché mais qu'un des checkbox lié est coché, l'autre ce checkbox va être décoché.
         self.create()  # la référence est crée en appelant cela. ATTENTION: La référence est la surface sur laquelle le texte est dessinée
 
         Checkbox.checkboxes.append(self)
+
+    def check(self):
+        self.checked = True
+        for checkbox in self.linkedcheckboxes:
+            if checkbox.checked:
+                del checkbox.checkreferance
+            checkbox.checked = False
+        self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)
 
     def create(self):
         posy = self.y + int(self.height/2 - self.boxsize/2)
@@ -55,5 +65,15 @@ class Checkbox(uielement.UIelement):
         view.View.pygame.draw.rect(self.parentsurface, self.color, [self.x, posy, self.boxsize, self.boxsize],
                              self.bordersize)
         text.Text.create(self)
-        if self.checked:
-            self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)
+
+    def getCheckboxes(cls):
+        return Checkbox.checkboxes
+
+    def linkcheckboxes(cls, *checkboxes):  # méthode pour lier des checkbox. Il faut passer les objets checkbox qu'on veut lier
+        for checkbox in checkboxes:
+            for othercheckbox in checkboxes:
+                if checkbox.text != othercheckbox.text:  # on suppose que les checkbox ne sont pas identiques s'il n'ont pas le même texte
+                    checkbox.linkedcheckboxes.append(othercheckbox)
+
+    getCheckboxes = classmethod(getCheckboxes)
+    linkcheckboxes = classmethod(linkcheckboxes)
