@@ -63,6 +63,9 @@ class Button(uielement.UIelement):
                               self.bordersize)
         text.Text.create(self)
 
+    def draw(self):
+        self.create()
+
     def __del__(self):
         if self in Button.boutons:
             Button.boutons.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire

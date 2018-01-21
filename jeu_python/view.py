@@ -82,18 +82,8 @@ class View:
                     View.checktween(obj)
                     tweenobj.append(obj)
             if classname != "Surface":
-                functiontorun = None
-                if classname == "Image":
-                    functiontorun = obj.draw
-                elif classname == "Text":
-                    functiontorun = obj.create
-                elif classname == "Button":
-                    functiontorun = obj.create
-                elif classname == "Checkbox":
-                    functiontorun = obj.create
-
                 for obj in UIelements[classname]:
-                    functiontorun()
+                    obj.draw()
 
                     if hasattr(obj, "referance"):
                         if type(obj.referance) is dict:
@@ -111,6 +101,7 @@ class View:
                                      positionx, positiony = 0, 0
 
                                 obj.parentsurface.blit(obj.referance, (positionx, obj.y + positiony))
+
                             elif classname == "Checkbox":  # ... et les checkbox aussi
                                 if obj.textcenteredx or obj.textcenteredy:
                                     positionx, positiony = f.centretexte(obj.textreferance.size(obj.text), (obj.width, obj.height))
@@ -122,6 +113,11 @@ class View:
                                      positionx, positiony = 0, 0
 
                                 obj.parentsurface.blit(obj.referance, (positionx + obj.textoffset, obj.y + positiony))
+
+                                checksize = obj.boxsize - obj.bordersize*2
+                                a = View.pygame.Surface((checksize, checksize))  # une surface pour reset les checkbox
+                                a.fill((255, 255, 255))
+                                obj.parentsurface.blit(a, (obj.x + obj.bordersize, obj.y + obj.bordersize + int(obj.height/2 - obj.boxsize/2)))
 
                                 if obj.checked:
                                     obj.parentsurface.blit(obj.checkreferance, (obj.x, obj.y + int(obj.height/2 - obj.boxsize/2)))

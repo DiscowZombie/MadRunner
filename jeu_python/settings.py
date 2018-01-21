@@ -24,7 +24,7 @@ class BDDManager:
 class Settings:
 
     def __init__(self):
-        print()
+        pass
 
     def get_conf_setting(self, setting_path):
         return JsonManager(c.CONFIG_PATH + "settings.json").readjson()[setting_path]

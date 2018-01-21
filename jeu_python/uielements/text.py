@@ -22,12 +22,15 @@ class Text(uielement.UIelement):
 
         Text.texts.append(self)
 
-    def create(self):
+    def create(self):  # view
         texte = view.View.pygame.font.SysFont(self.font, self.fontsize)
         surfacetext = texte.render(self.text, self.antialias, self.textcolor,
                                    self.backgroundcolor)  # retourne la surface sur laquelle le texte est dessiné
         self.textreferance = texte
         self.referance = surfacetext
+
+    def draw(self):
+        self.create()
 
     def __del__(self):
         if self in Text.texts:

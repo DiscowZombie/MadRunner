@@ -46,6 +46,7 @@ class Checkbox(uielement.UIelement):
         self.checked = False
         self.clicking = False
         self.linkedcheckboxes = []  # ceci est une liste des checkbox qui sont "liés" à celui-ci, c'est à dire, si ce checkbox est coché mais qu'un des checkbox lié est coché, l'autre ce checkbox va être décoché.
+        self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)
         self.create()  # la référence est crée en appelant cela. ATTENTION: La référence est la surface sur laquelle le texte est dessinée
 
         Checkbox.checkboxes.append(self)
@@ -53,10 +54,7 @@ class Checkbox(uielement.UIelement):
     def check(self):
         self.checked = True
         for checkbox in self.linkedcheckboxes:
-            if checkbox.checked:
-                del checkbox.checkreferance
             checkbox.checked = False
-        self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)
 
     def create(self):
         posy = self.y + int(self.height/2 - self.boxsize/2)
@@ -65,6 +63,9 @@ class Checkbox(uielement.UIelement):
         view.View.pygame.draw.rect(self.parentsurface, self.color, [self.x, posy, self.boxsize, self.boxsize],
                              self.bordersize)
         text.Text.create(self)
+
+    def draw(self):
+        text.Text.draw(self)
 
     def getCheckboxes(cls):
         return Checkbox.checkboxes
