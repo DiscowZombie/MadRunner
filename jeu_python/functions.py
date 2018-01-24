@@ -1,3 +1,9 @@
+import uielements.text as text
+import uielements.surface as surface
+import uielements.button as button
+import uielements.image as image
+import uielements.checkbox as checkbox
+
 def centretexte(textsize, espace):  # Utilitaire pour center un texte ! Retourne la position x et y du texte
     return int(espace[0] / 2 - textsize[0] / 2), int(espace[1] / 2 - textsize[1] / 2)
 
@@ -10,6 +16,17 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
     if posx >= minx and posx <= maxx and posy >= miny and posy <= maxy:
         return True
     return False
+
+
+def delete_menu_obj():
+    for bouton in list(button.Button.boutons):
+        bouton.__del__()
+    for surf in surface.Surface.getSurfaces():
+        surf.__del__()
+    for txt in text.Text.getTexts():
+        txt.__del__()
+    for check in checkbox.Checkbox.getCheckboxes():
+        check.__del__()
 
 def click_clavier(event):
     print('== > Evenement : ', event.type)

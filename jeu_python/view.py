@@ -100,7 +100,7 @@ class View:
                                 else:
                                      positionx, positiony = 0, 0
 
-                                obj.parentsurface.blit(obj.referance, (positionx, obj.y + positiony))
+                                obj.parentsurface.blit(obj.referance, (obj.x + positionx, obj.y + positiony))
 
                             elif classname == "Checkbox":  # ... et les checkbox aussi
                                 if obj.textcenteredx or obj.textcenteredy:

@@ -4,7 +4,7 @@ import constantes
 import statemanager
 import functions as f
 
-import uielements.text as text
+from  uielements import text as text
 import uielements.surface as surface
 import uielements.button as button
 import uielements.image as image
