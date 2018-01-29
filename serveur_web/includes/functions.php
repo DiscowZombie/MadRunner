@@ -39,4 +39,39 @@ if(!function_exists('read_json')){
 	}
 }
 
+if(!function_exists('get_username')){
+	function get_username($pdo, $id){
+		$q = $pdo->prepare("SELECT pseudo FROM data WHERE id = ?");
+		$q->execute([$id]);
+		while($row = $q->fetch(PDO::FETCH_OBJ)){
+		  $pseudo = $row->pseudo;
+		}
+		$q->closeCursor();
+
+		return $pseudo;
+	}
+}
+
+if(!function_exists('get_coursename')){
+	function get_coursename($pdo, $enum){
+		$name = "";
+
+		switch ($enum) {
+			case 'Q':
+				$name = "400 mètres";
+				break;
+			case 'QH':
+				$name= "400 mètres haies";
+				break;
+			case "I":
+				$name = "Course Infini";
+				break;
+			default:
+				break;
+		}
+
+		return $name;
+	}
+}
+
 ?>
