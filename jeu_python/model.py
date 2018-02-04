@@ -12,7 +12,6 @@ import uielements.checkbox as checkbox
 
 class Model:
     pygame = None
-    screen = None
 
     introplaying = False
     introfinished = False
@@ -25,7 +24,7 @@ class Model:
 
     def mousebutton1down(cls, position):  # click gauche
         for bouton in list(button.Button.getButtons()):
-            bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.width, bouton.height)
+            bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.abswidth, bouton.absheight)
         for checkboxe in checkbox.Checkbox.getCheckboxes():
             if f.checkmousebouton(position, checkboxe.absx, checkboxe.absy + int(checkboxe.height/2 - checkboxe.boxsize/2), checkboxe.boxsize, checkboxe.boxsize):  # si on est en train de cliquer dessus
                 checkboxe.check()
@@ -33,40 +32,44 @@ class Model:
     def mousebutton1up(cls, position):
         print("plus en train de click")
 
-    def initscreen(cls, screen):
-        Model.screen = screen
-
     def startintro(cls):
         statemanager.StateManager.setstate(statemanager.StateEnum.INTRO)
         Model.introplaying = True
         Model.firstintro = True
 
-        # état initial de la surface où on va mettre le logo et le titire du jeu
-        POSITION_SURFACE = (0, 0)
-        POSITION_X = 220
-        POSITION_Y = 120
-        LARGEUR = 225
-        HAUTEUR = 225
+        # état initial de la surface où on va mettre le logo et le titre du jeu
+        LARGEUR = 0  # état final: 225
+        HAUTEUR = 0  # état final: 225
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0.5  # milieu de l'écran
+        SCALE_Y = 0.5  # idem
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
         COULEUR = constantes.WHITE
         BORDURE = 0  # rempli
         ALPHA = 0  # transarence
         CONVERT_ALPHA = False
 
-        surface_intro = surface.Surface(ALPHA, CONVERT_ALPHA, Model.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
-                                HAUTEUR, COULEUR,
+        surface_intro = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                 BORDURE)  # creation de la l'objet surface où on va mettre le titire et l'image du jeu
 
         # état intial de l'image du logo
         REPERTOIRE = "assets/img/menu_fond.png"
-        POSITION_X = 100
-        POSITION_Y = 140
         LARGEUR = 0
         HAUTEUR = 0
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0.3
+        SCALE_WIDTH = 1
+        SCALE_HEIGHT = 0.7
         COULEUR = constantes.WHITE
         BORDURE = 0
 
-        image_intro = image.Image(REPERTOIRE, surface_intro.referance, (surface_intro.x, surface_intro.y), POSITION_X,
-                            POSITION_Y, LARGEUR, HAUTEUR, COULEUR, BORDURE)
+        image_intro = image.Image(REPERTOIRE, surface_intro, POSITION_X,
+                            POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # état initial du texte du jeu
         TEXTE = "Mad Runner"
@@ -78,28 +81,32 @@ class Model:
         CENTRE_Y = True  # centré sur l'axe y
         ARRIERE_PLAN = constantes.WHITE
         ECART = 0
-        POSITION_X = 100
-        POSITION_Y = 0
+        SEUL = True
         LARGEUR = 0
         HAUTEUR = 0
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        SCALE_WIDTH = 1
+        SCALE_HEIGHT = 0.3
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
-        texte_intro = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                           surface_intro.referance, (surface_intro.x, surface_intro.y), POSITION_X, POSITION_Y, LARGEUR,
-                           HAUTEUR, COULEUR_ARRIERE, BORDURE)
+        texte_intro = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART, SEUL,
+                           surface_intro, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                           HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         Model.tempobjets.append(surface_intro)
         Model.tempobjets.append(image_intro)
         Model.tempobjets.append(texte_intro)
 
         # et enfin, on fait une merveilleuse transition vers l'état final de l'image et du texte
-        surface_intro.tween(surface_intro.x, surface_intro.y, surface_intro.width, surface_intro.height, 1, {
+        surface_intro.tween(-112, -112, 0.5, 0.5, 225, 225, 0, 0, 1, {
             "name": "alpha",
             "value": 255
         })
-        image_intro.tween(0, 80, 200, 120, 1)  # posx final, posy final, largeur finale, hauteur finale, durée
-        texte_intro.tween(0, 0, 200, 80, 1, {  # transition de la taille du font également
+        texte_intro.tween(POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, 1, {  # transition de la taille du font également, le reste reste identique
             "name": "fontsize",
             "value": 44
         })
@@ -111,7 +118,7 @@ class Model:
         Model.firstintro = False
         Model.secondintro = True
         surfaceintro = surface.Surface.getSurfaces()[0]
-        surfaceintro.tween(surfaceintro.x, surfaceintro.y, surfaceintro.width, surfaceintro.height, 1, {
+        surfaceintro.tween(surfaceintro.x, surfaceintro.y, surfaceintro.scalex, surfaceintro.scaley, surfaceintro.width, surfaceintro.height, surfaceintro.scalew, surfaceintro.scaleh, 1, {
             "name": "alpha",
             "value": 0  # transparent
         })
@@ -127,39 +134,46 @@ class Model:
         Model.main_menu()
 
     def main_menu(cls):
-        # creation de l'image du menu
+        # creation de l'image d'arrière plan du menu
         REPERTOIRE = "assets/img/background_temporaire.jpg"
-        POSITION_SURFACE = (0, 0)
         POSITION_X = 0
         POSITION_Y = 0
-        LARGEUR = 640
-        HAUTEUR = 480
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 0
+        HAUTEUR = 0
+        SCALE_WIDTH = 1
+        SCALE_HEIGHT = 1
         COULEUR = constantes.WHITE
         BORDURE = 0
 
-        image_menu = image.Image(REPERTOIRE, Model.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR, HAUTEUR,
-                           COULEUR, BORDURE)
+        image_menu = image.Image(REPERTOIRE, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
-        POSITION_SURFACE = (0, 0)
-        POSITION_X = 120
-        POSITION_Y = 150
+        SCALE_X = 0.5
+        SCALE_Y = 0.5
         LARGEUR = 400
         HAUTEUR = 200
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        POSITION_X = - int(LARGEUR/2)
+        POSITION_Y = - int(HAUTEUR/2)
         COULEUR = constantes.WHITE
         BORDURE = 0  # rempli
-        ALPHA = 255  # opaque
-        CONVERT_ALPHA = True
+        ALPHA = 255  # opaque...
+        CONVERT_ALPHA = True  # ...mais transparent
 
-        surface_boutons = surface.Surface(ALPHA, CONVERT_ALPHA, Model.screen, POSITION_SURFACE, POSITION_X, POSITION_Y, LARGEUR,
-                                  HAUTEUR, COULEUR, BORDURE)
+        surface_boutons = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-        # Les fameux boutons du menu
-        POSITION_SURFACE = (120, 150)
         POSITION_X = 0
         POSITION_Y = 0
-        LARGEUR = 400
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 0
         HAUTEUR = 50
+        SCALE_WIDTH = 1
+        SCALE_HEIGHT = 0
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
@@ -172,18 +186,17 @@ class Model:
         BORDURE = 0  # rempli
 
         button.BJouer("Jouer", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                              ARRIERE_PLAN, ECART, surface_boutons.referance, POSITION_SURFACE, POSITION_X, POSITION_Y,
-                              LARGEUR, HAUTEUR, COULEUR, BORDURE)
+                              ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         button.BStats("Statistiques", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                              ARRIERE_PLAN, ECART, surface_boutons.referance, POSITION_SURFACE, POSITION_X, POSITION_Y,
-                              LARGEUR, HAUTEUR, COULEUR, BORDURE)
+                              ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         button.BParam("Paramètres", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                              ARRIERE_PLAN, ECART, surface_boutons.referance, POSITION_SURFACE, POSITION_X, POSITION_Y,
-                              LARGEUR, HAUTEUR, COULEUR, BORDURE)
+                              ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-    initscreen = classmethod(initscreen)
     mousebutton1down = classmethod(mousebutton1down)
     mousebutton1up = classmethod(mousebutton1up)
     startintro = classmethod(startintro)

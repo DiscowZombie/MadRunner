@@ -27,13 +27,13 @@ class Checkbox(uielement.UIelement):
     :param *UIargs - Tous les paramètres d'un élément graphique (voir classe "UIelement")
     """
 
-    def __init__(self, boxsize, text, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
+    def __init__(self, boxsize, textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
                  *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Checkbox")
 
         self.boxsize = boxsize
-        self.text = text
+        self.text = textb
         self.antialias = antialias
         self.textcolor = couleur_text
         self.font = font
@@ -46,8 +46,9 @@ class Checkbox(uielement.UIelement):
         self.checked = False
         self.clicking = False
         self.linkedcheckboxes = []  # ceci est une liste des checkbox qui sont "liés" à celui-ci, c'est à dire, si ce checkbox est coché mais qu'un des checkbox lié est coché, l'autre ce checkbox va être décoché.
+        self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset, False, *UIargs)
         self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)
-        self.create()  # la référence est crée en appelant cela. ATTENTION: La référence est la surface sur laquelle le texte est dessinée
+        self.referance = self.create()
 
         Checkbox.checkboxes.append(self)
 
@@ -57,15 +58,24 @@ class Checkbox(uielement.UIelement):
             checkbox.checked = False
 
     def create(self):
-        posy = self.y + int(self.height/2 - self.boxsize/2)
-        view.View.pygame.draw.rect(self.parentsurface, constantes.WHITE, [self.x, posy, self.boxsize, self.boxsize],
-                             0)
-        view.View.pygame.draw.rect(self.parentsurface, self.color, [self.x, posy, self.boxsize, self.boxsize],
-                             self.bordersize)
-        text.Text.create(self)
+        posx = self.parentsurface.abswidth*self.scalex + self.x
+        posy = self.parentsurface.absheight*self.scaley + self.y + int(self.height/2 - self.boxsize/2)
+        view.View.pygame.draw.rect(
+            self.parentsurface.referance,
+            constantes.WHITE,
+            [posx, posy, self.boxsize, self.boxsize],
+            0
+        )
+        view.View.pygame.draw.rect(
+            self.parentsurface.referance,
+            self.color,
+            [posx, posy, self.boxsize, self.boxsize],
+            self.bordersize
+        )
+        self.textobj.create()
 
     def draw(self):
-        text.Text.draw(self)
+        self.create()
 
     def __del__(self):
         if self in Checkbox.checkboxes:

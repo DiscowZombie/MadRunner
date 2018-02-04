@@ -1,4 +1,5 @@
 import model
+import view
 
 class Controller:
 
@@ -16,6 +17,10 @@ class Controller:
             # Si on appuie sur la croix pour fermer le programme
             if event.type == pygame.QUIT:
                 return False
+            # si on redimensionne la fenêtre
+            elif event.type == pygame.VIDEORESIZE:
+                view.View.updatewindow(event.size)
+            # clic sur la souris
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # RAPPEL, boutons possible:
                 # 1: Clique gauche

@@ -21,11 +21,11 @@ class Image(uielement.UIelement):
     def create(self, resize, xresize = None, yresize = None):
         image = view.View.pygame.image.load(self.imagepath).convert_alpha()
         if resize:
-            image = view.View.pygame.transform.scale(image, (xresize or self.width, yresize or self.height))
+            image = view.View.pygame.transform.scale(image, (xresize or int(self.parentsurface.abswidth*self.scalew + self.width), yresize or int(self.parentsurface.absheight*self.scaleh + self.height)))
         return image
 
     def draw(self):
-        self.referance = view.View.pygame.transform.scale(self.originalimage, (self.width, self.height))
+        self.referance = view.View.pygame.transform.scale(self.originalimage, (int(self.abswidth), int(self.absheight)))
 
     def __del__(self):
         if self in Image.images:

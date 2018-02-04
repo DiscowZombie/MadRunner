@@ -8,40 +8,34 @@ import uielement
 class View:
     pygame = None
     screen = None
+    screensize = (640, 480)  # taille par défaut de la fenêtre
 
     def __init__(self, pygame):
-        screen = pygame.display.set_mode((640, 480))  # fenêtre de 640 sur 480
-        screen.fill((255, 255, 255))
+        View.pygame = pygame
+        View.updatewindow(View.screensize)
         pygame.display.set_caption("Mad Runner")
 
         image_menu = pygame.image.load("assets/img/menu_fond.png").convert_alpha()
         pygame.display.set_icon(image_menu)  # Icone du jeu
 
-        View.pygame = pygame
+    def updatewindow(cls, newsize):  # quand la fenêtre est redimensionnée, ou initialisée
+        del View.screen  # efface l'ancienne objet écran qui n'est plus utile !
+        View.screensize = newsize
+        screen = uielement.UIelement(None, 0, 0, 0, 0, newsize[0], newsize[1], 0, 0, constantes.WHITE, 0, "screen", None, True)
+        screen.referance = View.pygame.display.set_mode(newsize, View.pygame.RESIZABLE)
         View.screen = screen
-
-        model.Model.initscreen(screen)
-
-    def drawreturn(cls):
-        POSITION_BOUTON = (0, 0)
-        TAILLE_BOUTON = [100, 50]
-        surfacetrans = View.pygame.Surface(TAILLE_BOUTON, View.pygame.SRCALPHA,
-                                           32)  # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
-        surfacetrans = surfacetrans.convert_alpha()  # Il faut cependant que la surface a un arrière plan transparent
-
-        model.BRetour(View.pygame, "Retour", surfacetrans, POSITION_BOUTON, POSITION_BOUTON[0], POSITION_BOUTON[1],
-                        TAILLE_BOUTON[0], TAILLE_BOUTON[1], constantes.GRAY, 0,
-                        constantes.BLACK, "Arial", 24, True, True, 0)
-
-        View.screen.blit(surfacetrans, POSITION_BOUTON)
 
     def checktween(self):
         tweendata = self.tweendata
         advanceratio = tweendata["passed"] / tweendata["duration"]
         self.x = int(tweendata["x start"] + tweendata["delta x"] * advanceratio)
         self.y = int(tweendata["y start"] + tweendata["delta y"] * advanceratio)
+        self.scalex = tweendata["scale x start"] + tweendata["delta x scale"] * advanceratio
+        self.scaley = tweendata["scale y start"] + tweendata["delta y scale"] * advanceratio
         self.width = int(tweendata["width start"] + tweendata["delta width"] * advanceratio)
         self.height = int(tweendata["height start"] + tweendata["delta height"] * advanceratio)
+        self.scalew = tweendata["scale width start"] + tweendata["delta width scale"] * advanceratio
+        self.scaleh = tweendata["scale height start"] + tweendata["delta height scale"] * advanceratio
 
         if "otherattr" in tweendata:
             for attributdict in tweendata["otherattr"]:
@@ -50,10 +44,9 @@ class View:
                     attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio))
 
     def updatescreen(cls, passed):
-
-        a = View.pygame.Surface((640, 480))  # une surface pour reset l'écran
+        a = View.pygame.Surface(View.screensize)  # une surface pour reset l'écran
         a.fill((255, 255, 255))
-        View.screen.blit(a, (0, 0))
+        View.screen.referance.blit(a, (0, 0))
 
         currentstate, statetime = statemanager.StateManager.getstate(), statemanager.StateManager.getstatetime()
         if currentstate == statemanager.StateEnum.INITIALISATION:
@@ -73,60 +66,45 @@ class View:
         UIelements = uielement.UIelement.getUIelements()
         tweenobj = []
 
-        if "Surface" in UIelements:
-            for surface in UIelements["Surface"]:  # on met à jour les surfaces en premier !
-                surface.draw()
-        for classname in UIelements:
+        for classname in UIelements:  # on met à jour les position absolues des éléments graphiques en premier...
             for obj in UIelements[classname]:
-                if hasattr(obj, "tweendata") and obj.tweendata:
+                if hasattr(obj, "tweendata") and obj.tweendata:  # tout d'abord, on calcul leur position s'il sont en train de faire une transition
                     View.checktween(obj)
                     tweenobj.append(obj)
+                parentsurface = obj.parentsurface
+                referance = parentsurface.referance
+                obj.absx = int(parentsurface.absx + referance.get_width()*obj.scalex + obj.x)
+                obj.absy = int(parentsurface.absy + referance.get_height()*obj.scaley + obj.y)
+                obj.abswidth = int(referance.get_width()*obj.scalew + obj.width)
+                obj.absheight = int(referance.get_height()*obj.scaleh + obj.height)
+
+        if "Surface" in UIelements:
+            for surface in UIelements["Surface"]:  # ...puis on met à jour les surfaces...
+                surface.draw()
+        for classname in UIelements:  # ...puis le reste...
             if classname != "Surface":
                 for obj in UIelements[classname]:
                     obj.draw()
-
                     if hasattr(obj, "referance"):
-                        if type(obj.referance) is dict:
-                            for referancename in obj.referance:
-                                obj.parentsurface.blit(obj.referance[referancename], (obj.x, obj.y))
+                        if classname == "Button":  # exception pour les boutons qui ne vont pas être blité comme les autres...
+                            textobj = obj.textobj
+                            obj.parentsurface.referance.blit(textobj.referance, (int(obj.parentsurface.referance.get_width()*obj.scalex + obj.x + textobj.x), int(obj.parentsurface.referance.get_height()*obj.scaley + obj.y + textobj.y)))
+                        elif classname == "Checkbox":  # ... et les checkbox aussi
+                            textobj = obj.textobj
+                            obj.parentsurface.referance.blit(textobj.referance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x + textobj.x + obj.boxsize), int(obj.parentsurface.absheight*obj.scaley + obj.y + textobj.y)))
+
+                            if obj.checked:
+                                obj.parentsurface.referance.blit(obj.checkreferance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x + obj.x), int(obj.parentsurface.absheight*obj.scaley + obj.y) + int(obj.height/2 - obj.boxsize/2)))
+                        elif classname == "Text":
+                            if obj.alone:
+                                obj.parentsurface.referance.blit(obj.referance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x), int(obj.parentsurface.absheight*obj.scaley + obj.y)))
                         else:
-                            if classname == "Button":  # exception pour les boutons qui ne vont pas être blité comme les autres...
-                                if obj.textcenteredx or obj.textcenteredy:
-                                    positionx, positiony = f.centretexte(obj.textreferance.size(obj.text), (obj.width, obj.height))
-                                    if not obj.textcenteredx:
-                                        positionx = 0
-                                    if not obj.textcenteredy:
-                                        positiony = 0
-                                else:
-                                     positionx, positiony = 0, 0
-
-                                obj.parentsurface.blit(obj.referance, (obj.x + positionx, obj.y + positiony))
-
-                            elif classname == "Checkbox":  # ... et les checkbox aussi
-                                if obj.textcenteredx or obj.textcenteredy:
-                                    positionx, positiony = f.centretexte(obj.textreferance.size(obj.text), (obj.width, obj.height))
-                                    if not obj.textcenteredx:
-                                        positionx = 0
-                                    if not obj.textcenteredy:
-                                        positiony = 0
-                                else:
-                                     positionx, positiony = 0, 0
-
-                                obj.parentsurface.blit(obj.referance, (positionx + obj.textoffset, obj.y + positiony))
-
-                                checksize = obj.boxsize - obj.bordersize*2
-                                a = View.pygame.Surface((checksize, checksize))  # une surface pour reset les checkbox
-                                a.fill((255, 255, 255))
-                                obj.parentsurface.blit(a, (obj.x + obj.bordersize, obj.y + obj.bordersize + int(obj.height/2 - obj.boxsize/2)))
-
-                                if obj.checked:
-                                    obj.parentsurface.blit(obj.checkreferance, (obj.x, obj.y + int(obj.height/2 - obj.boxsize/2)))
-                            else:
-                                obj.parentsurface.blit(obj.referance, (obj.x, obj.y))
+                            obj.parentsurface.referance.blit(obj.referance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x), int(obj.parentsurface.absheight*obj.scaley + obj.y)))
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:
-                View.screen.blit(surface.referance, (surface.x, surface.y))
+                parentsize = surface.parentsurface.referance.get_size()
+                surface.parentsurface.referance.blit(surface.referance, (parentsize[0]*surface.scalex + surface.x, parentsize[1]*surface.scaley + surface.y))
 
         View.pygame.display.update()
 
@@ -138,7 +116,7 @@ class View:
                     obj)  # on met la durée à l'état final, car il peut y avoir de gros décalage en cas de performance pas assez élevé
                 del obj.tweendata  # transition finie
 
-    drawreturn = classmethod(drawreturn)
+    updatewindow = classmethod(updatewindow)
     updatescreen = classmethod(updatescreen)
 
     """"

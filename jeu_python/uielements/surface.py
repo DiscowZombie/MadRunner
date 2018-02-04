@@ -14,17 +14,16 @@ class Surface(uielement.UIelement):
 
     def create(self):
         if self.convertalpha:
-            return view.View.pygame.Surface((self.width, self.height), view.View.pygame.SRCALPHA, 32)
+            surface = view.View.pygame.Surface((self.abswidth, self.absheight), view.View.pygame.SRCALPHA, 32)
+            surface.convert_alpha(surface)
         else:
-            return view.View.pygame.Surface((self.width, self.height))
-
-    def draw(self):
-        surface = self.referance
-        if self.convertalpha:
-            surface.convert_alpha(self.referance)
-        else:
+            surface = view.View.pygame.Surface((self.abswidth, self.absheight))
             surface.fill(self.color)
             surface.set_alpha(self.alpha)
+        return surface
+
+    def draw(self):
+        self.referance = self.create()
 
     def __del__(self):
         if self in Surface.surfaces:
