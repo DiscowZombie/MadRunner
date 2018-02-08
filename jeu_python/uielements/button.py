@@ -76,9 +76,10 @@ class Button(uielement.UIelement):
         self.create()
 
     def __del__(self):
+        self.textobj.__del__()
         if self in Button.boutons:
             Button.boutons.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
-            self.remove()
+        self.remove()
 
     def getButtons(cls):
         return Button.boutons
@@ -520,7 +521,9 @@ class BCommencer(Button):
         Button.__init__(*arguments)
 
     def button1down(self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
-        print("commencer le jeu !")
+        functions.delete_menu_obj()
+        for img in list(image.Image.getImages()):
+            img.__del__()
 
 
 menu_states = [  # les états du jeu qui font retourner au menu principale lorsqu'on clique sur retour

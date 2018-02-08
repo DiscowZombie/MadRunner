@@ -48,7 +48,7 @@ class Text(uielement.UIelement):
     def __del__(self):
         if self in Text.texts:
             Text.texts.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
-            self.remove()
+        self.remove()
 
     def getTexts(cls):
         return Text.texts

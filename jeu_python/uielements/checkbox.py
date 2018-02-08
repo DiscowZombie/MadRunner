@@ -78,9 +78,10 @@ class Checkbox(uielement.UIelement):
         self.create()
 
     def __del__(self):
+        self.textobj.__del__()
         if self in Checkbox.checkboxes:
             Checkbox.checkboxes.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
-            self.remove()
+        self.remove()
 
     def getCheckboxes(cls):
         return Checkbox.checkboxes

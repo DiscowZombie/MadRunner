@@ -28,7 +28,7 @@ class Surface(uielement.UIelement):
     def __del__(self):
         if self in Surface.surfaces:
             Surface.surfaces.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
-            self.remove()
+        self.remove()
 
     def getSurfaces(cls):
         return Surface.surfaces

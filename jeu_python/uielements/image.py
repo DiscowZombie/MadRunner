@@ -30,7 +30,7 @@ class Image(uielement.UIelement):
     def __del__(self):
         if self in Image.images:
             Image.images.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
-            self.remove()
+        self.remove()
 
     def getImages(cls):
         return Image.images
