@@ -1,15 +1,15 @@
-# This class handles sprite sheets
-# This was taken from www.scriptefun.com/transcript-2-using
-# sprite-sheets-and-drawing-the-background
-# I've added some code to fail if the file wasn't found..
-# Note: When calling images_at the rect is the format:
-# (x, y, x + offset, y + offset)
-
-# TODO
+# Source original
 #  http://www.pygame.org/wiki/Spritesheet
 
+"""
+3 pixels mort en haut
+3 pixels mort en bas
 
-class spritesheet(object):
+80 pixels (aucun pixel mort), tout juste
+"""
+
+
+class SpriteSheet(object):
     sheet = None
     strip = []
 
@@ -20,18 +20,16 @@ class spritesheet(object):
         # Clear Strip
         self.strip = []
 
-        lastmin = 3
-        lastmax = 2 + 75
-        for i in range(0, nombre_images + 1):
-            self.strip.append(self.image_at((lastmin, 3, lastmax, 3 + 91)))
-            lastmin += lastmax
-            lastmax += (2 + 75 + 13)
+        x = 3
+        for i in range(0, nombre_images):
+            self.strip.append(self.image_at((x, 3, x + 80, 76)))
+            x += 88
 
         return self.strip
 
     # Load a specific image from a specific rectangle
     def image_at(self, rectangle, colorkey=None):
-        "Loads image from x,y,x+offset,y+offset"
+        # Loads image from x,y,x+offset,y+offset
         rect = pygame.Rect(rectangle)
         image = pygame.Surface(rect.size).convert()
         image.blit(self.sheet, (0, 0), rect)
@@ -43,54 +41,19 @@ class spritesheet(object):
 
 
 class SpriteStripAnim(object):
-    """sprite strip animator
+    compteur = 0
+    strip = []
 
-    This class provides an iterator (iter() and next() methods), and a
-    __add__() method for joining strips which comes in handy when a
-    strip wraps to the next row.
-    """
+    def __init__(self, strips):
+        self.compteur = 0
+        self.strip = strips
 
-    def __init__(self, filename, rect, count, colorkey=None, loop=False, frames=1):
-        """construct a SpriteStripAnim
-
-        filename, rect, count, and colorkey are the same arguments used
-        by spritesheet.load_strip.
-
-        loop is a boolean that, when True, causes the next() method to
-        loop. If False, the terminal case raises StopIteration.
-
-        frames is the number of ticks to return the same image before
-        the iterator advances to the next image.
-        """
-        self.filename = filename
-        ss = spritesheet(filename)
-        self.images = ss.load_strip(rect, count, colorkey)
-        self.i = 0
-        self.loop = loop
-        self.frames = frames
-        self.f = frames
-
-    def iter(self):
-        self.i = 0
-        self.f = self.frames
-        return self
-
-    def next(self):
-        if self.i >= len(self.images):
-            if not self.loop:
-                raise StopIteration
-            else:
-                self.i = 0
-        image = self.images[self.i]
-        self.f -= 1
-        if self.f == 0:
-            self.i += 1
-            self.f = self.frames
-        return image
-
-    def __add__(self, ss):
-        self.images.extend(ss.images)
-        return self
+    def next(self, posx, posy):
+        screen.blit(self.strip[self.compteur], (posx, posy))
+        if self.compteur + 1 > (len(self.strip) - 1):
+            self.compteur = 0
+        else:
+            self.compteur += 1
 
 
 import pygame
@@ -99,41 +62,16 @@ from pygame import *
 pygame.init()
 
 screen = pygame.display.set_mode((480, 320))
-
 clock = pygame.time.Clock()
 
-# http://www.pygame.org/wiki/Spritesheet
-"""strips = [
-    SpriteStripAnim("assets/img/personnages/gros/cour.png", (4, 4, 80, 89), 1, 1),
-    SpriteStripAnim("assets/img/personnages/gros/cour.png", (80 * 7 + 4, 89 * 7 + 4, 80, 89), 1, 1)
-]
-
-n = 0
-strips[n].iter()
-image = strips[n].next()
-
-while True:
-    if n >= len(strips):
-        n = 0
-        strips[n].iter()
-
-    screen.blit(image, (50, 50))
-    pygame.display.flip()
-    image = strips[n].next()
-
-    clock.tick(1)"""
-
-st = spritesheet("../assets/img/personnages/gros/cour.png").load(10)
+st = SpriteSheet("../assets/img/personnages/gros/cour.png").load(10)
+ssa = SpriteStripAnim(st)
 n = 0
 
 while True:
     screen.fill((0, 0, 0))
 
-    screen.blit(st[n], (10, 10))
-    if (n + 1 > (len(st) - 1)):
-        n = 0
-    else:
-        n += 1
+    ssa.next(100, 100)
 
     pygame.display.flip()
-    clock.tick(3) #1 fps
+    clock.tick(3)  # 3 fps
