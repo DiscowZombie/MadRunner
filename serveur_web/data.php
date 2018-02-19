@@ -20,11 +20,8 @@ if(isset($_GET["id"]) AND !empty($_GET["id"])){
 
 	$q->closeCursor();
 
-	# On écrit dans le fichier json
-	$fp = fopen('secure/data.json', 'w');
-	fwrite($fp, json_encode($jsontxt));
-	fclose($fp);
-
-	header("Location: secure/data.json");
+	# On retourne les infos comme un fichier json
+	header('Content-type: application/json');
+	echo json_encode($jsontxt);
 
 }

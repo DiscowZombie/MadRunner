@@ -32,9 +32,9 @@ if(isset($_POST["pseudo"]) AND !empty($_POST["pseudo"]) AND isset($_POST["passwo
   	$jsontxt = array();
     $jsontxt["key"] = $key;
 
-    $fp = fopen('secure/response.json', 'w');
-  	fwrite($fp, json_encode($jsontxt));
-  	fclose($fp);
+    # On retourne les infos comme un fichier json
+  	header('Content-type: application/json');
+  	echo json_encode($jsontxt);
   }
 
 }
