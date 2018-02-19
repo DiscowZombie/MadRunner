@@ -1,40 +1,32 @@
-# Source original
+# Source original (en tant que support)
 #  http://www.pygame.org/wiki/Spritesheet
 
-"""
-3 pixels mort en haut
-3 pixels mort en bas
-
-80 pixels (aucun pixel mort), tout juste
-"""
 import view
 
 
-class SpriteSheet(object):
+class SpriteSheet:
     sheet = None
     strip = []
 
     def __init__(self, filename):
-        self.sheet = view.View.pygame.image.load(filename).convert()
+        self.sheet = view.View.pygame.image.load(filename).convert_alpha()
 
     def load(self, nombre_images):
         # Clear Strip
         self.strip = []
 
-        x = 3
         for i in range(0, nombre_images):
             self.strip.append(self.image_at((
                 i * 80,
-                3,
+                0,
                 80,
-                i * 80 + 76
+                98
             )))
-            x += 88
 
         return self.strip
 
     # Load a specific image from a specific rectangle
-    def image_at(self, rectangle, colorkey=None):
+    def image_at(self, rectangle, colorkey = None):
         # Loads image from x,y,x+offset,y+offset
         rect = view.View.pygame.Rect(rectangle)
         image = view.View.pygame.Surface(rect.size).convert()
@@ -46,19 +38,21 @@ class SpriteSheet(object):
         return image
 
 
-class SpriteStripAnim(object):
-    compteur = 0
-    strip = []
+class SpriteStripAnim(SpriteSheet):
 
-    def __init__(self, strips):
+    def __init__(self, spriteinfos):
+        SpriteSheet.__init__(self, spriteinfos["image"])
         self.compteur = 0
-        self.strip = strips
+        self.speed = spriteinfos["initspeed"]
+        self.numimage = spriteinfos["nbimage"]
+        self.strip = self.load(self.numimage)
 
     def next(self, posx, posy):
         # Draw
-        view.View.screen.blit(self.strip[self.compteur], (posx, posy))
+        # ne pas oublier de passer à l'image suivante uniquement si la vitesse le permet, ne pas oublier d'ajuter ca !
+        view.View.screen.referance.blit(self.strip[self.compteur], (posx, posy))
         # Change compteur
-        if self.compteur + 1 > (len(self.strip) - 1):
+        if self.compteur + 1 == self.numimage:
             self.compteur = 0
         else:
             self.compteur += 1

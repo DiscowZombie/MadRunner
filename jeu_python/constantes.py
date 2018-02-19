@@ -11,5 +11,35 @@ GRAY = (192, 192, 192)
 # Pour les chemins d'accès
 CONFIG_PATH = "config/"
 
-# SpriteSheet path
-SPRITESHEET_PATH = "assets/img/personnages/gros/cour.png"
+# informations sur différents spritesheet
+Animations = {
+    "cour": {
+        "gros": {
+            "image": "assets/img/personnages/gros/cour.png",
+            "nbimage": 10,
+            "initspeed": 15  # initspeed désigne la vitesse initiale de l'animation (en image par seconde)
+        },
+        "normal": {
+            "image": "",
+            "nbimage": 0
+        },
+        "athlete": {
+            "image": "",
+            "nbimage": 0
+        }
+    },
+    "saut": {
+        "gros": {
+            "image": "",
+            "nbimage": 0
+        },
+        "normal": {
+            "image": "",
+            "nbimage": 0
+        },
+        "athlete": {
+            "image": "",
+            "nbimage": 0
+        }
+    }
+}

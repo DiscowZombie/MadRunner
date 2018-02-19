@@ -2,6 +2,7 @@ import model
 import functions as f
 import constantes
 import statemanager
+import coregame.coregame as coregame
 
 import uielement
 
@@ -12,18 +13,21 @@ class View:
     screensize = (640, 480)  # taille par défaut de la fenêtre
 
     def __init__(self, pygame):
+        View.pygame = pygame
         self.pygame = pygame
         self.updatewindow(View.screensize)
         self.pygame.display.set_caption("Mad Runner")
 
         image_menu = self.pygame.image.load("assets/img/menu_fond.png").convert_alpha()
         self.pygame.display.set_icon(image_menu)  # Icone du jeu
+        View.pygame = pygame
 
     def updatewindow(cls, newsize):  # quand la fenêtre est redimensionnée, ou initialisée
         del View.screen  # efface l'ancienne objet écran qui n'est plus utile !
         View.screensize = newsize
         screen = uielement.UIelement(None, 0, 0, 0, 0, newsize[0], newsize[1], 0, 0, constantes.WHITE, 0, "screen",
                                      None, True)
+        print(View.pygame)
         screen.referance = View.pygame.display.set_mode(newsize, View.pygame.RESIZABLE)
         View.screen = screen
 
@@ -64,6 +68,8 @@ class View:
                     model.Model.endintro()
         elif currentstate == statemanager.StateEnum.MAIN_MENU:
             pass
+        elif currentstate == statemanager.StateEnum.PLAYING:
+            coregame.CoreGame.loop()
 
         UIelements = uielement.UIelement.getUIelements()
         tweenobj = []

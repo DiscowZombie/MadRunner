@@ -560,8 +560,7 @@ class BCommencer(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
-            self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+    def button1down(self):
         cgame = coregame.CoreGame()
         cgame.loop()
 
