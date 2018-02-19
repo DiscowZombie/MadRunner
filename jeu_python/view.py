@@ -5,23 +5,25 @@ import statemanager
 
 import uielement
 
+
 class View:
     pygame = None
     screen = None
     screensize = (640, 480)  # taille par défaut de la fenêtre
 
     def __init__(self, pygame):
-        View.pygame = pygame
-        View.updatewindow(View.screensize)
-        pygame.display.set_caption("Mad Runner")
+        self.pygame = pygame
+        self.updatewindow(View.screensize)
+        self.pygame.display.set_caption("Mad Runner")
 
-        image_menu = pygame.image.load("assets/img/menu_fond.png").convert_alpha()
-        pygame.display.set_icon(image_menu)  # Icone du jeu
+        image_menu = self.pygame.image.load("assets/img/menu_fond.png").convert_alpha()
+        self.pygame.display.set_icon(image_menu)  # Icone du jeu
 
     def updatewindow(cls, newsize):  # quand la fenêtre est redimensionnée, ou initialisée
         del View.screen  # efface l'ancienne objet écran qui n'est plus utile !
         View.screensize = newsize
-        screen = uielement.UIelement(None, 0, 0, 0, 0, newsize[0], newsize[1], 0, 0, constantes.WHITE, 0, "screen", None, True)
+        screen = uielement.UIelement(None, 0, 0, 0, 0, newsize[0], newsize[1], 0, 0, constantes.WHITE, 0, "screen",
+                                     None, True)
         screen.referance = View.pygame.display.set_mode(newsize, View.pygame.RESIZABLE)
         View.screen = screen
 
@@ -68,15 +70,16 @@ class View:
 
         for classname in UIelements:  # on met à jour les position absolues des éléments graphiques en premier...
             for obj in UIelements[classname]:
-                if hasattr(obj, "tweendata") and obj.tweendata:  # tout d'abord, on calcul leur position s'il sont en train de faire une transition
+                if hasattr(obj,
+                           "tweendata") and obj.tweendata:  # tout d'abord, on calcul leur position s'il sont en train de faire une transition
                     View.checktween(obj)
                     tweenobj.append(obj)
                 parentsurface = obj.parentsurface
                 referance = parentsurface.referance
-                obj.absx = int(parentsurface.absx + referance.get_width()*obj.scalex + obj.x)
-                obj.absy = int(parentsurface.absy + referance.get_height()*obj.scaley + obj.y)
-                obj.abswidth = int(referance.get_width()*obj.scalew + obj.width)
-                obj.absheight = int(referance.get_height()*obj.scaleh + obj.height)
+                obj.absx = int(parentsurface.absx + referance.get_width() * obj.scalex + obj.x)
+                obj.absy = int(parentsurface.absy + referance.get_height() * obj.scaley + obj.y)
+                obj.abswidth = int(referance.get_width() * obj.scalew + obj.width)
+                obj.absheight = int(referance.get_height() * obj.scaleh + obj.height)
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:  # ...puis on met à jour les surfaces...
@@ -88,23 +91,35 @@ class View:
                     if hasattr(obj, "referance"):
                         if classname == "Button":  # exception pour les boutons qui ne vont pas être blité comme les autres...
                             textobj = obj.textobj
-                            obj.parentsurface.referance.blit(textobj.referance, (int(obj.parentsurface.referance.get_width()*obj.scalex + obj.x + textobj.x), int(obj.parentsurface.referance.get_height()*obj.scaley + obj.y + textobj.y)))
+                            obj.parentsurface.referance.blit(textobj.referance, (
+                            int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x + textobj.x),
+                            int(obj.parentsurface.referance.get_height() * obj.scaley + obj.y + textobj.y)))
                         elif classname == "Checkbox":  # ... et les checkbox aussi
                             textobj = obj.textobj
-                            obj.parentsurface.referance.blit(textobj.referance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x + textobj.x + obj.boxsize), int(obj.parentsurface.absheight*obj.scaley + obj.y + textobj.y)))
+                            obj.parentsurface.referance.blit(textobj.referance, (
+                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x + obj.boxsize),
+                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
 
                             if obj.checked:
-                                obj.parentsurface.referance.blit(obj.checkreferance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x + obj.x), int(obj.parentsurface.absheight*obj.scaley + obj.y) + int(obj.height/2 - obj.boxsize/2)))
+                                obj.parentsurface.referance.blit(obj.checkreferance, (
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x + obj.x),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y) + int(
+                                    obj.height / 2 - obj.boxsize / 2)))
                         elif classname == "Text":
                             if obj.alone:
-                                obj.parentsurface.referance.blit(obj.referance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x), int(obj.parentsurface.absheight*obj.scaley + obj.y)))
+                                obj.parentsurface.referance.blit(obj.referance, (
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y)))
                         else:
-                            obj.parentsurface.referance.blit(obj.referance, (int(obj.parentsurface.abswidth*obj.scalex + obj.x), int(obj.parentsurface.absheight*obj.scaley + obj.y)))
+                            obj.parentsurface.referance.blit(obj.referance, (
+                            int(obj.parentsurface.abswidth * obj.scalex + obj.x),
+                            int(obj.parentsurface.absheight * obj.scaley + obj.y)))
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:
                 parentsize = surface.parentsurface.referance.get_size()
-                surface.parentsurface.referance.blit(surface.referance, (parentsize[0]*surface.scalex + surface.x, parentsize[1]*surface.scaley + surface.y))
+                surface.parentsurface.referance.blit(surface.referance, (
+                parentsize[0] * surface.scalex + surface.x, parentsize[1] * surface.scaley + surface.y))
 
         View.pygame.display.update()
 

@@ -7,6 +7,7 @@
 
 80 pixels (aucun pixel mort), tout juste
 """
+import view
 
 
 class SpriteSheet(object):
@@ -14,7 +15,7 @@ class SpriteSheet(object):
     strip = []
 
     def __init__(self, filename):
-        self.sheet = pygame.image.load(filename).convert()
+        self.sheet = view.View.pygame.image.load(filename).convert()
 
     def load(self, nombre_images):
         # Clear Strip
@@ -22,7 +23,12 @@ class SpriteSheet(object):
 
         x = 3
         for i in range(0, nombre_images):
-            self.strip.append(self.image_at((x, 3, x + 80, 76)))
+            self.strip.append(self.image_at((
+                i * 80,
+                3,
+                80,
+                i * 80 + 76
+            )))
             x += 88
 
         return self.strip
@@ -30,13 +36,13 @@ class SpriteSheet(object):
     # Load a specific image from a specific rectangle
     def image_at(self, rectangle, colorkey=None):
         # Loads image from x,y,x+offset,y+offset
-        rect = pygame.Rect(rectangle)
-        image = pygame.Surface(rect.size).convert()
+        rect = view.View.pygame.Rect(rectangle)
+        image = view.View.pygame.Surface(rect.size).convert()
         image.blit(self.sheet, (0, 0), rect)
         if colorkey is not None:
             if colorkey is -1:
                 colorkey = image.get_at((0, 0))
-            image.set_colorkey(colorkey, pygame.RLEACCEL)
+            image.set_colorkey(colorkey, view.View.pygame.RLEACCEL)
         return image
 
 
@@ -49,13 +55,17 @@ class SpriteStripAnim(object):
         self.strip = strips
 
     def next(self, posx, posy):
-        screen.blit(self.strip[self.compteur], (posx, posy))
+        # Draw
+        view.View.screen.blit(self.strip[self.compteur], (posx, posy))
+        # Change compteur
         if self.compteur + 1 > (len(self.strip) - 1):
             self.compteur = 0
         else:
             self.compteur += 1
 
 
+"""
+Version indé
 import pygame
 from pygame import *
 
@@ -66,12 +76,15 @@ clock = pygame.time.Clock()
 
 st = SpriteSheet("../assets/img/personnages/gros/cour.png").load(10)
 ssa = SpriteStripAnim(st)
-n = 0
 
 while True:
     screen.fill((0, 0, 0))
 
-    ssa.next(100, 100)
+    # Le perso doit bouger à 15 fps
+    for i in range(0, 60//4):
+        ssa.next(100, 100)
+        pygame.time.wait(33)
 
     pygame.display.flip()
-    clock.tick(3)  # 3 fps
+    clock.tick(60)
+"""

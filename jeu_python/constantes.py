@@ -10,3 +10,6 @@ GRAY = (192, 192, 192)
 
 # Pour les chemins d'accès
 CONFIG_PATH = "config/"
+
+# SpriteSheet path
+SPRITESHEET_PATH = "assets/img/personnages/gros/cour.png"

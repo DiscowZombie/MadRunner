@@ -12,6 +12,7 @@ import controller
 import settings
 # l'état du jeu
 import statemanager
+import coregame.coregame as coregame
 
 # On initialise le module
 pygame.init()
@@ -39,6 +40,9 @@ while running:
     if running:
         view.View.updatescreen(passed)  # puis on update tout ça
         statemanager.StateManager.setstatetime(passed)
+
+        if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:
+            coregame.loop(view.View.pygame)
 
         # On limite à 60 fps ou à la valeur en config si elle est valide
         # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
