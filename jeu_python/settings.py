@@ -1,5 +1,7 @@
 import json
 import constantes as c
+import pycurl
+from io import BytesIO
 
 
 class JsonManager:
@@ -13,12 +15,23 @@ class JsonManager:
 
 class BDDManager:
 
-    def __init__(self):
-        print()
+    body = None
 
+    def __init__(self, website_url):
+        buffer = BytesIO()
+        cu = pycurl.Curl()
+        cu.setopt(cu.URL, website_url)
+        cu.setopt(cu.WRITEDATA, buffer)
+        cu.perform()
+        cu.close()
+        self.body = buffer.getvalue()
+
+    """
+    Read JSON - GET Request only
+    """
     def readbdd(self):
-        # Make Web Request and Read returned json
-        return None
+        jsonbody = json.loads(self.body.decode('iso-8859-1'))
+        return jsonbody
 
 
 class Settings:
@@ -29,5 +42,7 @@ class Settings:
     def get_conf_setting(self, setting_path):
         return JsonManager(c.CONFIG_PATH + "settings.json").readjson()[setting_path]
 
-    def get_bdd_settings(self, setting_path):
-        return None
+    """
+    Read JSON - GET Request only"""
+    def get_bdd_settings(self, url, setting_path):
+        return BDDManager(url).readbdd()[setting_path]
