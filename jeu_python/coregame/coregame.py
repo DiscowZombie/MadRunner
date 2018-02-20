@@ -8,7 +8,6 @@ import constantes
 Ne fonctionne pour piur 60 fps pour le moment
 """
 
-
 class CoreGame:
 
     character_sprite = None

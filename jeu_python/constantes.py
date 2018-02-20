@@ -17,7 +17,7 @@ Animations = {
         "gros": {
             "image": "assets/img/personnages/gros/cour.png",
             "nbimage": 10,
-            "initspeed": 15  # initspeed désigne la vitesse initiale de l'animation (en image par seconde)
+            "initspeed": 20  # initspeed désigne la vitesse initiale de l'animation (en image par seconde)
         },
         "normal": {
             "image": "",

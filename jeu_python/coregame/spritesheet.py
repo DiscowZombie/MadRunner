@@ -5,8 +5,6 @@ import view
 
 
 class SpriteSheet:
-    sheet = None
-    strip = []
 
     def __init__(self, filename):
         self.sheet = view.View.pygame.image.load(filename).convert_alpha()
@@ -42,20 +40,25 @@ class SpriteStripAnim(SpriteSheet):
 
     def __init__(self, spriteinfos):
         SpriteSheet.__init__(self, spriteinfos["image"])
+        self.speedcounter = 0
         self.compteur = 0
         self.speed = spriteinfos["initspeed"]
         self.numimage = spriteinfos["nbimage"]
         self.strip = self.load(self.numimage)
 
     def next(self, posx, posy):
-        # Draw
-        # ne pas oublier de passer à l'image suivante uniquement si la vitesse le permet, ne pas oublier d'ajuter ca !
-        view.View.screen.referance.blit(self.strip[self.compteur], (posx, posy))
-        # Change compteur
-        if self.compteur + 1 == self.numimage:
-            self.compteur = 0
-        else:
+        # calcule et dessine la prochaine image (ou pas !)
+        if self.speedcounter == 60//self.speed:
+            self.speedcounter = 0
             self.compteur += 1
+        else:
+            self.speedcounter += 1
+
+        if self.compteur == self.numimage:
+            self.compteur = 0
+
+        view.View.screen.referance.blit(self.strip[self.compteur], (posx, posy))
+
 
 
 """
