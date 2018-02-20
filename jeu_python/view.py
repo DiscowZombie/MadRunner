@@ -27,7 +27,6 @@ class View:
         View.screensize = newsize
         screen = uielement.UIelement(None, 0, 0, 0, 0, newsize[0], newsize[1], 0, 0, constantes.WHITE, 0, "screen",
                                      None, True)
-        print(View.pygame)
         screen.referance = View.pygame.display.set_mode(newsize, View.pygame.RESIZABLE)
         View.screen = screen
 

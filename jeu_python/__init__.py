@@ -12,6 +12,7 @@ import controller
 import settings
 # l'état du jeu
 import statemanager
+import utils
 
 # On initialise le module
 pygame.init()
@@ -29,6 +30,11 @@ view.View(pygame)
 controller.Controller(pygame, view)
 
 running = True
+
+# On limite à 60 fps ou à la valeur en config si elle est valide
+fps = utils.GameSettings().setfps()
+print("[DEBUG] FPS: " + str(fps)) #TODO
+
 passed = 0
 
 while running:
@@ -42,8 +48,7 @@ while running:
 
         # On limite à 60 fps ou à la valeur en config si elle est valide
         # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
-        passed = clock.tick(settings.Settings().get_conf_setting("limit_fps") if functions.isvalidint(
-            settings.Settings().get_conf_setting("limit_fps")) else 60)
+        passed = clock.tick(fps)
 
 # On quitte le module
 pygame.quit()

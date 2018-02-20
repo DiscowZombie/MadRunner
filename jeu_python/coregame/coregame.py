@@ -21,8 +21,6 @@ class CoreGame:
         CoreGame.character_sprite = sprit.SpriteStripAnim(constantes.Animations["cour"]["gros"])
 
     def loop(cls):
-        # Le perso doit bouger à 15 fps
-        #for i in range(0, 60 // 4):
         CoreGame.character_sprite.next(100, 100)
 
     loop = classmethod(loop)

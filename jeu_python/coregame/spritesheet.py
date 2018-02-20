@@ -58,30 +58,3 @@ class SpriteStripAnim(SpriteSheet):
             self.compteur = 0
 
         view.View.screen.referance.blit(self.strip[self.compteur], (posx, posy))
-
-
-
-"""
-Version indé
-import pygame
-from pygame import *
-
-pygame.init()
-
-screen = pygame.display.set_mode((480, 320))
-clock = pygame.time.Clock()
-
-st = SpriteSheet("../assets/img/personnages/gros/cour.png").load(10)
-ssa = SpriteStripAnim(st)
-
-while True:
-    screen.fill((0, 0, 0))
-
-    # Le perso doit bouger à 15 fps
-    for i in range(0, 60//4):
-        ssa.next(100, 100)
-        pygame.time.wait(33)
-
-    pygame.display.flip()
-    clock.tick(60)
-"""
