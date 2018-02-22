@@ -1,5 +1,7 @@
 import model
 import view
+import statemanager
+import coregame.coregame as coregame
 
 class Controller:
 
@@ -38,7 +40,9 @@ class Controller:
                 if button_number == 1:  # clic gauche
                     model.Model.mousebutton1up(event.pos)
             elif event.type == pygame.KEYDOWN:
-                print("ok")
+                if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:  # le clavier n'est utile uniquement pendant qu'on joue !
+                    if event.key == pygame.K_SPACE:
+                        coregame.CoreGame.spacepressed()
         return True
 
     def getpressingbuttons(cls):
