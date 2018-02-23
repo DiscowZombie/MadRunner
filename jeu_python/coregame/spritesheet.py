@@ -49,6 +49,7 @@ class SpriteStripAnim(SpriteSheet):
         self.speed = spriteinfos["initspeed"]
         self.numimage = spriteinfos["nbimage"]
         self.framesize = spriteinfos["framesize"]
+        self.repeatimage = spriteinfos["repeatimage"]
         self.strip = self.load(self.numimage, self.framesize)
 
     def next(self, offsetx, offsety):
@@ -60,8 +61,6 @@ class SpriteStripAnim(SpriteSheet):
             self.speedcounter += 1
 
         if self.compteur == self.numimage:
-            self.compteur = 0
-
-        print(self.compteur)
+            self.compteur = self.repeatimage - 1
 
         view.View.screen.referance.blit(self.strip[self.compteur], (self.x + offsetx, self.y + offsety))
