@@ -138,21 +138,3 @@ class View:
 
     updatewindow = classmethod(updatewindow)
     updatescreen = classmethod(updatescreen)
-
-    """"
-    @staticmethod
-    def createbouton(pygame, name, surface_bouton, surface_position, posx, posy, width, height, couleur_bouton,
-                     bordersize, couleur_text, font, font_size, centeredx, centeredy, offset):
-        pygame.draw.rect(surface_bouton, couleur_bouton, [posx, posy, width, height], bordersize)
-        texte = pygame.font.SysFont(font, font_size)
-        if centeredx or centeredy:
-            positionx, positiony = f.centretexte(texte.size(name), (width, height))
-            if not centeredx:
-                positionx = 0
-            if not centeredy:
-                positiony = 0
-        else:
-            positionx, positiony = 0, 0
-
-        surface_bouton.blit(texte.render(str(name), True, couleur_text), (positionx + offset, posy + positiony))
-    """
