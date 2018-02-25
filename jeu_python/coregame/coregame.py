@@ -3,6 +3,7 @@ import uielements.image as image
 import statemanager
 import coregame.spritesheet as sprit
 import constantes
+import view as v
 
 """
 Ne fonctionne pour piur 60 fps pour le moment
