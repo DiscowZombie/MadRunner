@@ -56,7 +56,12 @@ class CoreGame:
         elif character.jumping:
             state = "jump"
 
+        # On charge le perso
         character.__getattribute__(state + "sprite").next(-int(characterinfos[state]["framesize"][0]/2), -int(characterinfos[state]["framesize"][1]/2))
+
+        # Chargement et collage du personnage
+        perso = v.View.pygame.image.load("assets/").convert()
+        v.View.screen.referance.blit(perso, (200, 300))
 
     def spacepressed(cls):
         CoreGame.character_sprite.jump()
