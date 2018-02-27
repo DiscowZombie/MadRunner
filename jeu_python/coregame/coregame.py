@@ -42,8 +42,8 @@ class CoreGame:
             img.__del__()
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYING)
 
-        POSITION_X = 100
-        POSITION_Y = 100
+        POSITION_X = 400
+        POSITION_Y = 260
 
         CoreGame.character_sprite = Character(constantes.Animations["gros"], POSITION_X, POSITION_Y)  # plus tard dans le développement du jeu, on devra  selectionner le sprite qui convient !
 
@@ -56,12 +56,23 @@ class CoreGame:
         elif character.jumping:
             state = "jump"
 
+        # On charge le haut (Texte indicatifs + Bouton "Pause")
+        # TODO: Le texte sera créé plus tard quand les variables auront une signification
+
+        # Chargement du background
+        backg = v.View.pygame.image.load("assets/img/decors/jeux_olympiques/background.jpeg").convert_alpha()
+        v.View.screen.referance.blit(backg, (0, 50, 640, 137))
+
+        # Chargement de la piste
+        piste = v.View.pygame.image.load("assets/img/decors/jeux_olympiques/piste.png").convert_alpha()
+        v.View.screen.referance.blit(piste, (0, 215, 640, 317))
+
+        # On dessine le hors piste, d'abord en haut de la piste puis en bas
+        v.View.screen.referance.fill((127, 221, 76), (0, 187, 640, 27))
+        v.View.screen.referance.fill((127, 221, 76), (0, 317, 640, 53))
+
         # On charge le perso
         character.__getattribute__(state + "sprite").next(-int(characterinfos[state]["framesize"][0]/2), -int(characterinfos[state]["framesize"][1]/2))
-
-        # Chargement et collage du personnage
-        perso = v.View.pygame.image.load("assets/").convert()
-        v.View.screen.referance.blit(perso, (200, 300))
 
     def spacepressed(cls):
         CoreGame.character_sprite.jump()
