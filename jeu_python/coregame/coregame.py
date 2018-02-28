@@ -35,12 +35,19 @@ class Character:
 class CoreGame:
 
     character_sprite = None
+    carte = None
+    modejeu = None
+    level = None
 
-    def __init__(self):
+    def __init__(self, carte, modejeu, level):
         functions.delete_menu_obj()
         for img in list(image.Image.getImages()):
             img.__del__()
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYING)
+
+        self.carte = carte
+        self.modejeu = modejeu
+        self.level = level
 
         POSITION_X = 400
         POSITION_Y = 260
@@ -60,11 +67,11 @@ class CoreGame:
         # TODO: Le texte sera créé plus tard quand les variables auront une signification
 
         # Chargement du background
-        backg = v.View.pygame.image.load("assets/img/decors/jeux_olympiques/background.jpeg").convert_alpha()
+        backg = v.View.pygame.image.load("assets/img/decors/" + functions.cartepathbyname(cls.carte) + "/background.jpeg").convert_alpha()
         v.View.screen.referance.blit(backg, (0, 50, 640, 137))
 
         # Chargement de la piste
-        piste = v.View.pygame.image.load("assets/img/decors/jeux_olympiques/piste.png").convert_alpha()
+        piste = v.View.pygame.image.load("assets/img/decors/" + functions.cartepathbyname(cls.carte) + "/piste.png").convert_alpha()
         v.View.screen.referance.blit(piste, (0, 215, 640, 317))
 
         # On dessine le hors piste, d'abord en haut de la piste puis en bas

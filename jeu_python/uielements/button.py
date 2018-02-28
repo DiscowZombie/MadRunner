@@ -561,7 +561,11 @@ class BCommencer(Button):
         Button.__init__(*arguments)
 
     def button1down(self):
-        cgame = coregame.CoreGame()
+        # TODO: Seulement pour le debug
+        carte = None
+        modejeu = None
+        level = None
+        cgame = coregame.CoreGame(carte, modejeu, level)
         cgame.loop()
 
 
