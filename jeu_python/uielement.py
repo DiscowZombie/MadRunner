@@ -49,7 +49,7 @@ class UIelement:
             surface_obj.addchild(self)  # appeler cette méthode va ajouter un attribut appelé "parentsurface" qui permet d'avoir une référence vers l'objet parent
             if not classname in UIelement.UIelements:
                 UIelement.UIelements[classname] = []
-            UIelement.UIelements[classname].append(self)# on l'ajoute aux éléments UI, en les triant par leur "classname"
+            UIelement.UIelements[classname].append(self)  # on l'ajoute aux éléments UI, en les triant par leur "classname"
 
     def addchild(self, child):  # pour ajouter un élément graphique dans un autre (ex: un bouton dans une surface)
         self.children.append(child)
@@ -97,6 +97,10 @@ class UIelement:
 
     def remove(self):
         classlist = UIelement.UIelements[self.classname]
+        for child in self.children:  # ne pas oublier d'effacer également les objets descendants de celui-ci
+            child.remove()
+        if self in self.parentsurface.children:
+            self.parentsurface.children.remove(self)  # on l'enlève également de la table des descendants de son parent
         if self in classlist:
             classlist.remove(self)
         del self

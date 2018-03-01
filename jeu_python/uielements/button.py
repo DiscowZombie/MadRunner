@@ -562,9 +562,9 @@ class BCommencer(Button):
 
     def button1down(self):
         # TODO: Seulement pour le debug
-        carte = None
-        modejeu = None
-        level = None
+        carte = "jeux_olympiques"
+        modejeu = "400m"
+        level = "difficile"
         cgame = coregame.CoreGame(carte, modejeu, level)
         cgame.loop()
 

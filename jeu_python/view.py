@@ -117,8 +117,8 @@ class View:
                                 int(obj.parentsurface.absheight * obj.scaley + obj.y)))
                         else:
                             obj.parentsurface.referance.blit(obj.referance, (
-                            int(obj.parentsurface.abswidth * obj.scalex + obj.x),
-                            int(obj.parentsurface.absheight * obj.scaley + obj.y)))
+                            int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x),
+                            int(obj.parentsurface.referance.get_height() * obj.scaley + obj.y)))  # ATTENTION : L'IMAGE NE SE POSITIONNE PAS CORRECTEMENT CAAR LE PARENTSURFACE CONTIENT LES ANCIENNES DIMENSIONS DE L'OBJET ECRAN !
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:
@@ -126,15 +126,22 @@ class View:
                 surface.parentsurface.referance.blit(surface.referance, (
                 parentsize[0] * surface.scalex + surface.x, parentsize[1] * surface.scaley + surface.y))
 
+        # on dessine le personnage et les obstacles en dernier
+        characters = coregame.CoreGame.characters_sprite
+
+        for character in characters:
+            attrname = character.state + "sprite"
+            state_sprite = character.__getattribute__(attrname)
+            View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (state_sprite.absx + state_sprite.offsetx, state_sprite.absy + state_sprite.offsety))  #on suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
+
         View.pygame.display.update()
 
         for obj in tweenobj:
             obj.tweendata["passed"] += passed / 1000
             if obj.tweendata["passed"] >= obj.tweendata["duration"]:
                 obj.tweendata["passed"] = obj.tweendata["duration"]
-                View.checktween(
-                    obj)  # on met la durée à l'état final, car il peut y avoir de gros décalage en cas de performance pas assez élevé
-                del obj.tweendata  # transition finie
+                View.checktween(obj)  # on met la durée à l'état final, car il peut y avoir de gros décalage en cas de performance pas assez élevé
+                delattr(obj, "tweendata")  # transition finie
 
     updatewindow = classmethod(updatewindow)
     updatescreen = classmethod(updatescreen)

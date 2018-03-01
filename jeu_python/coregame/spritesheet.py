@@ -7,10 +7,14 @@ import view
 
 class SpriteSheet:
 
-    def __init__(self, filename, posx, posy):
+    def __init__(self, filename, posx, posy, scalex, scaley):
         self.sheet = view.View.pygame.image.load(filename).convert_alpha()
         self.x = posx
         self.y = posy
+        self.scalex = scalex
+        self.scaley = scaley
+        self.absx = int(view.View.screen.absx + view.View.screen.abswidth*scalex + posx)
+        self.absy = int(view.View.screen.absy + view.View.screen.abswidth*scaley + posy)
 
     def load(self, nombre_images, taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement
         # Clear Strip
@@ -41,16 +45,22 @@ class SpriteSheet:
 
 class SpriteStripAnim(SpriteSheet):
 
-    def __init__(self, spriteinfos, posx, posy):
-        SpriteSheet.__init__(self, spriteinfos["image"], posx, posy)
+    sprite_anims = []
+
+    def __init__(self, spriteinfos, posx, posy, scalex, scaley):
+        SpriteSheet.__init__(self, spriteinfos["image"], posx, posy, scalex, scaley)
         self.speedcounter = 0
         self.compteur = 0
+        self.offsetx = 0
+        self.offsety = 0
         self.state = "run"
         self.speed = spriteinfos["initspeed"]
         self.numimage = spriteinfos["nbimage"]
         self.framesize = spriteinfos["framesize"]
         self.repeatimage = spriteinfos["repeatimage"]
         self.strip = self.load(self.numimage, self.framesize)
+
+        SpriteStripAnim.sprite_anims.append(self)
 
     def next(self, offsetx, offsety):
         # calcule et dessine la prochaine image (ou pas !)
@@ -63,4 +73,13 @@ class SpriteStripAnim(SpriteSheet):
         if self.compteur == self.numimage:
             self.compteur = self.repeatimage - 1
 
-        view.View.screen.referance.blit(self.strip[self.compteur], (self.x + offsetx, self.y + offsety))
+        # mis à jour de positions absolues et de l'offset
+        self.absx = int(view.View.screen.absx + view.View.screen.abswidth*self.scalex + self.x)
+        self.absy = int(view.View.screen.absy + view.View.screen.absheight*self.scaley + self.y)
+        self.offsetx = offsetx
+        self.offsety = offsety
+
+    def getSpriteAnims(cls):
+        return SpriteStripAnim.sprite_anims
+
+    getSpriteAnims = classmethod(getSpriteAnims)

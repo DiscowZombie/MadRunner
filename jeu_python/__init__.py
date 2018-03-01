@@ -44,6 +44,7 @@ while running:
 
     if running:
         view.View.updatescreen(passed)  # puis on update tout ça
+
         statemanager.StateManager.setstatetime(passed)
 
         # On limite à 60 fps ou à la valeur en config si elle est valide
