@@ -68,7 +68,7 @@ class View:
         elif currentstate == statemanager.StateEnum.MAIN_MENU:
             pass
         elif currentstate == statemanager.StateEnum.PLAYING:
-            coregame.CoreGame.loop()
+            coregame.CoreGame.loop(passed)
 
         UIelements = uielement.UIelement.getUIelements()
         tweenobj = []

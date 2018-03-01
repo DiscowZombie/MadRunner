@@ -18,8 +18,8 @@ Animations = {
             "image": "assets/img/personnages/gros/cour.png",
             "framesize": (80, 98),  # taille x et y d'une image du sprite
             "nbimage": 10,
-            "initspeed": 60,  # initspeed désigne la vitesse initiale de l'animation (en image par seconde)
-            "repeatimage": 1  # permet de répéter l'image non pas depuis le début, mais depuis une certaine frame
+            "initspeed": 20,  # initspeed désigne la vitesse initiale de l'animation (en image par seconde)
+            "repeatimage": 1,  # permet de répéter l'image non pas depuis le début, mais depuis une certaine frame
         },
         "jump": {
             "image": "assets/img/personnages/gros/saut.png",
@@ -54,5 +54,11 @@ Animations = {
             "nbimage": 0,
             "initspeed": 20
         }
+    }
+}
+
+CharactersFeatures = {
+    "gros": {
+        "initspeed": 3  # la vitesse à laquelle court le personnage à l'état initial, en m/s
     }
 }

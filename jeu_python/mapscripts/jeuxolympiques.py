@@ -30,9 +30,13 @@ def colonne_siege(i):
 
     global bg_surfaces
 
+    if i <= 0:
+        POSITION_X = i
+    else:
+        POSITION_X = i*30
+
     LARGEUR = 30
     HAUTEUR = 0
-    POSITION_X = i*30
     POSITION_Y = 0
     SCALE_X = 0
     SCALE_Y = 0.05
@@ -57,10 +61,14 @@ def panneau(bas_surface, i):
 
     global bas_surfaces
 
+    if i <= 0:
+        POSITION_X = i
+    else:
+        POSITION_X = i*200
+
     REPERTOIRE = "assets/img/decors/jeux_olympiques/bas_gradin.png"
     LARGEUR = 200
     HAUTEUR = 0
-    POSITION_X = i * 200
     POSITION_Y = 0
     SCALE_X = 0
     SCALE_Y = 0
@@ -150,6 +158,7 @@ def refresh():
 
     # HAUT DU GRADIN (SIèGES)
     max_x = 0
+    min_x = taille_ecran[0]
 
     for surfaceimg in bg_surfaces:
         if surfaceimg.absx > taille_ecran[0]:  # on enlève dans un premier temps les sièges qui ne sont plus visibles
@@ -157,6 +166,7 @@ def refresh():
             surfaceimg.remove()
         else:
             max_x = max(max_x, surfaceimg.absx + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
+            min_x = min(min_x, surfaceimg.absx)
             max_y = 0  # va servir a ajouter des sièges si jamais il en manque
             for image in surfaceimg.children:
                 if image.y > surfaceimg.referance.get_height():
@@ -177,11 +187,16 @@ def refresh():
     for i in range(nbcolonne, nbcolonne + nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place
         colonne_siege(i)
 
+    if min_x >= 0:
+        print("nouv colonne")
+        colonne_siege(min_x - 30)
+
     # BAS DU GRADIN (PANNEAUX)
     global surface_panneau
     global bas_surfaces
 
     max_x = 0
+    min_x = taille_ecran[0]
 
     for surfaceimg in bas_surfaces:
         if surfaceimg.absx > taille_ecran[0]:  # on enlève dans un premier temps les panneaux qui ne sont plus visibles
@@ -189,9 +204,21 @@ def refresh():
             surfaceimg.remove()
         else:
             max_x = max(max_x, surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
+            min_x = min(min_x, surfaceimg.x)
 
     nbcolonne = len(bas_surfaces)
     nbnouvcolonne = ((taille_ecran[0] - max_x)//200) + 1
 
     for i in range(nbcolonne, nbcolonne + nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place
         panneau(surface_panneau, i)
+
+    if min_x >= 0:
+        print("nouv panneau")
+        panneau(surface_panneau, min_x - 200)
+
+
+def getDecors():
+    global bg_surfaces
+    global bas_surfaces
+
+    return [bg_surfaces, bas_surfaces]
