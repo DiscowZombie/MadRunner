@@ -3,11 +3,13 @@ import model
 import view
 import controller
 import statemanager
-import coregame.coregame as coregame
+
+from coregame import coregame as coregame
 
 from uielements import surface
 from uielements import text
 from uielements import checkbox
+
 import constantes
 import functions
 
@@ -589,5 +591,11 @@ class BRetour(Button):
         if game_state in menu_states:
             model.Model.endintro()  # bon, ce n'est pas la fin de l'intro mais c'est tellement bien adapté pour !
         elif game_state == statemanager.StateEnum.MAP_AND_DIFF:
-            BJouer.button1down(
-                None)  # pas sûr que c'est super bien de faire ca. Mais en réalité, c'est comme si on avait cliqué sur jouer...
+            BJouer.button1down(None)  # pas sûr que c'est super bien de faire ca. Mais en réalité, c'est comme si on avait cliqué sur jouer...
+
+class BPause(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self):
+        coregame.CoreGame.pause = not coregame.CoreGame.pause

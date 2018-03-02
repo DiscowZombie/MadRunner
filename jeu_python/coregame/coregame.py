@@ -1,5 +1,8 @@
 import functions
+import uielements.button as button
 import uielements.image as image
+import uielements.surface as surface
+import uielements.rect as rect
 import statemanager
 import coregame.spritesheet as sprit
 import constantes
@@ -41,6 +44,7 @@ class CoreGame:
     modejeu = None
     level = None
     mapscript = None
+    pause = False
     time = 0  # temps en ms depuis lequel le jeu a commencé (le chrono)
     distance = 0  # la distance parcouru
 
@@ -58,6 +62,65 @@ class CoreGame:
 
         # On charge le haut (Texte indicatifs + Bouton "Pause")
         # TODO: Le texte sera créé plus tard quand les variables auront une signification
+
+        # Création de la barre d'énergie
+        # la bordure
+        LARGEUR = 0
+        HAUTEUR = 0
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0.2
+        SCALE_Y = 0.005
+        SCALE_WIDTH = 0.4
+        SCALE_HEIGHT = 0.04
+        COULEUR = constantes.DARKYELLOW
+        BORDURE = 0  # rempli
+        ALPHA = 255  # opaque
+        CONVERT_ALPHA = False
+
+        barre_energie_out = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                    BORDURE)
+
+        # l'intérieur (en tant qu'objet rect, et non en tant qu'objet surface)
+        LARGEUR = -4
+        HAUTEUR = -4
+        POSITION_X = 2
+        POSITION_Y = 2
+        SCALE_X = 0
+        SCALE_Y = 0
+        SCALE_WIDTH = 1
+        SCALE_HEIGHT = 1
+        COULEUR = constantes.YELLOW
+        BORDURE = 0  # rempli
+
+        barre_energie_in = rect.Rect(barre_energie_out, POSITION_X, POSITION_Y, SCALE_X,
+                                        SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                        BORDURE)
+
+        # Création du bouton pause
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0.9
+        SCALE_Y = 0
+        LARGEUR = 0
+        HAUTEUR = 0
+        SCALE_WIDTH = 0.1
+        SCALE_HEIGHT = 0.05
+        COULEUR = constantes.WHITE
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        FONT = "ArialBold"
+        TAILLE_FONT = 30
+        CENTRE_X = True
+        CENTRE_Y = False
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 3  # rempli
+
+        button.BPause("| |", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                ECART, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # Chargement de la piste
         # Mis en place de la piste
@@ -91,35 +154,33 @@ class CoreGame:
 
     def loop(cls, passed=0):  # update l'arrière plan + chaque personnage
 
-        charspeed = CoreGame.characters_sprite[0].speed  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
-        d1 = CoreGame.distance
-        d2 = d1 + charspeed*(passed/1000)
-        delta_d = d2 - d1
-        delta_pixel = int(d2*10) - int(d1*10)
+        if not CoreGame.pause:
+            charspeed = CoreGame.characters_sprite[0].speed  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+            d1 = CoreGame.distance
+            d2 = d1 + charspeed*(passed/1000)
+            delta_d = d2 - d1
+            delta_pixel = int(d2*10) - int(d1*10)
 
-        CoreGame.distance += delta_d
-        CoreGame.time += passed/1000
+            CoreGame.distance += delta_d
+            CoreGame.time += passed/1000
 
-        for decors in CoreGame.mapscript.getDecors():
-            for surface in decors:
-                surface.x += delta_pixel
+            for decors in CoreGame.mapscript.getDecors():
+                for surface in decors:
+                    surface.x += delta_pixel
 
-        CoreGame.mapscript.refresh()
+            CoreGame.mapscript.refresh()
 
-        for character in CoreGame.characters_sprite:
-            new_state = None
-            characterinfos = character.characterinfos
-            if character.running:
-                new_state = "run"
-            elif character.jumping:
-                new_state = "jump"
+            for character in CoreGame.characters_sprite:
+                new_state = None
+                characterinfos = character.characterinfos
+                if character.running:
+                    new_state = "run"
+                elif character.jumping:
+                    new_state = "jump"
 
-            character.state = new_state
-            # On charge le perso
-            character.__getattribute__(new_state + "sprite").next(-int(characterinfos[new_state]["framesize"][0]/2), -int(characterinfos[new_state]["framesize"][1]/2))
-
-
-
+                character.state = new_state
+                # On charge le perso
+                character.__getattribute__(new_state + "sprite").next(-int(characterinfos[new_state]["framesize"][0]/2), -int(characterinfos[new_state]["framesize"][1]/2))
 
     def spacepressed(cls):
         CoreGame.characters_sprite[0].jump()  # bon, ici on va faire sauter le joueur 1 ! Il faudra pendre en compte cela lors qu'on dera le mode 2 joueurs

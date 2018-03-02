@@ -98,7 +98,7 @@ class UIelement:
     def remove(self):
         classlist = UIelement.UIelements[self.classname]
         for child in self.children:  # ne pas oublier d'effacer également les objets descendants de celui-ci
-            child.remove()
+            child.__del__()
         if self in self.parentsurface.children:
             self.parentsurface.children.remove(self)  # on l'enlève également de la table des descendants de son parent
         if self in classlist:

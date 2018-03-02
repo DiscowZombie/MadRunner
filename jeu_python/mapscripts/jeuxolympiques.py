@@ -30,7 +30,7 @@ def colonne_siege(i):
 
     global bg_surfaces
 
-    if i <= 0:
+    if i < 0:
         POSITION_X = i
     else:
         POSITION_X = i*30
@@ -61,7 +61,7 @@ def panneau(bas_surface, i):
 
     global bas_surfaces
 
-    if i <= 0:
+    if i < 0:
         POSITION_X = i
     else:
         POSITION_X = i*200
@@ -165,8 +165,8 @@ def refresh():
             bg_surfaces.remove(surfaceimg)
             surfaceimg.remove()
         else:
-            max_x = max(max_x, surfaceimg.absx + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
-            min_x = min(min_x, surfaceimg.absx)
+            max_x = max(max_x, surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
+            min_x = min(min_x, surfaceimg.x)
             max_y = 0  # va servir a ajouter des sièges si jamais il en manque
             for image in surfaceimg.children:
                 if image.y > surfaceimg.referance.get_height():
@@ -188,7 +188,6 @@ def refresh():
         colonne_siege(i)
 
     if min_x >= 0:
-        print("nouv colonne")
         colonne_siege(min_x - 30)
 
     # BAS DU GRADIN (PANNEAUX)
@@ -213,7 +212,6 @@ def refresh():
         panneau(surface_panneau, i)
 
     if min_x >= 0:
-        print("nouv panneau")
         panneau(surface_panneau, min_x - 200)
 
 

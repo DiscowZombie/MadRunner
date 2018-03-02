@@ -7,6 +7,8 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 PINK = (255,200,200)
 GRAY = (192, 192, 192)
+YELLOW = (255, 255, 0)
+DARKYELLOW = (127, 127, 0)
 
 # Pour les chemins d'accès
 CONFIG_PATH = "config/"

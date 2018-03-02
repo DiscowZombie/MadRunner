@@ -1,5 +1,7 @@
 import uielement
+import uielements.rect as rect
 import view
+
 
 class Surface(uielement.UIelement):
     surfaces = []
@@ -8,6 +10,7 @@ class Surface(uielement.UIelement):
         uielement.UIelement.__init__(self, *UIargs, "Surface", alpha)
 
         self.convertalpha = convert_alpha
+        self.rects = []
         self.referance = self.create()
 
         Surface.surfaces.append(self)
@@ -24,6 +27,8 @@ class Surface(uielement.UIelement):
 
     def draw(self):
         self.referance = self.create()
+        for rectangle in self.rects:
+            rectangle.draw()
 
     def __del__(self):
         if self in Surface.surfaces:

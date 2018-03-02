@@ -115,6 +115,8 @@ class View:
                                 obj.parentsurface.referance.blit(obj.referance, (
                                 int(obj.parentsurface.abswidth * obj.scalex + obj.x),
                                 int(obj.parentsurface.absheight * obj.scaley + obj.y)))
+                        elif classname == "Rect":
+                            pass  # pas besoin de blitter car ils le sont déja !
                         else:
                             obj.parentsurface.referance.blit(obj.referance, (
                             int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x),
