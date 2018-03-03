@@ -107,18 +107,19 @@ class CoreGame:
         HAUTEUR = 0
         SCALE_WIDTH = 0.1
         SCALE_HEIGHT = 0.05
-        COULEUR = constantes.WHITE
+        COULEUR = constantes.BLACK
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = None
         FONT = "ArialBold"
         TAILLE_FONT = 30
         CENTRE_X = True
-        CENTRE_Y = False
+        CENTRE_Y = True
         ARRIERE_PLAN = COULEUR
         ECART = 0
-        BORDURE = 3  # rempli
+        BORDURE = 3
 
-        button.BPause("| |", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        button.BPause("| |", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                 ECART, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 

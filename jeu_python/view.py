@@ -53,23 +53,6 @@ class View:
         a.fill((255, 255, 255))
         View.screen.referance.blit(a, (0, 0))
 
-        currentstate, statetime = statemanager.StateManager.getstate(), statemanager.StateManager.getstatetime()
-        if currentstate == statemanager.StateEnum.INITIALISATION:
-            if statetime >= 3000:  # on attends 3 secondes avant de commencer, parce que sinon, la transition de l'intro est moins fluide
-                model.Model.startintro()
-        elif currentstate == statemanager.StateEnum.INTRO:
-            if not model.Model.introsurfacetweening():  # si on est en train d'attendre
-                statemanager.StateManager.referancetimer += passed
-                referancetime = statemanager.StateManager.referancetimer
-                if model.Model.firstintro and referancetime >= 2000:
-                    model.Model.middleintro()
-                elif model.Model.secondintro and referancetime >= 2500:
-                    model.Model.endintro()
-        elif currentstate == statemanager.StateEnum.MAIN_MENU:
-            pass
-        elif currentstate == statemanager.StateEnum.PLAYING:
-            coregame.CoreGame.loop(passed)
-
         UIelements = uielement.UIelement.getUIelements()
         tweenobj = []
 

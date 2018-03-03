@@ -21,6 +21,7 @@ class Button(uielement.UIelement):
     :param text - Le texte sur le bouton
     :param antialias - Y a-t-il l'anti-alias ou pas ?
     :param couleur_text - La couleur du texte
+    :param backgroundtextcolor - La couleur de l'arrère plan du texte
     :param font - Le font du texte
     :param font_size - La taille du font
     :param centeredx - Le texte est-il centré sur l'axe x ?
@@ -30,7 +31,7 @@ class Button(uielement.UIelement):
     :param *UIargs - Tous les paramètres d'un élément graphique (voir classe "UIelement")
     """
 
-    def __init__(self, textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
+    def __init__(self, textb, antialias, couleur_text, backgroundtextcolor,  font, font_size, centeredx, centeredy, backgroundcolor, offset,
                  *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Button")
@@ -38,6 +39,7 @@ class Button(uielement.UIelement):
         self.text = textb
         self.antialias = antialias
         self.textcolor = couleur_text
+        self.backgroundtextcolor = backgroundtextcolor
         self.font = font
         self.fontsize = font_size
         self.textcenteredx = centeredx
@@ -45,7 +47,7 @@ class Button(uielement.UIelement):
         self.backgroundcolor = backgroundcolor
         self.textoffset = offset
         self.clicking = False
-        self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor,
+        self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundtextcolor,
                                  offset, False, *UIargs)
         self.referance = self.create()  # la référence  est crée en appelant cela. ATTENTION: La référence est la surface sur laquelle le texte est dessinée, et il y a aussi l'attribut "rectreferance" qui est une référance vers le rectangle du bouton
 
@@ -128,6 +130,7 @@ class BJouer(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -136,11 +139,11 @@ class BJouer(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        B1Joueur("1 joueur", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        B1Joueur("1 joueur", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                  ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        B2Joueurs("2 joueurs", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        B2Joueurs("2 joueurs", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                   ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -155,6 +158,7 @@ class BJouer(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -163,7 +167,7 @@ class BJouer(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -188,6 +192,7 @@ class BParam(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -196,7 +201,7 @@ class BParam(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -221,6 +226,7 @@ class BStats(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -229,7 +235,7 @@ class BStats(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -243,7 +249,7 @@ class B1Joueur(Button):
         statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
         functions.delete_menu_obj()
 
-        SCALE_X = 1 / 6
+        SCALE_X = 1/6
         SCALE_Y = 0.5
         LARGEUR = 175
         HAUTEUR = 250
@@ -399,7 +405,7 @@ class B1Joueur(Button):
         checkbox.Checkbox.linkcheckboxes(check_400m, check_400m_haie,
                                          check_course_inf)  # ces checbox sont liés, càd, si l'un se fait coché, les autres seront décochés
 
-        SCALE_X = 5 / 6
+        SCALE_X = 5/6
         SCALE_Y = 0.5
         LARGEUR = 175
         HAUTEUR = 250
@@ -489,6 +495,7 @@ class B1Joueur(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -497,7 +504,7 @@ class B1Joueur(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BCommencer("Commencer", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        BCommencer("Commencer", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                    ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -512,6 +519,7 @@ class B1Joueur(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -520,7 +528,7 @@ class B1Joueur(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -545,6 +553,7 @@ class B2Joueurs(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -553,7 +562,7 @@ class B2Joueurs(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 

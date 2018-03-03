@@ -43,6 +43,7 @@ while running:
     running = controller.Controller.checkevents()  # vérifie les interactions pour peut être modifier des infos du model
 
     if running:
+        model.Model.updatemodel(passed)  # update les infos du model
         view.View.updatescreen(passed)  # puis on update tout ça
 
         statemanager.StateManager.setstatetime(passed)

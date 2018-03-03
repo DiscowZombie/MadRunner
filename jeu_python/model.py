@@ -10,6 +10,8 @@ import uielements.button as button
 import uielements.image as image
 import uielements.checkbox as checkbox
 
+import coregame.coregame as coregame
+
 class Model:
     pygame = None
 
@@ -21,6 +23,24 @@ class Model:
 
     def __init__(self, pygame):
         Model.pygame = pygame
+
+    def updatemodel(cls, passed):
+        currentstate, statetime = statemanager.StateManager.getstate(), statemanager.StateManager.getstatetime()
+        if currentstate == statemanager.StateEnum.INITIALISATION:
+            if statetime >= 3000:  # on attends 3 secondes avant de commencer, parce que sinon, la transition de l'intro est moins fluide
+                Model.startintro()
+        elif currentstate == statemanager.StateEnum.INTRO:
+            if not Model.introsurfacetweening():  # si on est en train d'attendre
+                statemanager.StateManager.referancetimer += passed
+                referancetime = statemanager.StateManager.referancetimer
+                if Model.firstintro and referancetime >= 2000:
+                    Model.middleintro()
+                elif Model.secondintro and referancetime >= 2500:
+                    Model.endintro()
+        elif currentstate == statemanager.StateEnum.MAIN_MENU:
+            pass
+        elif currentstate == statemanager.StateEnum.PLAYING:
+            coregame.CoreGame.loop(passed)
 
     def mousebutton1down(cls, position):  # click gauche
         for bouton in list(button.Button.getButtons()):
@@ -177,6 +197,7 @@ class Model:
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
@@ -185,18 +206,19 @@ class Model:
         ECART = 0
         BORDURE = 0  # rempli
 
-        button.BJouer("Jouer", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        button.BJouer("Jouer", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                               ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                               SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        button.BStats("Statistiques", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        button.BStats("Statistiques", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                               ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                               SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        button.BParam("Paramètres", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        button.BParam("Paramètres", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                               ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                               SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
+    updatemodel = classmethod(updatemodel)
     mousebutton1down = classmethod(mousebutton1down)
     mousebutton1up = classmethod(mousebutton1up)
     startintro = classmethod(startintro)
