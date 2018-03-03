@@ -14,7 +14,7 @@ class Key():
     def __init__(self, surface_boutons, timeout):
 
         self.time = 0  # temps depuis lequel l'objet a été créé
-        self.timeout = timeout  # le temps à partir duquel l'objet et détruit
+        self.timeout = timeout*1000  # le temps à partir duquel l'objet et détruit (en ms)
 
         TAILLE_BOUTON = 30  # carré
 
@@ -24,6 +24,23 @@ class Key():
         surfaceheight = surface_boutons.referance.get_height()
         max_x_scale = (screenwidth - TAILLE_BOUTON)/screenwidth
         max_y_scale = (surfaceheight - TAILLE_BOUTON)/surfaceheight
+
+        """DEMANDER A MR LANGER POUR CA ! COMMENT FAIRE POUR VERIFIER LES POSITIONS POSSIBLES AFIN DE NE PAS SUPERPOSER 2 SURFACES !"""
+
+        """impossible_position_ranges = []
+
+        for keyobj in Key.keys:
+            x = keyobj.absx
+            y = keyobj.absy
+
+            impossible_position_ranges.append(((x - TAILLE_BOUTON, x + TAILLE_BOUTON), (y - TAILLE_BOUTON, y + TAILLE_BOUTON)))
+
+        possible_position_ranges = []
+
+        for impossible_range in impossible_position_ranges:
+            for impossible_range2 in impossible_position_ranges:
+                if impossible_range != impossible_range2:"""
+
 
         LARGEUR = TAILLE_BOUTON
         HAUTEUR = TAILLE_BOUTON
@@ -65,11 +82,27 @@ class Key():
 
         self.rectreferance = rectreferance
         self.textreferance = textreferance
+        self.absx = int(screenwidth * SCALE_X)
+        self.absy = int(surfaceheight * SCALE_Y)
 
         Key.availablekeys.remove(lettre)
         Key.keys.append(self)
 
+    def __del__(self):
+        self.rectreferance.__del__()
+        self.textreferance.__del__()
+        if self in Key.keys:
+            Key.keys.remove(self)
+        del self
+
     def canCreateKey(cls):  # peut-on créer un objet lettre ?
         return len(Key.availablekeys) > 0
 
+    def updatekeys(cls, passed):
+        for key in Key.keys:
+            key.time += passed
+            if key.time >= key.timeout:
+                key.__del__()
+
     canCreateKey = classmethod(canCreateKey)
+    updatekeys = classmethod(updatekeys)

@@ -99,8 +99,8 @@ class View:
                         elif classname == "Text":
                             if obj.alone:
                                 obj.parentsurface.referance.blit(obj.referance, (
-                                int(obj.parentsurface.abswidth * obj.scalex + obj.x),
-                                int(obj.parentsurface.absheight * obj.scaley + obj.y)))
+                                int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x),
+                                int(obj.parentsurface.referance.get_height() * obj.scaley + obj.y)))
                         else:
                             obj.parentsurface.referance.blit(obj.referance, (
                             int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x),
