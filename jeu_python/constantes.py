@@ -13,6 +13,9 @@ DARKYELLOW = (127, 127, 0)
 # Pour les chemins d'accès
 CONFIG_PATH = "config/"
 
+# l'alphabet :p
+ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+
 # informations sur différents spritesheet
 Animations = {
     "gros": {

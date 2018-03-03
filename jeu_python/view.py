@@ -72,8 +72,11 @@ class View:
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:  # ...puis on met à jour les surfaces...
                 surface.draw()
+        if "Rect" in UIelements:
+            for rect in UIelements["Rect"]:  # ...puis les rectangles contenues dans les surfaces...
+                rect.draw()
         for classname in UIelements:  # ...puis le reste...
-            if classname != "Surface":
+            if classname != "Surface" and classname != "Rect":
                 for obj in UIelements[classname]:
                     obj.draw()
                     if hasattr(obj, "referance"):
@@ -98,8 +101,6 @@ class View:
                                 obj.parentsurface.referance.blit(obj.referance, (
                                 int(obj.parentsurface.abswidth * obj.scalex + obj.x),
                                 int(obj.parentsurface.absheight * obj.scaley + obj.y)))
-                        elif classname == "Rect":
-                            pass  # pas besoin de blitter car ils le sont déja !
                         else:
                             obj.parentsurface.referance.blit(obj.referance, (
                             int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x),

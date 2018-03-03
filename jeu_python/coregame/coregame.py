@@ -3,11 +3,15 @@ import uielements.button as button
 import uielements.image as image
 import uielements.surface as surface
 import uielements.rect as rect
+from uielements import text as text
 import statemanager
 import coregame.spritesheet as sprit
+import coregame.gameobjects.key as key
 import constantes
 import view as v
 import mapscripts.jeuxolympiques as jo
+
+import random
 
 """
 Ne fonctionne pour piur 60 fps pour le moment
@@ -47,6 +51,7 @@ class CoreGame:
     pause = False
     time = 0  # temps en ms depuis lequel le jeu a commencé (le chrono)
     distance = 0  # la distance parcouru
+    surface_boutons = None  # la surface sur laquelle les boutons à appuyer sont dessinés
 
     def __init__(self, carte, modejeu, level):
         functions.delete_menu_obj()
@@ -59,6 +64,8 @@ class CoreGame:
         self.level = level
         self.time = 0
         self.distance = 0
+        self.keys = []
+        self.availablekeys = list(constantes.ALPHABET)
 
         # On charge le haut (Texte indicatifs + Bouton "Pause")
         # TODO: Le texte sera créé plus tard quand les variables auront une signification
@@ -140,6 +147,25 @@ class CoreGame:
         piste = image.Image(REPERTOIRE, v.View.screen, POSITION_X,
                             POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
+        LARGEUR = 0
+        HAUTEUR = -175
+        POSITION_X = 0
+        POSITION_Y = 175
+        SCALE_X = 0
+        SCALE_Y = 0.45
+        SCALE_WIDTH = 1
+        SCALE_HEIGHT = 0.55
+        COULEUR = constantes.WHITE
+        BORDURE = 0
+        ALPHA = 255  # opque
+        CONVERT_ALPHA = False
+
+        self.surface_boutons = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                BORDURE)
+
+        CoreGame.surface_boutons = self.surface_boutons
+
         # Initialisation de la carte (IL FAUT TENIR COMPTE DE LA CARTE CHOISI !!)
         if carte == "jeux_olympiques":
             CoreGame.mapscript = jo
@@ -165,6 +191,9 @@ class CoreGame:
             CoreGame.distance += delta_d
             CoreGame.time += passed/1000
 
+            if random.randint(1,100) == 1 and key.Key.canCreateKey():  # arbitraire pour l'instant, car la chance augmente avec la distance parcouru
+                key.Key(CoreGame.surface_boutons, 10)  # timeout arbitraire pour l'instant, il dépend normalement de la difficulté
+
             for decors in CoreGame.mapscript.getDecors():
                 for surface in decors:
                     surface.x += delta_pixel
@@ -183,8 +212,9 @@ class CoreGame:
                 # On charge le perso
                 character.__getattribute__(new_state + "sprite").next(-int(characterinfos[new_state]["framesize"][0]/2), -int(characterinfos[new_state]["framesize"][1]/2))
 
-    def spacepressed(cls):
-        CoreGame.characters_sprite[0].jump()  # bon, ici on va faire sauter le joueur 1 ! Il faudra pendre en compte cela lors qu'on dera le mode 2 joueurs
+    def keypressed(cls, pygame, event):
+        if event.key == pygame.K_SPACE:
+            CoreGame.characters_sprite[0].jump()  # bon, ici on va faire sauter le joueur 1 ! Il faudra pendre en compte cela lors qu'on dera le mode 2 joueurs
 
     loop = classmethod(loop)
-    spacepressed = classmethod(spacepressed)
+    keypressed = classmethod(keypressed)

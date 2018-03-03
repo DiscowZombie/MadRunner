@@ -41,8 +41,7 @@ class Controller:
                     model.Model.mousebutton1up(event.pos)
             elif event.type == pygame.KEYDOWN:
                 if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:  # le clavier n'est utile uniquement pendant qu'on joue !
-                    if event.key == pygame.K_SPACE:
-                        coregame.CoreGame.spacepressed()
+                    coregame.CoreGame.keypressed(pygame, event)
         return True
 
     def getpressingbuttons(cls):

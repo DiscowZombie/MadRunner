@@ -1,6 +1,7 @@
 import uielement
 import view
 
+
 class Rect(uielement.UIelement):
     rects = []
 

@@ -148,7 +148,7 @@ class Model:
         Model.secondintro = False
         Model.introplaying = False
         for objet in Model.tempobjets:
-            objet.__del__() # efface l'objet
+            objet.__del__()  # efface l'objet
         Model.tempobjets.clear()
 
         Model.main_menu()
