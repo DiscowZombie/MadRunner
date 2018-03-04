@@ -141,7 +141,7 @@ class CoreGame:
         TEXTE = ""
         ANTIALIAS = True
         COULEUR = constantes.BLACK
-        FONT = "ArialBold"
+        FONT = "Arial"  # arial bold normalement
         TAILLE_FONT = 22
         CENTRE_X = False
         CENTRE_Y = True
@@ -177,7 +177,7 @@ class CoreGame:
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
         ARRIERE_PLAN_TEXTE = None
-        FONT = "ArialBold"
+        FONT = "Arial"  # arial bold normalement
         TAILLE_FONT = 30
         CENTRE_X = True
         CENTRE_Y = True
@@ -291,6 +291,8 @@ class CoreGame:
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:
             CoreGame.characters_sprite[0].jump()  # bon, ici on va faire sauter le joueur 1 ! Il faudra pendre en compte cela lors qu'on dera le mode 2 joueurs
+        else:
+            key.Key.keypressed(event.dict["unicode"].capitalize())
 
     loop = classmethod(loop)
     keypressed = classmethod(keypressed)

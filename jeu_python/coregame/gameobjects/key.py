@@ -84,6 +84,7 @@ class Key():
         self.textreferance = textreferance
         self.absx = int(screenwidth * SCALE_X)
         self.absy = int(surfaceheight * SCALE_Y)
+        self.key = lettre
 
         Key.availablekeys.remove(lettre)
         Key.keys.append(self)
@@ -104,5 +105,19 @@ class Key():
             if key.time >= key.timeout:
                 key.__del__()
 
+    def keypressed(cls, pressed_key):
+        exists = False
+        for key in Key.keys:
+            if key.key == pressed_key:
+                exists = True
+                key.__del__()
+                break
+
+        if exists:
+            """Donne l'avantage"""
+        else:
+            """fait le contraire de l'avantage"""
+
     canCreateKey = classmethod(canCreateKey)
     updatekeys = classmethod(updatekeys)
+    keypressed = classmethod(keypressed)
