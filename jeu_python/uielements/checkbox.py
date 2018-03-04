@@ -92,5 +92,11 @@ class Checkbox(uielement.UIelement):
                 if checkbox.text != othercheckbox.text:  # on suppose que les checkbox ne sont pas identiques s'il n'ont pas le même texte
                     checkbox.linkedcheckboxes.append(othercheckbox)
 
+    def isChecked(self):
+        return self.checked
+
+    def gettext(self):
+        return self.text
+
     getCheckboxes = classmethod(getCheckboxes)
     linkcheckboxes = classmethod(linkcheckboxes)

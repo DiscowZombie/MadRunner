@@ -10,7 +10,7 @@ surface_panneau = None
 
 def siege(bg_surface, y):
 
-    REPERTOIRE = "assets/img/decors/jeux_olympiques/siege.png"
+    REPERTOIRE = "assets/img/decors/Jeux Olympiques/siege.png"
     LARGEUR = 30
     HAUTEUR = 30
     POSITION_X = 0
@@ -66,7 +66,7 @@ def panneau(bas_surface, i):
     else:
         POSITION_X = i*200
 
-    REPERTOIRE = "assets/img/decors/jeux_olympiques/bas_gradin.png"
+    REPERTOIRE = "assets/img/decors/Jeux Olympiques/bas_gradin.png"
     LARGEUR = 200
     HAUTEUR = 0
     POSITION_Y = 0

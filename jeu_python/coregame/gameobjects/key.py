@@ -6,7 +6,7 @@ from uielements import rect as rect
 import random
 
 
-class Key():
+class Key:
 
     keys = []  # les touches qui sont affiché à l'écran (et qu'il faut appuyer)
     availablekeys = list(constantes.ALPHABET)  # les touches qui peuvent être affichées (pour éviter d'avoir 2 même touches)
@@ -40,7 +40,6 @@ class Key():
         for impossible_range in impossible_position_ranges:
             for impossible_range2 in impossible_position_ranges:
                 if impossible_range != impossible_range2:"""
-
 
         LARGEUR = TAILLE_BOUTON
         HAUTEUR = TAILLE_BOUTON

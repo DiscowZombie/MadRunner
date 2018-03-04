@@ -20,6 +20,8 @@ Ne fonctionne pour piur 60 fps pour le moment
 
 class Character:
 
+    speed = 0
+
     def __init__(self, characterfeatures, characterinfos, posx, posy, scalex, scaley):
         for spritename in characterinfos:
             self.__setattr__(spritename + "sprite", sprit.SpriteStripAnim(characterinfos[spritename], posx, posy, scalex, scaley))
@@ -36,7 +38,9 @@ class Character:
 
     def jump(self):
         if not self.jumping and self.energy >= 10:  # unité encore arbitraire pour l'énergie, on verra cela plus tard !
-            self.energy += -10
+            self.energy -= 10
+            # Sauter reduit sa vitesse de 15%
+            self.speed -= (15/100) * self.speed
             self.jumping = True
             self.running = False
 
@@ -58,6 +62,11 @@ class CoreGame:
     distanceobj = None  # le texte sur lequel on écrit la distance parcouru (AFFICHé SEULEMENT EN COURSE INFINI)
 
     def __init__(self, carte, modejeu, level):
+        """
+        :param carte - Valeurs possibles: Jeux Olympiques, Athènes, Forêt
+        :param modejeu - Valeurs possibles: 400m, 400m haie, Course infinie
+        :param level - Valeurs possibles: Facile, Moyen, Difficile
+        """
         functions.delete_menu_obj()
         for img in list(image.Image.getImages()):
             img.__del__()
@@ -72,9 +81,6 @@ class CoreGame:
         self.availablekeys = list(constantes.ALPHABET)
 
         CoreGame.modejeu = modejeu
-
-        # On charge le haut (Texte indicatifs + Bouton "Pause")
-        # TODO: Le texte sera créé plus tard quand les variables auront une signification
 
         # Création de la barre d'énergie
         # la bordure
@@ -226,7 +232,7 @@ class CoreGame:
         CoreGame.surface_boutons = self.surface_boutons
 
         # Initialisation de la carte (IL FAUT TENIR COMPTE DE LA CARTE CHOISI !!)
-        if carte == "jeux_olympiques":
+        if carte == "Jeux Olympiques":
             CoreGame.mapscript = jo
 
         CoreGame.mapscript.init()
@@ -285,6 +291,7 @@ class CoreGame:
                     new_state = "jump"
 
                 character.state = new_state
+
                 # On charge le perso
                 character.__getattribute__(new_state + "sprite").next(-int(characterinfos[new_state]["framesize"][0]/2), -int(characterinfos[new_state]["framesize"][1]/2))
 

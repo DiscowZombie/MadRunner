@@ -40,30 +40,3 @@ def click_clavier(event):
 def isvalidint(supposedint):
     var = True if (supposedint is not None and int(supposedint) is not None) else False
     return var
-
-
-def cartepathbyname(name=None):
-    if name == "foret":
-        return "foret"
-    elif name == "athenes":
-        return "athenes"
-    else:
-        return "jeux_olympiques"
-
-
-def modejeubyname(modejeu=None):
-    if modejeu == "400m":
-        return "400m"
-    elif modejeu == "400mh":
-        return "400m_haie"
-    else:
-        return "infinie"
-
-
-def difficultybyname(diff=1):
-    if diff == 3:
-        return "hard"
-    elif diff == 2:
-        return "normal"
-    else:
-        return "easy"

@@ -7,3 +7,4 @@ serveur_web/config/config.json
 build/
 dist/
 setup.py
+setupxfreez.py
