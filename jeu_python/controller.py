@@ -3,8 +3,8 @@ import view
 import statemanager
 import coregame.coregame as coregame
 
-class Controller:
 
+class Controller:
     pressing_buttons = {}
     pygame = None
     view = None

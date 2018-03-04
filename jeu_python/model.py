@@ -4,13 +4,14 @@ import constantes
 import statemanager
 import functions as f
 
-from  uielements import text as text
+from uielements import text as text
 import uielements.surface as surface
 import uielements.button as button
 import uielements.image as image
 import uielements.checkbox as checkbox
 
 import coregame.coregame as coregame
+
 
 class Model:
     pygame = None
@@ -46,7 +47,9 @@ class Model:
         for bouton in list(button.Button.getButtons()):
             bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.abswidth, bouton.absheight)
         for checkboxe in checkbox.Checkbox.getCheckboxes():
-            if f.checkmousebouton(position, checkboxe.absx, checkboxe.absy + int(checkboxe.height/2 - checkboxe.boxsize/2), checkboxe.boxsize, checkboxe.boxsize):  # si on est en train de cliquer dessus
+            if f.checkmousebouton(position, checkboxe.absx,
+                                  checkboxe.absy + int(checkboxe.height / 2 - checkboxe.boxsize / 2), checkboxe.boxsize,
+                                  checkboxe.boxsize):  # si on est en train de cliquer dessus
                 checkboxe.check()
 
     def mousebutton1up(cls, position):
@@ -71,9 +74,10 @@ class Model:
         ALPHA = 0  # transarence
         CONVERT_ALPHA = False
 
-        surface_intro = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                BORDURE)  # creation de la l'objet surface où on va mettre le titire et l'image du jeu
+        surface_intro = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                        SCALE_Y, LARGEUR,
+                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                        BORDURE)  # creation de la l'objet surface où on va mettre le titire et l'image du jeu
 
         # état intial de l'image du logo
         REPERTOIRE = "assets/img/menu_fond.png"
@@ -89,7 +93,8 @@ class Model:
         BORDURE = 0
 
         image_intro = image.Image(REPERTOIRE, surface_intro, POSITION_X,
-                            POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                  POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                  BORDURE)
 
         # état initial du texte du jeu
         TEXTE = "Mad Runner"
@@ -113,9 +118,10 @@ class Model:
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
-        texte_intro = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART, SEUL,
-                           surface_intro, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                           HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+        texte_intro = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                                SEUL,
+                                surface_intro, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         Model.tempobjets.append(surface_intro)
         Model.tempobjets.append(image_intro)
@@ -126,10 +132,11 @@ class Model:
             "name": "alpha",
             "value": 255
         })
-        texte_intro.tween(POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, 1, {  # transition de la taille du font également, le reste reste identique
-            "name": "fontsize",
-            "value": 44
-        })
+        texte_intro.tween(POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, 1,
+                          {  # transition de la taille du font également, le reste reste identique
+                              "name": "fontsize",
+                              "value": 44
+                          })
 
     def introsurfacetweening(cls):
         return hasattr(surface.Surface.getSurfaces()[0], "tweendata")
@@ -138,10 +145,11 @@ class Model:
         Model.firstintro = False
         Model.secondintro = True
         surfaceintro = surface.Surface.getSurfaces()[0]
-        surfaceintro.tween(surfaceintro.x, surfaceintro.y, surfaceintro.scalex, surfaceintro.scaley, surfaceintro.width, surfaceintro.height, surfaceintro.scalew, surfaceintro.scaleh, 1, {
-            "name": "alpha",
-            "value": 0  # transparent
-        })
+        surfaceintro.tween(surfaceintro.x, surfaceintro.y, surfaceintro.scalex, surfaceintro.scaley, surfaceintro.width,
+                           surfaceintro.height, surfaceintro.scalew, surfaceintro.scaleh, 1, {
+                               "name": "alpha",
+                               "value": 0  # transparent
+                           })
 
     def endintro(cls):
         statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
@@ -167,7 +175,8 @@ class Model:
         COULEUR = constantes.WHITE
         BORDURE = 0
 
-        image_menu = image.Image(REPERTOIRE, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        image_menu = image.Image(REPERTOIRE, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
         SCALE_X = 0.5
@@ -176,15 +185,16 @@ class Model:
         HAUTEUR = 200
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
-        POSITION_X = - int(LARGEUR/2)
-        POSITION_Y = - int(HAUTEUR/2)
+        POSITION_X = - int(LARGEUR / 2)
+        POSITION_Y = - int(HAUTEUR / 2)
         COULEUR = constantes.WHITE
         BORDURE = 0  # rempli
         ALPHA = 255  # opaque...
         CONVERT_ALPHA = True  # ...mais transparent
 
-        surface_boutons = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        surface_boutons = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                          SCALE_Y, LARGEUR,
+                                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -207,16 +217,17 @@ class Model:
         BORDURE = 0  # rempli
 
         button.BJouer("Jouer", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                              ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
-                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                      ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                      SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        button.BStats("Statistiques", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                              ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
-                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        button.BStats("Statistiques", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                      CENTRE_Y,
+                      ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                      SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         button.BParam("Paramètres", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                              ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
-                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                      ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                      SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     updatemodel = classmethod(updatemodel)
     mousebutton1down = classmethod(mousebutton1down)

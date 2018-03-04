@@ -146,10 +146,12 @@ class BJouer(Button):
                  ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
+
+        """
         B2Joueurs("2 joueurs", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN,
                   ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -319,21 +321,21 @@ class B1Joueur(Button):
         BORDURE = 3
 
         check_jo = checkbox.Checkbox(BOXSIZE, "Jeux Olympiques", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
-                                          CENTRE_X,
-                                          CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y, SCALE_X,
-                                          SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                     CENTRE_X,
+                                     CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y, SCALE_X,
+                                     SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         check_jo.check()
         POSITION_Y += 75
         check_athenes = checkbox.Checkbox(BOXSIZE, "Athènes", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
-                                               CENTRE_X,
-                                               CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y,
-                                               SCALE_X,
-                                               SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                          CENTRE_X,
+                                          CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y,
+                                          SCALE_X,
+                                          SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         check_foret = checkbox.Checkbox(BOXSIZE, "Forêt", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                                             CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y,
-                                             SCALE_X,
-                                             SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                        CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y,
+                                        SCALE_X,
+                                        SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         checkbox.Checkbox.linkcheckboxes(check_jo, check_athenes,
                                          check_foret)  # ces checbox sont liés, càd, si l'un se fait coché, les autres seront décochés
@@ -401,23 +403,23 @@ class B1Joueur(Button):
         BORDURE = 3
 
         check_400m = checkbox.Checkbox(BOXSIZE, "400m", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                                            CENTRE_Y,
-                                            ARRIERE_PLAN, ECART, surface_mdj, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                       CENTRE_Y,
+                                       ARRIERE_PLAN, ECART, surface_mdj, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                                       LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         check_400m.check()
         POSITION_Y += 75
         check_400m_haie = checkbox.Checkbox(BOXSIZE, "400m haie", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
-                                                 CENTRE_X,
-                                                 CENTRE_Y, ARRIERE_PLAN, ECART, surface_mdj, POSITION_X, POSITION_Y,
-                                                 SCALE_X,
-                                                 SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                            CENTRE_X,
+                                            CENTRE_Y, ARRIERE_PLAN, ECART, surface_mdj, POSITION_X, POSITION_Y,
+                                            SCALE_X,
+                                            SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         check_course_inf = checkbox.Checkbox(BOXSIZE, "Course infinie", ANTIALIAS, COULEUR_TEXTE, FONT,
-                                                  TAILLE_FONT,
-                                                  CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART, surface_mdj, POSITION_X,
-                                                  POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
-                                                  SCALE_HEIGHT,
-                                                  COULEUR, BORDURE)
+                                             TAILLE_FONT,
+                                             CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART, surface_mdj, POSITION_X,
+                                             POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
+                                             SCALE_HEIGHT,
+                                             COULEUR, BORDURE)
 
         checkbox.Checkbox.linkcheckboxes(check_400m, check_400m_haie,
                                          check_course_inf)  # ces checbox sont liés, càd, si l'un se fait coché, les autres seront décochés
@@ -485,21 +487,21 @@ class B1Joueur(Button):
         BORDURE = 3
 
         check_facile = checkbox.Checkbox(BOXSIZE, "Facile", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                                              CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
-                                              SCALE_X,
-                                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                         CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
+                                         SCALE_X,
+                                         SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         check_moyen = checkbox.Checkbox(BOXSIZE, "Moyen", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                                             CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
-                                             SCALE_X,
-                                             SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                        CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
+                                        SCALE_X,
+                                        SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         check_moyen.check()
         POSITION_Y += 75
         check_difficile = checkbox.Checkbox(BOXSIZE, "Difficile", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
-                                                 CENTRE_X,
-                                                 CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
-                                                 SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                                 BORDURE)
+                                            CENTRE_X,
+                                            CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
+                                            SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                            BORDURE)
 
         checkbox.Checkbox.linkcheckboxes(check_facile, check_moyen,
                                          check_difficile)  # ces checbox sont liés, càd, si l'un se fait coché, les autres seront décochés
@@ -555,6 +557,8 @@ class B1Joueur(Button):
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
+"""
+Mode deux joueurs :
 class B2Joueurs(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
@@ -587,7 +591,7 @@ class B2Joueurs(Button):
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
 
 
 class BCommencer(Button):
@@ -627,13 +631,18 @@ class BRetour(Button):
             self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         functions.delete_menu_obj()
 
-        game_state = statemanager.StateManager.getstate()
+        model.Model.endintro()
 
-        if game_state in menu_states:
+
+"""
+Plus nécessaire depuis que le mode 2 joueurs n'existe plus:
+        if game_state in menu_states: 
             model.Model.endintro()  # bon, ce n'est pas la fin de l'intro mais c'est tellement bien adapté pour !
         elif game_state == statemanager.StateEnum.MAP_AND_DIFF:
+            BCommencer.button1down(None)
             BJouer.button1down(
                 None)  # pas sûr que c'est super bien de faire ca. Mais en réalité, c'est comme si on avait cliqué sur jouer...
+"""
 
 
 class BPause(Button):

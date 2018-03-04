@@ -60,6 +60,7 @@ class CoreGame:
     vitesseobj = None  # le texte sur lequel on écrit la vitesse du courreur
     tempsobj = None  # le texte sur lequel on écrit le temps de la course (AFFICHé SEULEMENT EN 400M ET 400M HAIE)
     distanceobj = None  # le texte sur lequel on écrit la distance parcouru (AFFICHé SEULEMENT EN COURSE INFINI)
+    barre_energie_in = None  # la barre d'energie
 
     def __init__(self, carte, modejeu, level):
         """
@@ -113,7 +114,7 @@ class CoreGame:
         COULEUR = constantes.YELLOW
         BORDURE = 0  # rempli
 
-        barre_energie_in = rect.Rect(barre_energie_out, POSITION_X, POSITION_Y, SCALE_X,
+        CoreGame.barre_energie_in = rect.Rect(barre_energie_out, POSITION_X, POSITION_Y, SCALE_X,
                                         SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                         BORDURE)
 
