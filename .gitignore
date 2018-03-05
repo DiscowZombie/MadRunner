@@ -1,10 +1,13 @@
+# IntelliJ files
 .idea/
 venv/
 Thumbs.db
 __pycache__/
+
+# Python
 jeu_python/test.py
+jeu_python/dist/
+jeu_python/build/
+
+# Web
 serveur_web/config/config.json
-build/
-dist/
-setup.py
-setupxfreez.py
