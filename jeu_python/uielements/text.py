@@ -2,10 +2,12 @@ import uielement
 import view
 import functions as f
 
+
 class Text(uielement.UIelement):
     texts = []
 
-    def __init__(self, text, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset, alone,
+    def __init__(self, text, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
+                 alone,
                  *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Text")
@@ -26,7 +28,8 @@ class Text(uielement.UIelement):
 
     def create(self):  # view
         texte = view.View.pygame.font.SysFont(self.font, self.fontsize)
-        surfacetext = texte.render(self.text, self.antialias, self.textcolor, self.backgroundcolor)  # retourne la surface sur laquelle le texte est dessiné
+        surfacetext = texte.render(self.text, self.antialias, self.textcolor,
+                                   self.backgroundcolor)  # retourne la surface sur laquelle le texte est dessiné
         if self.textcenteredx or self.textcenteredy:
             positionx, positiony = f.centretexte(texte.size(self.text), (self.abswidth, self.absheight))
             if not self.textcenteredx:
@@ -34,7 +37,7 @@ class Text(uielement.UIelement):
             if not self.textcenteredy:
                 positiony = 0
         else:
-             positionx, positiony = 0, 0
+            positionx, positiony = 0, 0
 
         self.x = positionx + self.textoffset
         self.y = positiony

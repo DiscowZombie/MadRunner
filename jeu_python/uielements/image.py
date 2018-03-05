@@ -1,6 +1,7 @@
 import uielement
 import view
 
+
 class Image(uielement.UIelement):
     images = []
 
@@ -14,14 +15,17 @@ class Image(uielement.UIelement):
 
         self.imagepath = image_path
         self.originalimage = self.create(False)
-        self.referance = self.create(True)  # on creer l'image pour avoir une référence vers celui-ci, mais sans nécessairement l'afficher
+        self.referance = self.create(
+            True)  # on creer l'image pour avoir une référence vers celui-ci, mais sans nécessairement l'afficher
 
         Image.images.append(self)
 
-    def create(self, resize, xresize = None, yresize = None):
+    def create(self, resize, xresize=None, yresize=None):
         image = view.View.pygame.image.load(self.imagepath).convert_alpha()
         if resize:
-            image = view.View.pygame.transform.scale(image, (xresize or int(self.parentsurface.abswidth*self.scalew + self.width), yresize or int(self.parentsurface.absheight*self.scaleh + self.height)))
+            image = view.View.pygame.transform.scale(image, (
+            xresize or int(self.parentsurface.abswidth * self.scalew + self.width),
+            yresize or int(self.parentsurface.absheight * self.scaleh + self.height)))
         return image
 
     def draw(self):

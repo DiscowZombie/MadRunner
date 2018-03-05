@@ -10,6 +10,7 @@ import coregame.gameobjects.key as key
 import constantes
 import view as v
 import mapscripts.jeuxolympiques as jo
+import endgame.endgame as eg
 
 import random
 
@@ -313,8 +314,13 @@ class CoreGame:
             # On vérifie que l'on as pas atteint la distance nécessaire
             if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
                 if CoreGame.distance >= 400:
-                    # temporaire
-                    CoreGame.pause = True
+                    CoreGame.pause = True  # Temporaire
+                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, CoreGame.distance, CoreGame.time, "end").end()
+
+            # On vérifie qu'il as assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
+            if energy <= 0:
+                CoreGame.pause = True  # Temporaire
+                eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, CoreGame.distance, CoreGame.time, "energy").end()
 
             if random.randint(1,
                               100) == 1 and key.Key.canCreateKey():  # arbitraire pour l'instant, car la chance augmente avec la distance parcouru
