@@ -64,6 +64,7 @@ Animations = {
 
 CharactersFeatures = {
     "gros": {
-        "initspeed": 3  # la vitesse à laquelle court le personnage à l'état initial, en m/s
+        "initspeed": 3,  # la vitesse à laquelle court le personnage à l'état initial, en m/s
+        "initenergy": 100  # la quantité d'énergie initiale du personnage (et maximale)
     }
 }

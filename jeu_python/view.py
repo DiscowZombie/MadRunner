@@ -113,12 +113,12 @@ class View:
                 parentsize[0] * surface.scalex + surface.x, parentsize[1] * surface.scaley + surface.y))
 
         # on dessine le personnage et les obstacles en dernier
-        characters = coregame.CoreGame.characters_sprite
+        characters = coregame.CoreGame.getCharacterSprites()
 
         for character in characters:
             attrname = character.state + "sprite"
             state_sprite = character.__getattribute__(attrname)
-            View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (state_sprite.absx + state_sprite.offsetx, state_sprite.absy + state_sprite.offsety))  #on suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
+            View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (state_sprite.absx + state_sprite.offsetx, state_sprite.absy + state_sprite.offsety))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
 
         View.pygame.display.update()
 

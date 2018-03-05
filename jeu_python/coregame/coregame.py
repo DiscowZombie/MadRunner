@@ -20,30 +20,45 @@ Ne fonctionne pour piur 60 fps pour le moment
 
 
 class Character:
-    speed = 0
 
     def __init__(self, characterfeatures, characterinfos, posx, posy, scalex, scaley):
         for spritename in characterinfos:
             self.__setattr__(spritename + "sprite",
                              sprit.SpriteStripAnim(characterinfos[spritename], posx, posy, scalex, scaley))
         self.characterinfos = characterinfos
-        self.y = 100  # position arbitraire pour l'instant, permet de dessiner le personnage dans un axe y correct (en effet, quand le personnage saute, sa position dans l'axe y va changer !)
+        self.characterfeatures = characterfeatures
+        self.x = posx
+        self.y = posy
+        self.scalex = scalex
+        self.scaley = scaley
         self.state = "run"
         self.running = True  # on va supposer pour l'instant que le gars cour tout de suite, mais plus tard, ce ne sera pas le cas (car on montrera un 3,2,1, go !)
         self.jumping = False  # le personnage est-il en train de sauter ?
-        self.energy = 100  # untité arbitraire pour l'instant, permet de savoir la quantité d'énergie restante pour sauter ou courir vite
+        self.energy = characterfeatures["initenergy"]
         self.speed = characterfeatures["initspeed"]
 
     def run(self):
-        print("rien d'intéressant ici !")  # en effet ! servira plus tard lorqu'on fera le à vos marques pret go !
+        self.running = True
+        self.jumping = False
 
     def jump(self):
         if not self.jumping and self.energy >= 10:  # unité encore arbitraire pour l'énergie, on verra cela plus tard !
             self.energy -= 10
-            # Sauter reduit sa vitesse de 15%
-            self.speed -= (15 / 100) * self.speed
+            self.speed -= 0.15 * self.speed  # Sauter reduit sa vitesse de 15%
             self.jumping = True
             self.running = False
+
+    def changeState(self, new_state):
+        self.state = new_state
+
+    def boost(self, attribut, amount):  # permet d'augmenter la valeur d'un attribut (ou de le diminuer si amount est négatif)
+        if attribut == "energy":  # petite exception pour cette attribut qui ne peut excéder la quantité d'énergie initiale
+            max_energy = self.characterfeatures["initenergy"]
+            if self.energy + amount > max_energy:
+                amount = max_energy - self.energy
+        if self.__getattribute__(attribut) + amount < 0:  # pour empêcher d'avoir de valeurs négatives !
+            amount = -self.__getattribute__(attribut)
+        self.__setattr__(attribut, self.__getattribute__(attribut) + amount)
 
 
 class CoreGame:
@@ -52,14 +67,18 @@ class CoreGame:
     modejeu = None
     level = None
     mapscript = None
+
     pause = False
     time = 0  # temps en ms depuis lequel le jeu a commencé (le chrono)
     distance = 0  # la distance parcouru
+    finished = False  # la course est-elle finie ?
+
     surface_boutons = None  # la surface sur laquelle les boutons à appuyer sont dessinés
 
     vitesseobj = None  # le texte sur lequel on écrit la vitesse du courreur
     tempsobj = None  # le texte sur lequel on écrit le temps de la course (AFFICHé SEULEMENT EN 400M ET 400M HAIE)
     distanceobj = None  # le texte sur lequel on écrit la distance parcouru (AFFICHé SEULEMENT EN COURSE INFINI)
+    lignearriveobj = None  # la surface qui fait office de ligne d'arrivé (n'existe que lorqu'on est assez proche de l'arrivé)
 
     # La barre d'énergie
     barre_energie_in = None
@@ -153,7 +172,7 @@ class CoreGame:
         TEXTE = ""
         ANTIALIAS = True
         COULEUR = constantes.BLACK
-        FONT = "Arial"  # arial bold normalement
+        FONT = "Arial"
         TAILLE_FONT = 22
         CENTRE_X = False
         CENTRE_Y = True
@@ -259,7 +278,10 @@ class CoreGame:
     def loop(cls, passed=0):  # update l'arrière plan + chaque personnage
 
         if not CoreGame.pause:
-            charspeed = CoreGame.characters_sprite[0].speed  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+            char = CoreGame.characters_sprite[0]  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+            # Calcul de la nouvelle distance parcouru
+            charspeed = char.speed
+
             d1 = CoreGame.distance
             d2 = d1 + charspeed * (passed / 1000)
             delta_d = d2 - d1
@@ -268,7 +290,34 @@ class CoreGame:
             CoreGame.distance += delta_d
             CoreGame.time += passed
 
+            """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
+            # Calcul de la position x absolue du personnage
+            char_absx = int(v.View.screen.referance.get_width() * char.scalex + char.x)
+            delta_pix_arrive = (400 - CoreGame.distance) * 10  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
+            pos_x_ligne_arrive = char_absx - delta_pix_arrive
+
+            if pos_x_ligne_arrive > -2:
+                if not CoreGame.lignearriveobj:  # dessiner la ligne d'arrivé si elle n'existe pas encore
+                    LARGEUR = 4
+                    HAUTEUR = 175
+                    POSITION_X = pos_x_ligne_arrive - 2
+                    POSITION_Y = 0
+                    SCALE_X = 0
+                    SCALE_Y = 0.35
+                    SCALE_WIDTH = 0
+                    SCALE_HEIGHT = 0
+                    COULEUR = constantes.WHITE
+                    BORDURE = 0
+                    ALPHA = 255  # opaque
+                    CONVERT_ALPHA = False
+
+                    CoreGame.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+                else:  # sinon, on met juste à jour sa position
+                    CoreGame.lignearriveobj.x = pos_x_ligne_arrive - 2
+
             # Mise à jour de l'affichage de la vitesse
+            # Affichage de la vitesse du personnage en km/h
             CoreGame.vitesseobj.text = str(int(charspeed * 3.6)) + " km/h"
 
             # TODO: La barre ne change pas encore de taille mais déjà de couleur
@@ -297,7 +346,8 @@ class CoreGame:
             # Mise à jour des boutons à appuyer
             key.Key.updatekeys(passed)
 
-            if CoreGame.modejeu == "400m":
+            # Affichage du temps en 400m et 400m haie
+            if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
                 temps_ms = CoreGame.time
                 aff_ms = str(temps_ms % 1000)
                 temps_s = int(temps_ms // 1000)
@@ -314,13 +364,19 @@ class CoreGame:
             # On vérifie que l'on as pas atteint la distance nécessaire
             if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
                 if CoreGame.distance >= 400:
-                    CoreGame.pause = True  # Temporaire
+                    CoreGame.finished = True
+                    CoreGame.pause = True
                     eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, CoreGame.distance, CoreGame.time, "end").end()
 
             # On vérifie qu'il as assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
             if energy <= 0:
-                CoreGame.pause = True  # Temporaire
+                CoreGame.finished = True
+                CoreGame.pause = True
                 eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, CoreGame.distance, CoreGame.time, "energy").end()
+
+            # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
+            if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
+                key_chance = CoreGame.distance / 10
 
             if random.randint(1,
                               100) == 1 and key.Key.canCreateKey():  # arbitraire pour l'instant, car la chance augmente avec la distance parcouru
@@ -328,32 +384,53 @@ class CoreGame:
                         10)  # timeout arbitraire pour l'instant, il dépend normalement de la difficulté
 
             for decors in CoreGame.mapscript.getDecors():
-                for surface in decors:
-                    surface.x += delta_pixel
+                for surfaceobj in decors:
+                    surfaceobj.x += delta_pixel
 
+            # Mis à jour de l'arrière plan de la carte
             CoreGame.mapscript.refresh()
 
+            # Mis à jour du state, et calcul de la vitesse, de la hauteur du saut...
             for character in CoreGame.characters_sprite:
-                new_state = None
+                state_sprite = character.__getattribute__(character.state + "sprite")
                 characterinfos = character.characterinfos
+                extra_y_offset = 0
                 if character.running:
                     new_state = "run"
                 elif character.jumping:
-                    new_state = "jump"
+                    jump_compteur = character.jumpsprite.totalcompteur
+                    if jump_compteur == 27:  # atterissage d'un saut
+                        new_state = "run"
+                        character.run()
+                    else:
+                        new_state = "jump"
+                        extra_y_offset = (1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
+                        extra_y_offset = extra_y_offset
+                else:
+                    new_state = "idle"  # fin et début de la course
 
-                character.state = new_state
+                if character.state != new_state:  # si le personnage change d'état...
+                    character.__getattribute__(character.state + "sprite").reset()  # on remet à 0 son animation
 
-                # On charge le perso
+                character.changeState(new_state)
+
+                # On charge la prochaine image du personnage
                 character.__getattribute__(new_state + "sprite").next(
                     -int(characterinfos[new_state]["framesize"][0] / 2),
-                    -int(characterinfos[new_state]["framesize"][1] / 2))
+                    -int(characterinfos[new_state]["framesize"][1] / 2) + extra_y_offset)
+
+            # Mis à jour de la taille de la barre d'énergie
+            CoreGame.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
 
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:
-            CoreGame.characters_sprite[
-                0].jump()  # bon, ici on va faire sauter le joueur 1 ! Il faudra pendre en compte cela lors qu'on dera le mode 2 joueurs
+            CoreGame.characters_sprite[0].jump()  # Ici, on va faire sauter le joueur 1
         else:
             key.Key.keypressed(event.dict["unicode"].capitalize())
 
+    def getCharacterSprites(cls):
+        return CoreGame.characters_sprite
+
     loop = classmethod(loop)
     keypressed = classmethod(keypressed)
+    getCharacterSprites = classmethod(getCharacterSprites)

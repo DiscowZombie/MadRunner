@@ -51,6 +51,7 @@ class SpriteStripAnim(SpriteSheet):
         SpriteSheet.__init__(self, spriteinfos["image"], posx, posy, scalex, scaley)
         self.speedcounter = 0
         self.compteur = 0
+        self.totalcompteur = 0
         self.offsetx = 0
         self.offsety = 0
         self.state = "run"
@@ -73,11 +74,21 @@ class SpriteStripAnim(SpriteSheet):
         if self.compteur == self.numimage:
             self.compteur = self.repeatimage - 1
 
+        self.totalcompteur += 1
+
         # mis à jour de positions absolues et de l'offset
-        self.absx = int(view.View.screen.absx + view.View.screen.abswidth*self.scalex + self.x)
-        self.absy = int(view.View.screen.absy + view.View.screen.absheight*self.scaley + self.y)
+        self.absx = int(view.View.screen.abswidth * self.scalex + self.x)
+        self.absy = int(view.View.screen.absheight * self.scaley + self.y)
         self.offsetx = offsetx
         self.offsety = offsety
+
+    def reset(self):
+        self.totalcompteur = 0
+        self.compteur = 0
+        self.speedcounter = 0
+
+    def setOffset(self, offset):
+        self.offsety = offset
 
     def getSpriteAnims(cls):
         return SpriteStripAnim.sprite_anims
