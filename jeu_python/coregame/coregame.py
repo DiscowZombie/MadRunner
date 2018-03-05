@@ -289,11 +289,12 @@ class CoreGame:
 
             CoreGame.distance += delta_d
             CoreGame.time += passed
+            new_distance = CoreGame.distance
 
             """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
             # Calcul de la position x absolue du personnage
             char_absx = int(v.View.screen.referance.get_width() * char.scalex + char.x)
-            delta_pix_arrive = (400 - CoreGame.distance) * 10  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
+            delta_pix_arrive = (400 - new_distance) * 10  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
             pos_x_ligne_arrive = char_absx - delta_pix_arrive
 
             if pos_x_ligne_arrive > -2:
@@ -320,29 +321,6 @@ class CoreGame:
             # Affichage de la vitesse du personnage en km/h
             CoreGame.vitesseobj.text = str(int(charspeed * 3.6)) + " km/h"
 
-            # TODO: La barre ne change pas encore de taille mais déjà de couleur
-            # Mise à jour de l'affichage de la barre d'énergie
-            LARGEUR = -4
-            HAUTEUR = -4
-            POSITION_X = 2
-            POSITION_Y = 2
-            SCALE_X = 0
-            SCALE_Y = 0
-            SCALE_WIDTH = 1
-            SCALE_HEIGHT = 1
-            energy = CoreGame.characters_sprite[0].energy
-            if energy >= 70:
-                COULEUR = constantes.GREEN
-            elif energy >= 30:
-                COULEUR = constantes.YELLOW
-            else:
-                COULEUR = constantes.RED
-            BORDURE = 0  # rempli
-
-            CoreGame.barre_energie_in = rect.Rect(CoreGame.barre_energie_out, POSITION_X, POSITION_Y, SCALE_X,
-                                                  SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                                  BORDURE)
-
             # Mise à jour des boutons à appuyer
             key.Key.updatekeys(passed)
 
@@ -363,25 +341,27 @@ class CoreGame:
 
             # On vérifie que l'on as pas atteint la distance nécessaire
             if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
-                if CoreGame.distance >= 400:
+                if new_distance >= 400:
                     CoreGame.finished = True
                     CoreGame.pause = True
-                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, CoreGame.distance, CoreGame.time, "end").end()
+                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, new_distance, CoreGame.time, "end").end()
 
             # On vérifie qu'il as assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
-            if energy <= 0:
+            if char.energy <= 0:
                 CoreGame.finished = True
-                CoreGame.pause = True
-                eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, CoreGame.distance, CoreGame.time, "energy").end()
+                eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, new_distance, CoreGame.time, "energy").end()
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
-            if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
-                key_chance = CoreGame.distance / 10
+            if new_distance == 0:
+                new_distance = 0.1  # pas de division pas 0 !
 
-            if random.randint(1,
-                              100) == 1 and key.Key.canCreateKey():  # arbitraire pour l'instant, car la chance augmente avec la distance parcouru
-                key.Key(CoreGame.surface_boutons,
-                        10)  # timeout arbitraire pour l'instant, il dépend normalement de la difficulté
+            if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
+                key_chance = int(1000 / new_distance)  # la probabilité d'avoir une touche augmente avec la distance parcouru
+            else:  # course infinie
+                key_chance = int(new_distance**0.5 / new_distance / 1000)
+
+            if random.randint(1,key_chance) == 1 and key.Key.canCreateKey():
+                key.Key(CoreGame.surface_boutons, 10)  # timeout qui dépend de la difficulté
 
             for decors in CoreGame.mapscript.getDecors():
                 for surfaceobj in decors:
@@ -397,6 +377,7 @@ class CoreGame:
                 extra_y_offset = 0
                 if character.running:
                     new_state = "run"
+                    character.runsprite.adjustspeed(character.speed*6)
                 elif character.jumping:
                     jump_compteur = character.jumpsprite.totalcompteur
                     if jump_compteur == 27:  # atterissage d'un saut
@@ -419,8 +400,14 @@ class CoreGame:
                     -int(characterinfos[new_state]["framesize"][0] / 2),
                     -int(characterinfos[new_state]["framesize"][1] / 2) + extra_y_offset)
 
-            # Mis à jour de la taille de la barre d'énergie
+            # Mis à jour de la taille et la couleur de la barre d'énergie
             CoreGame.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
+            if char.energy >= 70:
+                CoreGame.barre_energie_in.color = constantes.GREEN
+            elif char.energy >= 30:
+                CoreGame.barre_energie_in.color = constantes.YELLOW
+            else:
+                CoreGame.barre_energie_in.color = constantes.RED
 
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:

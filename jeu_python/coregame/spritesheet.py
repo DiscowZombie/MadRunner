@@ -90,6 +90,9 @@ class SpriteStripAnim(SpriteSheet):
     def setOffset(self, offset):
         self.offsety = offset
 
+    def adjustspeed(self, new_speed):
+        self.speed = new_speed
+
     def getSpriteAnims(cls):
         return SpriteStripAnim.sprite_anims
 
