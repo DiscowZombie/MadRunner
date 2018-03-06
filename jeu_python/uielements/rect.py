@@ -13,16 +13,15 @@ class Rect(uielement.UIelement):
         Rect.rects.append(self)
 
     def create(self):
-        """referance = self.parentsurface.referance
-        rectangle = referance.fill(self.color, [referance.get_width() * self.scalex + self.x, referance.get_height() * self.scaley + self.y,
-             referance.get_width() * self.scalew + self.width, referance.get_height() * self.scaleh + self.height])"""
+        """parentsurface = self.parentsurface
+        rectangle = parentsurface.referance.fill(self.color, [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
+             parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height])"""
         parentsurface = self.parentsurface
-        referance = parentsurface.referance
         rectangle = view.View.pygame.draw.rect(
             self.parentsurface.referance,
             self.color,
-            [referance.get_width() * self.scalex + self.x, referance.get_height() * self.scaley + self.y,
-             referance.get_width() * self.scalew + self.width, referance.get_height() * self.scaleh + self.height],
+            [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
+             parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height],
             self.bordersize
         )
         return rectangle

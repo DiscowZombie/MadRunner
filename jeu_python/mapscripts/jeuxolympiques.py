@@ -53,7 +53,7 @@ def colonne_siege(i):
 
     bg_surfaces.append(bg_surface)
 
-    for y in range((bg_surface.referance.get_height()//30) + 1):
+    for y in range((bg_surface.absheight//30) + 1):
         siege(bg_surface, y)
 
 
@@ -85,7 +85,7 @@ def init():
 
     global surface_panneau
 
-    taille_ecran = (view.View.screen.referance.get_width(),view.View.screen.referance.get_height())
+    taille_ecran = (view.View.screen.abswidth,view.View.screen.absheight)
 
     # Mis en place du haut de l'arrière plan (gradins)
     # On va creer autant d'image du haut du gradin que nécessaire pour remplir la largeur et la hauteur de la surface
@@ -154,7 +154,7 @@ def init():
                                 BORDURE)  # creation de la l'objet surface où on va mettre les images du bas du gradin
 
 def refresh():
-    taille_ecran = (view.View.screen.referance.get_width(),view.View.screen.referance.get_height())
+    taille_ecran = (view.View.screen.abswidth,view.View.screen.absheight)
 
     # HAUT DU GRADIN (SIèGES)
     max_x = 0
@@ -169,13 +169,13 @@ def refresh():
             min_x = min(min_x, surfaceimg.x)
             max_y = 0  # va servir a ajouter des sièges si jamais il en manque
             for image in surfaceimg.children:
-                if image.y > surfaceimg.referance.get_height():
+                if image.y > surfaceimg.absheight:
                     image.unreferance()
                 else:
                     max_y = max(max_y, image.y + image.abswidth)  # pour ajouter des lignes de sièges
 
             nbsiege = len(surfaceimg.children)  # nombre de sièges de la colonne
-            nbnouvsiege = ((surfaceimg.referance.get_height() - max_y)//30) + 1  # nombre de nouveau siege par colonne
+            nbnouvsiege = ((surfaceimg.absheight - max_y)//30) + 1  # nombre de nouveau siege par colonne
 
             for i in range(nbsiege, nbsiege + nbnouvsiege):  # ajout de colonnes de sièges s'il y a de la place
                 for surfaceimg in bg_surfaces:

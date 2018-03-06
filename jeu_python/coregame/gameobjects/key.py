@@ -25,8 +25,7 @@ class Key:
         TAILLE_BOUTON = 30  # carré
 
         lettre = Key.availablekeys[random.randint(0, len(Key.availablekeys) - 1)]
-        screenreferance = view.View.screen.referance
-        screenwidth = screenreferance.get_width()
+        screenwidth = view.View.screen.abswidth
         surfaceheight = surface_boutons.referance.get_height()
         max_x_scale = (screenwidth - TAILLE_BOUTON) / screenwidth
         max_y_scale = (surfaceheight - TAILLE_BOUTON) / surfaceheight

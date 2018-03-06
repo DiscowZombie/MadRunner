@@ -295,7 +295,7 @@ class CoreGame:
 
             """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
             # Calcul de la position x absolue du personnage
-            char_absx = int(v.View.screen.referance.get_width() * char.scalex + char.x)
+            char_absx = int(v.View.screen.abswidth * char.scalex + char.x)
             delta_pix_arrive = (400 - new_distance) * 10  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
             pos_x_ligne_arrive = char_absx - delta_pix_arrive
 

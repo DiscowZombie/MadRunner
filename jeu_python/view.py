@@ -23,12 +23,19 @@ class View:
         View.pygame = pygame
 
     def updatewindow(cls, newsize):  # quand la fenêtre est redimensionnée, ou initialisée
-        del View.screen  # efface l'ancienne objet écran qui n'est plus utile !
+        old_screen_obj = View.screen
+
         View.screensize = newsize
         screen = uielement.UIelement(None, 0, 0, 0, 0, newsize[0], newsize[1], 0, 0, constantes.WHITE, 0, "screen",
                                      None, True)
         screen.referance = View.pygame.display.set_mode(newsize, View.pygame.RESIZABLE)
         View.screen = screen
+
+        UIelements = uielement.UIelement.getUIelements()
+        for classname in UIelements:
+            for obj in UIelements[classname]:
+                if obj.parentsurface == old_screen_obj:  # tous les objets qui ont pour référence l'ancien objet écran sont mis à jour
+                    screen.addchild(obj)
 
     def checktween(self):
         tweendata = self.tweendata
@@ -63,11 +70,10 @@ class View:
                     View.checktween(obj)
                     tweenobj.append(obj)
                 parentsurface = obj.parentsurface
-                referance = parentsurface.referance
-                obj.absx = int(parentsurface.absx + referance.get_width() * obj.scalex + obj.x)
-                obj.absy = int(parentsurface.absy + referance.get_height() * obj.scaley + obj.y)
-                obj.abswidth = int(referance.get_width() * obj.scalew + obj.width)
-                obj.absheight = int(referance.get_height() * obj.scaleh + obj.height)
+                obj.absx = int(parentsurface.absx + parentsurface.abswidth * obj.scalex + obj.x)
+                obj.absy = int(parentsurface.absy + parentsurface.absheight * obj.scaley + obj.y)
+                obj.abswidth = int(parentsurface.abswidth * obj.scalew + obj.width)
+                obj.absheight = int(parentsurface.absheight * obj.scaleh + obj.height)
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:  # ...puis on met à jour les surfaces...
@@ -83,8 +89,8 @@ class View:
                         if classname == "Button":  # exception pour les boutons qui ne vont pas être blité comme les autres...
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
-                            int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x + textobj.x),
-                            int(obj.parentsurface.referance.get_height() * obj.scaley + obj.y + textobj.y)))
+                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
+                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
                         elif classname == "Checkbox":  # ... et les checkbox aussi
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
@@ -99,18 +105,17 @@ class View:
                         elif classname == "Text":
                             if obj.alone:
                                 obj.parentsurface.referance.blit(obj.referance, (
-                                int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x),
-                                int(obj.parentsurface.referance.get_height() * obj.scaley + obj.y)))
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y)))
                         else:
                             obj.parentsurface.referance.blit(obj.referance, (
-                            int(obj.parentsurface.referance.get_width() * obj.scalex + obj.x),
-                            int(obj.parentsurface.referance.get_height() * obj.scaley + obj.y)))  # ATTENTION : L'IMAGE NE SE POSITIONNE PAS CORRECTEMENT CAAR LE PARENTSURFACE CONTIENT LES ANCIENNES DIMENSIONS DE L'OBJET ECRAN !
+                            int(obj.parentsurface.abswidth * obj.scalex + obj.x),
+                            int(obj.parentsurface.absheight * obj.scaley + obj.y)))
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:
-                parentsize = surface.parentsurface.referance.get_size()
                 surface.parentsurface.referance.blit(surface.referance, (
-                parentsize[0] * surface.scalex + surface.x, parentsize[1] * surface.scaley + surface.y))
+                surface.parentsurface.abswidth * surface.scalex + surface.x, surface.parentsurface.absheight * surface.scaley + surface.y))
 
         # on dessine le personnage et les obstacles en dernier
         characters = coregame.CoreGame.getCharacterSprites()
