@@ -163,14 +163,14 @@ def refresh():
     for surfaceimg in bg_surfaces:
         if surfaceimg.absx > taille_ecran[0]:  # on enlève dans un premier temps les sièges qui ne sont plus visibles
             bg_surfaces.remove(surfaceimg)
-            surfaceimg.remove()
+            surfaceimg.unreferance()
         else:
             max_x = max(max_x, surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
             min_x = min(min_x, surfaceimg.x)
             max_y = 0  # va servir a ajouter des sièges si jamais il en manque
             for image in surfaceimg.children:
                 if image.y > surfaceimg.referance.get_height():
-                    image.remove()
+                    image.unreferance()
                 else:
                     max_y = max(max_y, image.y + image.abswidth)  # pour ajouter des lignes de sièges
 
@@ -200,7 +200,7 @@ def refresh():
     for surfaceimg in bas_surfaces:
         if surfaceimg.absx > taille_ecran[0]:  # on enlève dans un premier temps les panneaux qui ne sont plus visibles
             bas_surfaces.remove(surfaceimg)
-            surfaceimg.remove()
+            surfaceimg.unreferance()
         else:
             max_x = max(max_x, surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
             min_x = min(min_x, surfaceimg.x)

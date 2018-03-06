@@ -83,10 +83,8 @@ class Button(uielement.UIelement):
     def draw(self):
         self.create()
 
-    def __del__(self):
-        self.textobj.__del__()
-        if self in Button.boutons:
-            Button.boutons.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
+    def unreferance(self):
+        Button.boutons.remove(self)
         self.remove()
 
     def getButtons(cls):
@@ -604,7 +602,7 @@ class BCommencer(Button):
         level = None
 
         for checkboxe in checkbox.Checkbox.getCheckboxes():
-            if checkboxe.isChecked():
+            if checkboxe.checked:
                 if carte is None:
                     carte = checkboxe
                 elif modejeu is None:
@@ -612,8 +610,8 @@ class BCommencer(Button):
                 else:
                     level = checkboxe
 
-        cgame = coregame.CoreGame(carte.gettext(), modejeu.gettext(), level.gettext())
-        cgame.loop()
+        cgame = coregame.CoreGame(carte.text, modejeu.text, level.text)
+        #cgame.loop()
 
 
 menu_states = [  # les états du jeu qui font retourner au menu principale lorsqu'on clique sur retour
@@ -631,18 +629,11 @@ class BRetour(Button):
             self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         functions.delete_menu_obj()
 
-        model.Model.endintro()
-
-
-"""
-Plus nécessaire depuis que le mode 2 joueurs n'existe plus:
-        if game_state in menu_states: 
-            model.Model.endintro()  # bon, ce n'est pas la fin de l'intro mais c'est tellement bien adapté pour !
+        game_state = statemanager.StateManager.getstate()
+        if game_state in menu_states:
+            model.Model.main_menu(True)
         elif game_state == statemanager.StateEnum.MAP_AND_DIFF:
-            BCommencer.button1down(None)
-            BJouer.button1down(
-                None)  # pas sûr que c'est super bien de faire ca. Mais en réalité, c'est comme si on avait cliqué sur jouer...
-"""
+            BJouer.button1down(None)  # C'est comme si on avait cliqué sur jouer
 
 
 class BPause(Button):

@@ -1,8 +1,8 @@
 import functions
-import uielements.button as button
-import uielements.image as image
-import uielements.surface as surface
-import uielements.rect as rect
+from uielements import button as button
+from uielements import image as image
+from uielements import surface as surface
+from uielements import rect as rect
 from uielements import text as text
 import statemanager
 import coregame.spritesheet as sprit
@@ -85,14 +85,16 @@ class CoreGame:
     barre_energie_out = None
 
     def __init__(self, carte, modejeu, level):
+
         """
         :param carte - Valeurs possibles: Jeux Olympiques, Athènes, Forêt
         :param modejeu - Valeurs possibles: 400m, 400m haie, Course infinie
         :param level - Valeurs possibles: Facile, Moyen, Difficile
         """
+
         functions.delete_menu_obj()
         for img in list(image.Image.getImages()):
-            img.__del__()
+            img.unreferance()
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYING)
 
         self.carte = carte
@@ -353,7 +355,7 @@ class CoreGame:
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
             if new_distance == 0:
-                new_distance = 0.1  # pas de division pas 0 !
+                new_distance = 0.1  # pas de division par 0 !
 
             if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
                 key_chance = int(1000 / new_distance)  # la probabilité d'avoir une touche augmente avec la distance parcouru
@@ -395,7 +397,7 @@ class CoreGame:
 
                 character.changeState(new_state)
 
-                # On charge la prochaine image du personnage
+                # Chargement de la prochaine image du personnage
                 character.__getattribute__(new_state + "sprite").next(
                     -int(characterinfos[new_state]["framesize"][0] / 2),
                     -int(characterinfos[new_state]["framesize"][1] / 2) + extra_y_offset)
@@ -411,7 +413,7 @@ class CoreGame:
 
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:
-            CoreGame.characters_sprite[0].jump()  # Ici, on va faire sauter le joueur 1
+            CoreGame.characters_sprite[0].jump()  # Ici, le joueur 1 saute
         else:
             key.Key.keypressed(event.dict["unicode"].capitalize())
 

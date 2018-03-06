@@ -96,14 +96,12 @@ class UIelement:
                 self.tweendata["otherattr"].append(tweendict)
 
     def remove(self):
-        classlist = UIelement.UIelements[self.classname]
-        for child in self.children:  # ne pas oublier d'effacer également les objets descendants de celui-ci
-            child.__del__()
-        if self in self.parentsurface.children:
-            self.parentsurface.children.remove(self)  # on l'enlève également de la table des descendants de son parent
-        if self in classlist:
-            classlist.remove(self)
-        del self
+        for child in list(self.children):  # ne pas oublier d'effacer également les objets descendants de celui-ci
+            child.unreferance()
+            child.parentsurface = None
+        self.children.clear()
+        self.parentsurface.children.remove(self)  # on l'enlève également de la table des descendants de son parent
+        UIelement.UIelements[self.classname].remove(self)
 
     def getUIelements(cls):
         return UIelement.UIelements

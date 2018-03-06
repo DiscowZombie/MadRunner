@@ -20,7 +20,6 @@ class Model:
     introfinished = False
     firstintro = False  # première phase de l'intro: montrer l'icône et le nom
     secondintro = False  # deuxième phase de l'intro: effet de transiton
-    tempobjets = []  # une liste d'objets temporaires
 
     def __init__(self, pygame):
         Model.pygame = pygame
@@ -123,10 +122,6 @@ class Model:
                                 surface_intro, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
-        Model.tempobjets.append(surface_intro)
-        Model.tempobjets.append(image_intro)
-        Model.tempobjets.append(texte_intro)
-
         # et enfin, on fait une merveilleuse transition vers l'état final de l'image et du texte
         surface_intro.tween(-112, -112, 0.5, 0.5, 225, 225, 0, 0, 1, {
             "name": "alpha",
@@ -155,28 +150,27 @@ class Model:
         statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
         Model.secondintro = False
         Model.introplaying = False
-        for objet in Model.tempobjets:
-            objet.__del__()  # efface l'objet
-        Model.tempobjets.clear()
-
+        surface.Surface.getSurfaces()[0].unreferance()
         Model.main_menu()
 
-    def main_menu(cls):
-        # creation de l'image d'arrière plan du menu
-        REPERTOIRE = "assets/img/background_temporaire.jpg"
-        POSITION_X = 0
-        POSITION_Y = 0
-        SCALE_X = 0
-        SCALE_Y = 0
-        LARGEUR = 0
-        HAUTEUR = 0
-        SCALE_WIDTH = 1
-        SCALE_HEIGHT = 1
-        COULEUR = constantes.WHITE
-        BORDURE = 0
+    def main_menu(cls, from_return=False):
 
-        image_menu = image.Image(REPERTOIRE, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        if not from_return:  # la fuite de mémoire était causé par le fait qu'on faisait un nouvel objet image en cliquant sur retour...
+            # creation de l'image d'arrière plan du menu
+            REPERTOIRE = "assets/img/background_temporaire.jpg"
+            POSITION_X = 0
+            POSITION_Y = 0
+            SCALE_X = 0
+            SCALE_Y = 0
+            LARGEUR = 0
+            HAUTEUR = 0
+            SCALE_WIDTH = 1
+            SCALE_HEIGHT = 1
+            COULEUR = constantes.WHITE
+            BORDURE = 0
+
+            image.Image(REPERTOIRE, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
         SCALE_X = 0.5

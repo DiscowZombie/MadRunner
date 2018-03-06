@@ -48,9 +48,8 @@ class Text(uielement.UIelement):
         if self.alone:  # si l'objet texte fait partie d'un autre objet (ex: bouton), on laisse l'autre objet se charger de l'apparition du texte
             self.create()
 
-    def __del__(self):
-        if self in Text.texts:
-            Text.texts.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
+    def unreferance(self):
+        Text.texts.remove(self)
         self.remove()
 
     def getTexts(cls):

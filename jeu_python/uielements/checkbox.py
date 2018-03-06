@@ -77,10 +77,10 @@ class Checkbox(uielement.UIelement):
     def draw(self):
         self.create()
 
-    def __del__(self):
-        self.textobj.__del__()
-        if self in Checkbox.checkboxes:
-            Checkbox.checkboxes.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
+    def unreferance(self):
+        self.linkedcheckboxes.clear()
+        #self.checkreferance.unreferance()
+        Checkbox.checkboxes.remove(self)
         self.remove()
 
     def getCheckboxes(cls):
@@ -91,12 +91,6 @@ class Checkbox(uielement.UIelement):
             for othercheckbox in checkboxes:
                 if checkbox.text != othercheckbox.text:  # on suppose que les checkbox ne sont pas identiques s'il n'ont pas le même texte
                     checkbox.linkedcheckboxes.append(othercheckbox)
-
-    def isChecked(self):
-        return self.checked
-
-    def gettext(self):
-        return self.text
 
     getCheckboxes = classmethod(getCheckboxes)
     linkcheckboxes = classmethod(linkcheckboxes)

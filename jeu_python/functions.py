@@ -20,14 +20,14 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
 
 
 def delete_menu_obj():
-    for bouton in list(button.Button.boutons):
-        bouton.__del__()
+    for bouton in list(button.Button.getButtons()):
+        bouton.unreferance()
     for surf in list(surface.Surface.getSurfaces()):
-        surf.__del__()
+        surf.unreferance()
     for txt in list(text.Text.getTexts()):
-        txt.__del__()
+        txt.unreferance()
     for check in list(checkbox.Checkbox.getCheckboxes()):
-        check.__del__()
+        check.unreferance()
 
 
 def click_clavier(event):

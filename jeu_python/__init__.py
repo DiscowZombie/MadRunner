@@ -1,37 +1,39 @@
 # Les imports extérieurs
+
 import pygame
-# Utilitaires
-import functions
+
 # Gère les informations du jeu
 import model
+
 # Gère ce qui est affiché
 import view
+
 # Gère les contrôles
 import controller
-# Les options
-import settings
+
 # l'état du jeu
 import statemanager
+
 import utils
 
-# On initialise le module
+# Initialisation du module
 pygame.init()
 
-# On charge l'horloge de pygame
+# Chargement de l'horloge de pygame
 clock = pygame.time.Clock()
 
-# initialisation de la partie "model" du model/view/controller
+# Initialisation de la partie "model" du model/view/controller
 model.Model(pygame)
 
-# intitialisation de la partie "view" du model/view/controller
+# Intitialisation de la partie "view" du model/view/controller
 view.View(pygame)
 
-# initialisation de la partie "controller" de model/view/controller
+# Initialisation de la partie "controller" de model/view/controller
 controller.Controller(pygame, view)
 
 running = True
 
-# On limite à 60 fps ou à la valeur en config si elle est valide
+# Limite à 60 fps ou à la valeur en config si elle est valide
 fps = utils.GameSettings().setfps()
 # DEBUG
 print("[DEBUG] (__init__ > l.37) FPS: " + str(fps))
@@ -39,19 +41,19 @@ print("[DEBUG] (__init__ > l.37) FPS: " + str(fps))
 passed = 0
 
 while running:
-    # Les events:
 
+    # Les événements:
     running = controller.Controller.checkevents()  # vérifie les interactions pour peut être modifier des infos du model
 
     if running:
-        model.Model.updatemodel(passed)  # update les infos du model
-        view.View.updatescreen(passed)  # puis on update tout ça
+        model.Model.updatemodel(passed)  # Mis à jour des infos du model
+        view.View.updatescreen(passed)  # Affichage de tout
 
         statemanager.StateManager.setstatetime(passed)
 
-        # On limite à 60 fps ou à la valeur en config si elle est valide
+        # Limite à 60 fps ou à la valeur en config si elle est valide
         # La syntaxe est une syntaxe dite "ternaire", "si then else alors". Equivant à "cdt ? then : else"
         passed = clock.tick(fps)
 
-# On quitte le module
+# Quitte le module
 pygame.quit()

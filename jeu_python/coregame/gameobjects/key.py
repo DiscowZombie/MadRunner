@@ -95,15 +95,13 @@ class Key:
         Key.availablekeys.remove(lettre)
         Key.keys.append(self)
 
-    def __del__(self):
-        self.rectreferance.__del__()
-        self.textreferance.__del__()
+    def unreferance(self):
+        self.rectreferance.unreferance()
+        self.textreferance.unreferance()
         key_maj = self.key.capitalize()
         if not key_maj in Key.availablekeys:
             Key.availablekeys.append(key_maj)  # la lettre peut ainsi réapparaître
-        if self in Key.keys:
-            Key.keys.remove(self)
-        del self
+        Key.keys.remove(self)
 
     def canCreateKey(cls):  # peut-on créer un objet lettre ?
         return len(Key.availablekeys) > 0
@@ -112,14 +110,14 @@ class Key:
         for key in Key.keys:
             key.time += passed
             if key.time >= key.timeout:
-                key.__del__()
+                key.unreferance()
 
     def keypressed(cls, pressed_key):
         keyobj = None
         for key in Key.keys:
             if key.key == pressed_key:
                 keyobj = key
-                key.__del__()
+                key.unreferance()
                 break
 
         avantage = Key.avantages[random.randint(0, len(Key.avantages) - 1)]

@@ -31,9 +31,8 @@ class Image(uielement.UIelement):
     def draw(self):
         self.referance = view.View.pygame.transform.scale(self.originalimage, (int(self.abswidth), int(self.absheight)))
 
-    def __del__(self):
-        if self in Image.images:
-            Image.images.remove(self)  # on l'enlève de nos tables de boutons avant de le détruire
+    def unreferance(self):
+        Image.images.remove(self)
         self.remove()
 
     def getImages(cls):

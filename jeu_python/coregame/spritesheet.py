@@ -65,7 +65,7 @@ class SpriteStripAnim(SpriteSheet):
 
     def next(self, offsetx, offsety):
         # calcule et dessine la prochaine image (ou pas !)
-        if self.speedcounter == 60//self.speed:
+        if self.speedcounter >= 60//self.speed:
             self.speedcounter = 0
             self.compteur += 1
         else:
