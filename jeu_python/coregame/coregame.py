@@ -346,12 +346,12 @@ class CoreGame:
                 if new_distance >= 400:
                     CoreGame.finished = True
                     CoreGame.pause = True
-                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, new_distance, CoreGame.time, "end").end()
+                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "end").end()
 
             # On vérifie qu'il as assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
             if char.energy <= 0:
                 CoreGame.finished = True
-                eg.EndGame(CoreGame.modejeu, CoreGame.carte, CoreGame.level, new_distance, CoreGame.time, "energy").end()
+                eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "energy").end()
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
             if new_distance == 0:
@@ -362,7 +362,8 @@ class CoreGame:
             else:  # course infinie
                 key_chance = int(new_distance**0.5 / new_distance / 1000)
 
-            if random.randint(1,key_chance) == 1 and key.Key.canCreateKey():
+            # TODO: Créé un crash en course infini:
+            if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():
                 key.Key(CoreGame.surface_boutons, 10)  # timeout qui dépend de la difficulté
 
             for decors in CoreGame.mapscript.getDecors():
