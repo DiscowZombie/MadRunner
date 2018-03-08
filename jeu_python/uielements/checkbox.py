@@ -48,7 +48,7 @@ class Checkbox(uielement.UIelement):
         self.linkedcheckboxes = []  # ceci est une liste des checkbox qui sont "liés" à celui-ci, c'est à dire, si ce checkbox est coché mais qu'un des checkbox lié est coché, l'autre ce checkbox va être décoché.
         self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset, False, *UIargs)
         self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)
-        self.referance = self.create()
+        self.referance = self.create()  # ATTENTION: La référence est la surface sur laquelle le rectangle du bouton est dessiné
 
         Checkbox.checkboxes.append(self)
 
@@ -72,7 +72,7 @@ class Checkbox(uielement.UIelement):
             [posx, posy, self.boxsize, self.boxsize],
             self.bordersize
         )
-        self.textobj.create()
+        return self.textobj.create()
 
     def draw(self):
         self.create()

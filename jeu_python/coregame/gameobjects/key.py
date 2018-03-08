@@ -103,7 +103,7 @@ class Key:
         Key.keys.remove(self)
 
     def canCreateKey(cls):  # peut-on créer un objet lettre ?
-        return len(Key.availablekeys) > 0
+        return len(Key.availablekeys) >= 6  # on ne peut pas excéder 20 lettres
 
     def updatekeys(cls, passed):
         for key in Key.keys:

@@ -215,7 +215,7 @@ class CoreGame:
         TAILLE_FONT = 30
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
+        ARRIERE_PLAN = constantes.WHITE
         ECART = 0
         BORDURE = 3
 

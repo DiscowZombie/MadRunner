@@ -22,12 +22,20 @@ class Text(uielement.UIelement):
         self.backgroundcolor = backgroundcolor
         self.textoffset = offset
         self.alone = alone
-        self.create()
+        self.recreate = False  # permet de savoir s'il faut recréer le texte
+        self.textreferance = view.View.pygame.font.SysFont(font, font_size)
+        self.referance = self.create()
 
         Text.texts.append(self)
 
+    def __setattr__(self, key, value):  # pour des raisons de performances, on va vérifier certaines choses lorqu'on affecte une valeur à un attribut
+        if hasattr(self, key):
+            if (key == "font" or key == "fontsize") and getattr(self, key) != value:  # si l'un de ces attributs est changé et que la nouvelle valeur est différente
+                self.recreate = True
+        self.__dict__[key] = value
+
     def create(self):  # view
-        texte = view.View.pygame.font.SysFont(self.font, self.fontsize)
+        texte = self.textreferance
         surfacetext = texte.render(self.text, self.antialias, self.textcolor,
                                    self.backgroundcolor)  # retourne la surface sur laquelle le texte est dessiné
         if self.textcenteredx or self.textcenteredy:
@@ -41,12 +49,15 @@ class Text(uielement.UIelement):
 
         self.x = positionx + self.textoffset
         self.y = positiony
-        self.textreferance = texte
-        self.referance = surfacetext
+
+        return surfacetext.convert_alpha()
 
     def draw(self):
+        if self.recreate:
+            self.recreate = False
+            self.textreferance = view.View.pygame.font.SysFont(self.font, self.fontsize)
         if self.alone:  # si l'objet texte fait partie d'un autre objet (ex: bouton), on laisse l'autre objet se charger de l'apparition du texte
-            self.create()
+            self.referance = self.create()
 
     def unreferance(self):
         Text.texts.remove(self)

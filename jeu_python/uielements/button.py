@@ -51,7 +51,7 @@ class Button(uielement.UIelement):
         self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy,
                                  backgroundtextcolor,
                                  offset, False, *UIargs)
-        self.referance = self.create()  # la référence  est crée en appelant cela. ATTENTION: La référence est la surface sur laquelle le texte est dessinée, et il y a aussi l'attribut "rectreferance" qui est une référance vers le rectangle du bouton
+        self.referance = self.create()  # ATTENTION: La référence est la surface sur laquelle le rectangle du bouton est dessiné
 
         Button.boutons.append(self)
 
@@ -80,7 +80,7 @@ class Button(uielement.UIelement):
         return rectangle
 
     def draw(self):
-        self.create()
+        self.referance = self.create()
 
     def unreferance(self):
         Button.boutons.remove(self)
