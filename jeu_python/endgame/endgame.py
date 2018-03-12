@@ -1,12 +1,11 @@
 import constantes
 import view as v
 from uielements import surface as surface
-import model
-import functions as f
-from coregame import coregame as coregame
+from uielements import button as button
 
 
 class EndGame:
+    # Empêcher de mettre en pause SSI on est déjà arriver ici
     score = 0
     reason = None
     carte = None
@@ -27,7 +26,6 @@ class EndGame:
 
     def end(self):
         # Transition swag ?
-
 
         # Création de l'écran de fin
 
@@ -53,9 +51,27 @@ class EndGame:
         # Créé une image propre et l'afficher - Image "End"
         # ...
 
-        # On supprime les elements graphiques - ATTENTION: Ils ne semblent pas tous se recree
-        coregame.CoreGame.getCharacterSprites().clear()
-        f.delete_menu_obj()
+        # Afficher des boutons
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 0
+        HAUTEUR = 50
+        SCALE_WIDTH = 1
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
 
-        # Retour au menu, après il devra etre sur un bouton
-        model.Model.main_menu(False)
+        button.BRetourMenu("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                      ARRIERE_PLAN, ECART, surface, POSITION_X, POSITION_Y, SCALE_X,
+                      SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)

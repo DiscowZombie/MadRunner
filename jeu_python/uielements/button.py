@@ -610,7 +610,7 @@ class BCommencer(Button):
                     level = checkboxe
 
         cgame = coregame.CoreGame(carte.text, modejeu.text, level.text)
-        #cgame.loop()
+        # cgame.loop()
 
 
 menu_states = [  # les états du jeu qui font retourner au menu principale lorsqu'on clique sur retour
@@ -641,3 +641,21 @@ class BPause(Button):
 
     def button1down(self):
         coregame.CoreGame.pause = not coregame.CoreGame.pause
+
+
+"""
+Un bouon de retour au menu après la fin du jeu
+"""
+
+
+class BRetourMenu(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self):
+        # On change l'état du jeu
+        statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
+
+        functions.delete_menu_obj()
+
+        model.Model.main_menu(True)
