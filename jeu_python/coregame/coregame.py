@@ -84,6 +84,9 @@ class CoreGame:
     barre_energie_in = None
     barre_energie_out = None
 
+    # On stoque la piste pour pouvoir l'enlever à la fin
+    piste = None
+
     def __init__(self, carte, modejeu, level):
 
         """
@@ -238,7 +241,7 @@ class CoreGame:
         COULEUR = constantes.WHITE
         BORDURE = 0
 
-        piste = image.Image(REPERTOIRE, v.View.screen, POSITION_X,
+        self.piste = image.Image(REPERTOIRE, v.View.screen, POSITION_X,
                             POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         LARGEUR = 0
@@ -412,10 +415,10 @@ class CoreGame:
             else:
                 CoreGame.barre_energie_in.color = constantes.RED
 
-            """ TODO: Debug
+            """ TODO: Debug """
             CoreGame.finished = True
             CoreGame.pause = True
-            eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "debug").end() """
+            eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "debug").end()
 
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:

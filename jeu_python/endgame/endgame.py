@@ -2,6 +2,10 @@ import constantes
 import view as v
 from uielements import surface as surface
 from uielements import button as button
+from uielements import text as text
+from uielements import image as image
+from coregame import coregame as coregame
+import functions as f
 
 
 class EndGame:
@@ -24,6 +28,15 @@ class EndGame:
         self.carte = carte
         self.reason = reason
 
+        # Beau socre
+        self.score = "%.0f" % round(self.score, 0)  # Enlever les décimales du score
+
+        # Nettoyer l'écran
+        coregame.CoreGame.getCharacterSprites().clear()
+        for img in list(image.Image.getImages()):
+            img.unreferance()
+        f.delete_menu_obj()
+
     def end(self):
         # Transition swag ?
 
@@ -32,13 +45,13 @@ class EndGame:
         # Surface
         LARGEUR = 500
         HAUTEUR = 420
-        POSITION_X = 70
-        POSITION_Y = 30
+        POSITION_X = 35
+        POSITION_Y = 15
         SCALE_X = 0.05
         SCALE_Y = 0.03
         SCALE_WIDTH = 0.05  # TODO: A TRAVAILLER
         SCALE_HEIGHT = 0.03  # TODO: A TRAVAILLER
-        COULEUR = constantes.WHITE
+        COULEUR = constantes.YELLOW
         BORDURE = 0  # rempli
         ALPHA = 255  # opaque
         CONVERT_ALPHA = False
@@ -72,6 +85,33 @@ class EndGame:
         ECART = 0
         BORDURE = 0  # rempli
 
-        button.BRetourMenu("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                      ARRIERE_PLAN, ECART, surface, POSITION_X, POSITION_Y, SCALE_X,
+        button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                      ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
                       SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        # Afficher le score
+        TEXTE = "Score: " + self.score
+        ANTIALIAS = True
+        COULEUR = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 20
+        CENTRE_X = False
+        CENTRE_Y = True
+        ARRIERE_PLAN = constantes.WHITE
+        ECART = 3
+        SEUL = True
+        LARGEUR = 0
+        HAUTEUR = 0
+        POSITION_X = 25
+        POSITION_Y = 10
+        SCALE_X = 0.2
+        SCALE_Y = 0.2
+        SCALE_WIDTH = 0.5
+        SCALE_HEIGHT = 0.5
+        COULEUR_ARRIERE = constantes.WHITE
+        BORDURE = 0
+
+        text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                                        ECART, SEUL,
+                                        surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
