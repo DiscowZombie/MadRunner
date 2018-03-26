@@ -6,6 +6,7 @@ from uielements import text as text
 from uielements import image as image
 from coregame import coregame as coregame
 import functions as f
+import settings
 
 
 class EndGame:
@@ -13,6 +14,7 @@ class EndGame:
     score = 0
     reason = None
     carte = None
+    modejeu = None
 
     def __init__(self, modejeu, carte, distance, time, reason):
         if modejeu == "400m" or modejeu == "400 haie":
@@ -27,6 +29,7 @@ class EndGame:
             self.score = distance * 100  # Prendre en compte la difficulité?
         self.carte = carte
         self.reason = reason
+        self.modejeu = modejeu
 
         # Beau socre
         self.score = "%.0f" % round(self.score, 0)  # Enlever les décimales du score
@@ -36,6 +39,8 @@ class EndGame:
         for img in list(image.Image.getImages()):
             img.unreferance()
         f.delete_menu_obj()
+
+        self.sendscore()
 
     def end(self):
         # Transition swag ?
@@ -65,14 +70,14 @@ class EndGame:
         # ...
 
         # Afficher des boutons
-        POSITION_X = 0
-        POSITION_Y = 0
-        SCALE_X = 0
-        SCALE_Y = 0
-        LARGEUR = 0
-        HAUTEUR = 50
-        SCALE_WIDTH = 1
-        SCALE_HEIGHT = 0
+        POSITION_X = 10
+        POSITION_Y = 350
+        SCALE_X = 0.05
+        SCALE_Y = 0.03
+        LARGEUR = 490
+        HAUTEUR = 30
+        SCALE_WIDTH = 0.05
+        SCALE_HEIGHT = 0.03
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
@@ -85,9 +90,10 @@ class EndGame:
         ECART = 0
         BORDURE = 0  # rempli
 
-        button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                      ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
-                      SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                           CENTRE_Y,
+                           ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
+                           SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # Afficher le score
         TEXTE = "Score: " + self.score
@@ -102,16 +108,32 @@ class EndGame:
         SEUL = True
         LARGEUR = 0
         HAUTEUR = 0
-        POSITION_X = 25
+        POSITION_X = 240
         POSITION_Y = 10
         SCALE_X = 0.2
         SCALE_Y = 0.2
-        SCALE_WIDTH = 0.5
-        SCALE_HEIGHT = 0.5
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
         text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
-                                        ECART, SEUL,
-                                        surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+                  ECART, SEUL,
+                  surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+    def sendscore(self):
+        # Key associed with the user session
+        # TODO: Pour le moment, on utilise la clé qui permet d'acceder au compte anonyme, plus tard dans le jeu il faudra stoquer une clé associé à chaque lancé du jeu
+        key = "session_devtest"
+
+        # Coursetype
+        coursetype = None
+        if self.modejeu == "400m":
+            coursetype = "Q"
+        elif self.modejeu == "400 haie":
+            coursetype = "QH"
+        else:
+            coursetype = "I"
+
+        settings.BDDManager("http://127.0.0.1/serveur_web/" + "send_data.php?key=" + key + "&score=" + self.score + "&coursetype=" + coursetype)

@@ -41,7 +41,7 @@ if(!function_exists('read_json')){
 
 if(!function_exists('get_username')){
 	function get_username($pdo, $id){
-		$q = $pdo->prepare("SELECT pseudo FROM data WHERE id = ?");
+		$q = $pdo->prepare("SELECT pseudo FROM user WHERE id = ?");
 		$q->execute([$id]);
 		while($row = $q->fetch(PDO::FETCH_OBJ)){
 		  $pseudo = $row->pseudo;

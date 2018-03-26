@@ -8,20 +8,20 @@ if(isset($_POST["pseudo"]) AND !empty($_POST["pseudo"]) AND isset($_POST["passwo
   $pseudo = $_POST["pseudo"];
   $password = $_POST["password"];
 
-  $q = $pdo->prepare("SELECT id, password FROM data WHERE pseudo = ?");
+  $q = $pdo->prepare("SELECT id, password FROM user WHERE pseudo = ?");
   $q->execute([$pseudo]);
 
   $r = $q->fetch(PDO::FETCH_OBJ);
   $q->closeCursor();
 
-  if($password == $r->password){
+  if(password_hash(htmlspecialchars($password), PASSWORD_BCRYPT) == $r->password){
     $id = $r->id;
 
     // On génère une clé pour l'identification (Clé qui expire après un certains temps)
     $key = password_hash(uniqid(), PASSWORD_BCRYPT);
 
     // On met la clé dans la db
-    $q = $pdo->prepare("INSERT INTO sessions(uuid, user_id, ip) VALUES (:uuid, :id, :ip)");
+    $q = $pdo->prepare("INSERT INTO session(uuid, user_id, ip) VALUES (:uuid, :id, :ip)");
     $q->execute([
       "uuid" => $key,
       "id" => $id,
