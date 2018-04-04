@@ -10,6 +10,7 @@ import coregame.gameobjects.key as key
 import constantes
 import view as v
 import mapscripts.jeuxolympiques as jo
+import mapscripts.foret as foret
 import endgame.endgame as eg
 
 import random
@@ -264,6 +265,8 @@ class CoreGame:
         # Initialisation de la carte (IL FAUT TENIR COMPTE DE LA CARTE CHOISI !!)
         if carte == "Jeux Olympiques":
             CoreGame.mapscript = jo
+        elif carte == "Forêt":
+            CoreGame.mapscript = foret
 
         CoreGame.mapscript.init()
 
