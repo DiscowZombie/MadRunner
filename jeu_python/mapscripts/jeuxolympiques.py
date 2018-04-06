@@ -25,16 +25,13 @@ def siege(bg_surface, y):
                 POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
-def colonne_siege(i):
-    global bg_surfaces
+def colonne_siege(x):
 
-    if i < 0:
-        POSITION_X = i
-    else:
-        POSITION_X = i * 30
+    global bg_surfaces
 
     LARGEUR = 30
     HAUTEUR = 0
+    POSITION_X = x
     POSITION_Y = 0
     SCALE_X = 0
     SCALE_Y = 0.05
@@ -56,17 +53,14 @@ def colonne_siege(i):
         siege(bg_surface, y)
 
 
-def panneau(bas_surface, i):
-    global bas_surfaces
+def panneau(bas_surface, x):
 
-    if i < 0:
-        POSITION_X = i
-    else:
-        POSITION_X = i * 200
+    global bas_surfaces
 
     REPERTOIRE = "assets/img/decors/Jeux Olympiques/bas_gradin.png"
     LARGEUR = 200
     HAUTEUR = 0
+    POSITION_X = x
     POSITION_Y = 0
     SCALE_X = 0
     SCALE_Y = 0
@@ -87,8 +81,9 @@ def init():
 
     # Mis en place du haut de l'arrière plan (gradins)
     # On va creer autant d'image du haut du gradin que nécessaire pour remplir la largeur et la hauteur de la surface
-    for i in range((taille_ecran[0] // 30) + 1):
-        colonne_siege(i)
+
+    for i in range((taille_ecran[0]//30) + 1):
+        colonne_siege(i*30)
 
     # Mis en place du bas du gradin
     LARGEUR = 0
@@ -112,8 +107,9 @@ def init():
     surface_panneau = bas_surface
 
     # On va creer autant d'image du bas de gradin que nécessaire pour remplir la largeur de la surface
-    for i in range((taille_ecran[0] // 200) + 1):
-        panneau(bas_surface, i)
+
+    for i in range((taille_ecran[0]//200) + 1):
+        panneau(bas_surface, i*200)
 
     # Mis en place du hors piste (avec une surface :p)
     # haut
@@ -130,10 +126,9 @@ def init():
     ALPHA = 255  # opaque
     CONVERT_ALPHA = False
 
-    hors_piste_haut = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                      LARGEUR,
-                                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                      BORDURE)  # creation de la l'objet surface où on va mettre les images du bas du gradin
+    hors_piste_haut = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                BORDURE)
 
     # bas
     LARGEUR = 0
@@ -149,11 +144,9 @@ def init():
     ALPHA = 255  # opaque
     CONVERT_ALPHA = False
 
-    hors_piste_bas = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                     LARGEUR,
-                                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                     BORDURE)  # creation de la l'objet surface où on va mettre les images du bas du gradin
-
+    hors_piste_bas = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                BORDURE)
 
 def refresh():
     taille_ecran = (view.View.screen.abswidth, view.View.screen.absheight)
@@ -175,7 +168,7 @@ def refresh():
                 if image.y > surfaceimg.absheight:
                     image.unreferance()
                 else:
-                    max_y = max(max_y, image.y + image.abswidth)  # pour ajouter des lignes de sièges
+                    max_y = max(max_y, image.y + image.absheight)  # pour ajouter des lignes de sièges
 
             nbsiege = len(surfaceimg.children)  # nombre de sièges de la colonne
             nbnouvsiege = ((surfaceimg.absheight - max_y) // 30) + 1  # nombre de nouveau siege par colonne
@@ -184,11 +177,10 @@ def refresh():
                 for surfaceimg in bg_surfaces:
                     siege(surfaceimg, i)
 
-    nbcolonne = len(bg_surfaces)
-    nbnouvcolonne = ((taille_ecran[0] - max_x) // 30) + 1
+    nbnouvcolonne = ((taille_ecran[0] - max_x)//30) + 1
 
-    for i in range(nbcolonne, nbcolonne + nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place
-        colonne_siege(i)
+    for i in range(nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place à droite (redimension de l'écran)
+        colonne_siege(max_x + i*30)
 
     if min_x >= 0:
         colonne_siege(min_x - 30)
@@ -209,11 +201,10 @@ def refresh():
                         surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
             min_x = min(min_x, surfaceimg.x)
 
-    nbcolonne = len(bas_surfaces)
-    nbnouvcolonne = ((taille_ecran[0] - max_x) // 200) + 1
+    nbnouvcolonne = ((taille_ecran[0] - max_x)//200) + 1
 
-    for i in range(nbcolonne, nbcolonne + nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place
-        panneau(surface_panneau, i)
+    for i in range(nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place
+        panneau(surface_panneau, max_x + i*200)
 
     if min_x >= 0:
         panneau(surface_panneau, min_x - 200)
