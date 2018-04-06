@@ -136,4 +136,9 @@ class EndGame:
         else:
             coursetype = "I"
 
-        settings.BDDManager("http://127.0.0.1/serveur_web/" + "send_data.php?key=" + key + "&score=" + self.score + "&coursetype=" + coursetype)
+        try:
+            settings.BDDManager(
+                "http://127.0.0.1/serveur_web/" + "send_data.php?key=" + key + "&score=" + self.score + "&coursetype=" + coursetype)
+        except:
+            print("A error as append when trying to send statistics to the web server!")
+            raise

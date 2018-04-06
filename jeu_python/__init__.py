@@ -35,7 +35,7 @@ running = True
 
 # Limite à 60 fps ou à la valeur en config si elle est valide
 fps = utils.GameSettings().setfps()
-# DEBUG
+# TODO: DEBUG
 print("[DEBUG] (__init__ > l.37) FPS: " + str(fps))
 
 passed = 0

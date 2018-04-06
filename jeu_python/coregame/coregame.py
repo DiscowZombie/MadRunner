@@ -419,9 +419,11 @@ class CoreGame:
                 CoreGame.barre_energie_in.color = constantes.RED
 
             # TODO: Debug
+            """
             CoreGame.finished = True
             CoreGame.pause = True
             eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "debug").end()
+            """
 
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:
