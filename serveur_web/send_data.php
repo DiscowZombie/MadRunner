@@ -3,11 +3,12 @@
 require_once("includes/databases.php");
 
 // Si il y a un Id dans l'url
-if(isset($_GET["key"]) AND !empty($_GET["key"]) AND isset($_GET["score"]) AND !empty($_GET["score"])){
+if(!empty($_GET["key"]) AND !empty($_GET["score"]) AND !empty($_GET["coursetype"])){
   $key = $_GET["key"];
   $score = $_GET["score"];
+  $course_type = $_GET["coursetype"];
 
-  $q = $pdo->prepare("SELECT user_id FROM sessions WHERE uuid = ?");
+  $q = $pdo->prepare("SELECT user_id FROM session WHERE uuid = ?");
   $q->execute([$key]);
 
   // FETCH_ASSOC: Retourne la ligne suivante en tant qu'un tableau
@@ -16,10 +17,11 @@ if(isset($_GET["key"]) AND !empty($_GET["key"]) AND isset($_GET["score"]) AND !e
 
   if($id !== -1){
     // Insérer dans la bdd qui gère le score son score !
-    $q = $pdo->prepare("INSERT INTO score(user_id, score) VALUES (:user_id, :score)");
+    $q = $pdo->prepare("INSERT INTO score(user_id, score, coursetype) VALUES (:user_id, :score, :coursetype)");
     $q->execute([
       "user_id" => $id,
-      "score" => $score
+      "score" => $score,
+      "coursetype" => $course_type
     ]);
 
   }

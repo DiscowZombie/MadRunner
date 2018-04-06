@@ -10,7 +10,7 @@ if(isset($_GET["id"]) AND !empty($_GET["id"])){
 	$jsontxt = array();
 
 	// On prépare la requête
-	$q = $pdo->prepare("SELECT * FROM data WHERE id = ?");
+	$q = $pdo->prepare("SELECT * FROM user WHERE id = ?");
 	$q->execute([$id]);
 
 	while($row = $q->fetch(PDO::FETCH_OBJ)){

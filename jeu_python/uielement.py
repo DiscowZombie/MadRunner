@@ -3,7 +3,6 @@ class UIelement:
 
     """
     :param surface_bouton - L'objet de la surface où sera placé l'élément graphique
-    :param surface_position - La position de la surface où on va mettre l'élément graphique
     :param posx - La position x de l'élément graphique
     :param posy - La position y de l'élément graphique
     :param scalex - La position x de l'élément graphique (proportionnelle à la taille de l'écran, entre 0 et 1)
