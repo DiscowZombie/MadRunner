@@ -15,6 +15,9 @@ DARKYELLOW = (127, 127, 0)
 # Pour les chemins d'accès
 CONFIG_PATH = "config/"
 
+# Pour les requetes web (curl)
+WEBSITE_URI = "https://madrunner.discowzombie.fr/"
+
 # l'alphabet :p
 ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 

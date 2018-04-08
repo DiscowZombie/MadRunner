@@ -7,6 +7,7 @@ from uielements import image as image
 from coregame import coregame as coregame
 import functions as f
 import settings
+import pycurl
 
 
 class EndGame:
@@ -15,6 +16,7 @@ class EndGame:
     reason = None
     carte = None
     modejeu = None
+    error = None
 
     def __init__(self, modejeu, carte, distance, time, reason):
         if modejeu == "400m" or modejeu == "400 haie":
@@ -122,6 +124,34 @@ class EndGame:
                   surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
+        if self.error is not None:
+            # Afficher le score
+            TEXTE = self.error
+            ANTIALIAS = True
+            COULEUR = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 14
+            CENTRE_X = False
+            CENTRE_Y = True
+            ARRIERE_PLAN = constantes.WHITE
+            ECART = 3
+            SEUL = True
+            LARGEUR = 0
+            HAUTEUR = 0
+            POSITION_X = 280
+            POSITION_Y = 5
+            SCALE_X = 0.22
+            SCALE_Y = 0.22
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART, SEUL,
+                      surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
     def sendscore(self):
         # Key associed with the user session
         # TODO: Pour le moment, on utilise la clé qui permet d'acceder au compte anonyme, plus tard dans le jeu il faudra stoquer une clé associé à chaque lancé du jeu
@@ -138,7 +168,6 @@ class EndGame:
 
         try:
             settings.BDDManager(
-                "http://127.0.0.1/serveur_web/" + "send_data.php?key=" + key + "&score=" + self.score + "&coursetype=" + coursetype)
-        except:
-            print("A error as append when trying to send statistics to the web server!")
-            raise
+                constantes.WEBSITE_URI + "send_data.php?key=" + key + "&score=" + self.score + "&coursetype=" + coursetype)
+        except pycurl.error:
+            self.error = "A error as append when trying to send statistics to the web server!"

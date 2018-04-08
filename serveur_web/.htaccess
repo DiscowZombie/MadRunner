@@ -1,5 +1,5 @@
-ErrorDocument 404 "404 not found !"
+ErrorDocument 404 "La page est introuvable !"
 
-RewriteEngine Off
+RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]

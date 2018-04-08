@@ -74,4 +74,26 @@ if(!function_exists('get_coursename')){
 	}
 }
 
+if(!function_exists('is_name_unique')){
+	function is_name_unique($pdo, $pseudo){
+		$q = $pdo->prepare("SELECT pseudo FROM user WHERE pseudo = ?");
+		$q->execute([$pseudo]);
+		$amount = $q->rowCount();
+		$q->closeCursor();
+
+		return $amount == 0;
+	}
+}
+
+if(!function_exists('register_user')){
+	function register_user($pdo, $pseudo, $password){
+		$q = $pdo->prepare("INSERT INTO user(pseudo, password) VALUES(:pseudo, :password)");
+		$q->execute([
+			"pseudo" => $pseudo,
+			"password" => password_hash(htmlspecialchars($password), PASSWORD_BCRYPT)
+		]);
+		$q->closeCursor();
+	}
+}
+
 ?>
