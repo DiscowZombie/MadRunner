@@ -19,6 +19,7 @@ USE `discowzoirmybb` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `discowzoirmybb`.`user` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pseudo` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC))
