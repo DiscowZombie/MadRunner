@@ -1,3 +1,9 @@
 {
-  "limit_fps": 60
+  "account_settings": {
+		"username": null,
+		"password": null
+	},
+	"game_settings": {
+		"limit_fps": 60
+	}
 }

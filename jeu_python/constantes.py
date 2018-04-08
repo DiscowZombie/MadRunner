@@ -1,14 +1,14 @@
 # Les couleurs
-RED = (255,0,0)
-GREEN = (0,255,0)
-DARKGREEN = (0,128,0)
-BLUE = (0,0,255)
-DARKBLUE = (0,0,128)
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-PINK = (255,200,200)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+DARKGREEN = (0, 128, 0)
+BLUE = (0, 0, 255)
+DARKBLUE = (0, 0, 128)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+PINK = (255, 200, 200)
 GRAY = (192, 192, 192)
-PALE = (225,225,225)
+PALE = (225, 225, 225)
 YELLOW = (255, 255, 0)
 DARKYELLOW = (127, 127, 0)
 
@@ -19,7 +19,8 @@ CONFIG_PATH = "config/"
 WEBSITE_URI = "https://madrunner.discowzombie.fr/"
 
 # l'alphabet :p
-ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+            "V", "W", "X", "Y", "Z"]
 
 # informations sur différents spritesheet
 Animations = {
@@ -45,7 +46,7 @@ Animations = {
             "nbimage": 0,
             "initspeed": 20,
             "repeatimage": 1
-        } ,
+        },
         "jump": {
             "image": "",
             "nbimage": 0,

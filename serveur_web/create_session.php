@@ -4,9 +4,9 @@ require("includes/databases.php");
 require("includes/functions.php");
 
 // Si il y a un Id dans l'url
-if(isset($_POST["pseudo"]) AND !empty($_POST["pseudo"]) AND isset($_POST["password"]) AND !empty($_POST["password"])){
+if(!empty($_POST["pseudo"]) && !empty($_POST["password"])){
   $pseudo = $_POST["pseudo"];
-  $password = $_POST["password"];
+  $password = $_POST["password"]; // Le mot de passe doit déjà été chiffrer
 
   $q = $pdo->prepare("SELECT id, password FROM user WHERE pseudo = ?");
   $q->execute([$pseudo]);
@@ -14,7 +14,7 @@ if(isset($_POST["pseudo"]) AND !empty($_POST["pseudo"]) AND isset($_POST["passwo
   $r = $q->fetch(PDO::FETCH_OBJ);
   $q->closeCursor();
 
-  if(password_hash(htmlspecialchars($password), PASSWORD_BCRYPT) == $r->password){
+  if(htmlspecialchars($password) == $r->password){
     $id = $r->id;
 
     // On génère une clé pour l'identification (Clé qui expire après un certains temps)

@@ -153,9 +153,11 @@ class EndGame:
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
     def sendscore(self):
-        # Key associed with the user session
-        # TODO: Pour le moment, on utilise la clé qui permet d'acceder au compte anonyme, plus tard dans le jeu il faudra stoquer une clé associé à chaque lancé du jeu
-        key = "session_devtest"
+        # Clé associé avec la session
+        key = settings.StatsManager.session_key
+
+        if key is None:
+            return
 
         # Coursetype
         coursetype = None

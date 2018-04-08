@@ -1,5 +1,4 @@
 import view
-import controller
 import constantes
 import statemanager
 import functions as f
@@ -11,6 +10,8 @@ import uielements.image as image
 import uielements.checkbox as checkbox
 
 import coregame.coregame as coregame
+
+import settings
 
 
 class Model:
@@ -133,6 +134,10 @@ class Model:
                               "value": 44
                           })
 
+        # Charger les statistiques de l'utilisateur et son compte en ligne
+        # TODO: Charger les specs de son personnage...
+        settings.StatsManager().loadKey()
+
     def introsurfacetweening(cls):
         return hasattr(surface.Surface.getSurfaces()[0], "tweendata")
 
@@ -170,7 +175,7 @@ class Model:
             BORDURE = 0
 
             image.Image(REPERTOIRE, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # La surface où on va mettre les boutons (pour les positionner plus facilement par la suite)
         SCALE_X = 0.5
