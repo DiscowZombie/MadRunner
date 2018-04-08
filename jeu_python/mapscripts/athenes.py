@@ -8,11 +8,11 @@ bas_surfaces = []
 surface_panneau = None
 
 
-def siege(bg_surface, y):
-    REPERTOIRE = "assets/img/decors/Jeux Olympiques/siege.png"
-    LARGEUR = 30
+def banc(bg_surface, y):
+    REPERTOIRE = "assets/img/decors/Athènes/banc.png"
+    LARGEUR = 150
     HAUTEUR = 30
-    POSITION_X = 0
+    POSITION_X = 10
     POSITION_Y = y * 30
     SCALE_X = 0
     SCALE_Y = 0
@@ -25,11 +25,11 @@ def siege(bg_surface, y):
                 POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
-def colonne_siege(x):
+def colonne_banc(x):
 
     global bg_surfaces
 
-    LARGEUR = 30
+    LARGEUR = 170
     HAUTEUR = 0
     POSITION_X = x
     POSITION_Y = 0
@@ -37,7 +37,7 @@ def colonne_siege(x):
     SCALE_Y = 0.05
     SCALE_WIDTH = 0
     SCALE_HEIGHT = 0.15
-    COULEUR = constantes.GRAY
+    COULEUR = constantes.PALE
     BORDURE = 0  # rempli
     ALPHA = 255  # opaque
     CONVERT_ALPHA = False
@@ -45,19 +45,19 @@ def colonne_siege(x):
     bg_surface = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                                  LARGEUR,
                                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                 BORDURE)  # creation de la l'objet surface où on va mettre le haut des gradins (les sièges)
+                                 BORDURE)  # creation de la l'objet surface où on va mettre le haut des gradins (les bancs)
 
     bg_surfaces.append(bg_surface)
 
     for y in range((bg_surface.absheight // 30) + 1):
-        siege(bg_surface, y)
+        banc(bg_surface, y)
 
 
 def panneau(bas_surface, x):
 
     global bas_surfaces
 
-    REPERTOIRE = "assets/img/decors/Jeux Olympiques/bas_gradin.png"
+    REPERTOIRE = "assets/img/decors/Athènes/bas_gradin.png"
     LARGEUR = 200
     HAUTEUR = 0
     POSITION_X = x
@@ -81,9 +81,9 @@ def init():
 
     # Mis en place du haut de l'arrière plan (gradins)
     # On va creer autant d'image du haut du gradin que nécessaire pour remplir la largeur et la hauteur de la surface
-
-    for i in range((taille_ecran[0]//30) + 1):
-        colonne_siege(i*30)
+    nbbanc = (taille_ecran[0]//170) + 1  # espacement de 20 pixels entre les bancs
+    for i in range(nbbanc):
+        colonne_banc(i*170)
 
     # Mis en place du bas du gradin
     LARGEUR = 0
@@ -152,39 +152,39 @@ def init():
 def refresh():
     taille_ecran = (view.View.screen.abswidth, view.View.screen.absheight)
 
-    # HAUT DU GRADIN (SIèGES)
+    # HAUT DU GRADIN (BANCS)
     max_x = 0
     min_x = taille_ecran[0]
 
     for surfaceimg in bg_surfaces:
-        if surfaceimg.absx > taille_ecran[0]:  # on enlève dans un premier temps les sièges qui ne sont plus visibles
+        if surfaceimg.absx > taille_ecran[0]:  # on enlève dans un premier temps les bancs qui ne sont plus visibles
             bg_surfaces.remove(surfaceimg)
             surfaceimg.unreferance()
         else:
             max_x = max(max_x,
-                        surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
-            min_x = min(min_x, surfaceimg.x)
-            max_y = 0  # va servir a ajouter des sièges si jamais il en manque
+                        surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de bancs si jamais l'écran est redimensionné (plus grand)
+            min_x = min(min_x, surfaceimg.x - 20)
+            max_y = 0  # va servir a ajouter des bancs si jamais il en manque
             for image in surfaceimg.children:
                 if image.y > surfaceimg.absheight:
                     image.unreferance()
                 else:
-                    max_y = max(max_y, image.y + image.absheight)  # pour ajouter des lignes de sièges
+                    max_y = max(max_y, image.y + image.absheight)  # pour ajouter des lignes de bancs
 
-            nbsiege = len(surfaceimg.children)  # nombre de sièges de la colonne
-            nbnouvsiege = ((surfaceimg.absheight - max_y) // 30) + 1  # nombre de nouveau siege par colonne
+            nbbanc = len(surfaceimg.children)  # nombre de bancs de la colonne
+            nbnouvbanc = ((surfaceimg.absheight - max_y) // 30) + 1  # nombre de nouveau banc par colonne
 
-            for i in range(nbsiege, nbsiege + nbnouvsiege):  # ajout de colonnes de sièges s'il y a de la place
+            for i in range(nbbanc, nbbanc + nbnouvbanc):  # ajout de colonnes de bancs s'il y a de la place
                 for surfaceimg in bg_surfaces:
-                    siege(surfaceimg, i)
+                    banc(surfaceimg, i)
 
-    nbnouvcolonne = ((taille_ecran[0] - max_x)//30) + 1
+    nbnouvcolonne = ((taille_ecran[0] - max_x)//170) + 1
 
-    for i in range(nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place à droite (redimension de l'écran)
-        colonne_siege(max_x + i*30)
+    for i in range(nbnouvcolonne):  # ajout de colonnes de bancs s'il y a de la place à droite (redimension de l'écran)
+        colonne_banc(max_x + i*170)
 
-    if min_x >= 0:
-        colonne_siege(min_x - 30)
+    if min_x >= -20:
+        colonne_banc(min_x - 150)
 
     # BAS DU GRADIN (PANNEAUX)
     global surface_panneau
@@ -199,12 +199,12 @@ def refresh():
             surfaceimg.unreferance()
         else:
             max_x = max(max_x,
-                        surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de sièges si jamais l'écran est redimensionné (plus grand)
+                        surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de bancs si jamais l'écran est redimensionné (plus grand)
             min_x = min(min_x, surfaceimg.x)
 
     nbnouvcolonne = ((taille_ecran[0] - max_x)//200) + 1
 
-    for i in range(nbnouvcolonne):  # ajout de colonnes de sièges s'il y a de la place
+    for i in range(nbnouvcolonne):  # ajout de colonnes de bancs s'il y a de la place
         panneau(surface_panneau, max_x + i*200)
 
     if min_x >= 0:

@@ -11,6 +11,7 @@ import constantes
 import view as v
 import mapscripts.jeuxolympiques as jo
 import mapscripts.foret as foret
+import mapscripts.athenes as athenes
 import endgame.endgame as eg
 
 import random
@@ -270,6 +271,8 @@ class CoreGame:
             CoreGame.mapscript = jo
         elif carte == "Forêt":
             CoreGame.mapscript = foret
+        elif carte == "Athènes":
+            CoreGame.mapscript = athenes
 
         CoreGame.mapscript.init()
 
