@@ -5,13 +5,20 @@ from uielements import surface as surface
 from uielements import rect as rect
 from uielements import text as text
 import statemanager
+
 import coregame.spritesheet as sprit
 import coregame.gameobjects.key as key
+
+import coregame.mapscripts.jeuxolympiques as jo
+import coregame.mapscripts.foret as foret
+import coregame.mapscripts.athenes as athenes
+
+import coregame.gamemodes._400m as _400m
+import coregame.gamemodes._400mhaie as _400mhaie
+
 import constantes
 import view as v
-import mapscripts.jeuxolympiques as jo
-import mapscripts.foret as foret
-import mapscripts.athenes as athenes
+
 import endgame.endgame as eg
 
 import random
@@ -33,6 +40,8 @@ class Character:
         self.y = posy
         self.scalex = scalex
         self.scaley = scaley
+        self.absx = int(v.View.screen.abswidth * self.scalex + self.x)
+        self.absy = int(v.View.screen.absheight * self.scaley + self.y)
         self.state = "run"
         self.running = True  # on va supposer pour l'instant que le gars cour tout de suite, mais plus tard, ce ne sera pas le cas (car on montrera un 3,2,1, go !)
         self.jumping = False  # le personnage est-il en train de sauter ?
@@ -69,6 +78,7 @@ class CoreGame:
     modejeu = None
     level = None
     mapscript = None
+    gamemodescript = None
 
     pause = False
     time = 0  # temps en ms depuis lequel le jeu a commencé (le chrono)
@@ -197,7 +207,7 @@ class CoreGame:
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
-        if modejeu == "400m":
+        if modejeu == "400m" or modejeu == "400m haie":
             CoreGame.tempsobj = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                                           ARRIERE_PLAN, ECART, SEUL,
                                           v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
@@ -274,6 +284,11 @@ class CoreGame:
         elif carte == "Athènes":
             CoreGame.mapscript = athenes
 
+        if modejeu == "400m":
+            CoreGame.gamemodescript = _400m
+        elif modejeu == "400m haie":
+            CoreGame.gamemodescript = _400mhaie
+
         CoreGame.mapscript.init()
 
         POSITION_X = 0
@@ -304,9 +319,8 @@ class CoreGame:
 
             """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
             # Calcul de la position x absolue du personnage
-            char_absx = int(v.View.screen.abswidth * char.scalex + char.x)
             delta_pix_arrive = (400 - new_distance) * 10  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
-            pos_x_ligne_arrive = char_absx - delta_pix_arrive
+            pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
             if pos_x_ligne_arrive > -2:
                 if not CoreGame.lignearriveobj:  # dessiner la ligne d'arrivé si elle n'existe pas encore
@@ -327,6 +341,10 @@ class CoreGame:
 
                 else:  # sinon, on met juste à jour sa position
                     CoreGame.lignearriveobj.x = pos_x_ligne_arrive - 2
+            else:
+                if CoreGame.lignearriveobj:
+                    CoreGame.lignearriveobj.unreferance()
+                    CoreGame.lignearriveobj = None
 
             # Mise à jour de l'affichage de la vitesse
             # Affichage de la vitesse du personnage en km/h
@@ -381,6 +399,9 @@ class CoreGame:
 
             # Mis à jour de l'arrière plan de la carte
             CoreGame.mapscript.refresh()
+
+            # Mis à jour du territoire du mode de jeu
+            CoreGame.gamemodescript.refresh()
 
             # Mis à jour du state, et calcul de la vitesse, de la hauteur du saut...
             for character in CoreGame.characters_sprite:
