@@ -197,7 +197,7 @@ class CoreGame:
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
-        if modejeu == "400m":
+        if modejeu == "400m" or modejeu == "400m haie":
             CoreGame.tempsobj = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                                           ARRIERE_PLAN, ECART, SEUL,
                                           v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,

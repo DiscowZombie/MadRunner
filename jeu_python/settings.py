@@ -60,6 +60,9 @@ class StatsManager:
     def __init__(self):
         self.username = Settings().get_conf_setting("account_settings", "username")
         self.password = Settings().get_conf_setting("account_settings", "password")
+        # TODO: Debug
+        print("[DEBUG] (settings.py > 64) Username: " + self.username)
+        print("[DEBUG] (settings.py > 65) Password: " + self.password)
 
     def loadKey(self):
         if self.username is None or self.password is None:
