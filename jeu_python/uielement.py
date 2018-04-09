@@ -39,6 +39,7 @@ class UIelement:
         self.color = color
         self.bordersize = bordersize
         self.alpha = alpha
+        self.rotation = 0
         self.classname = classname  # pas sûr que ce sera utile
         self.ismousein = False
         self.tweendata = None
@@ -54,45 +55,28 @@ class UIelement:
         self.children.append(child)
         child.parentsurface = self
 
-    def tween(self, posx, posy, scalex, scaley, width, height, scalew, scaleh, duration,
-              *otherattr):  # transition linéaire de la position et/ou de la taille, "duration" en secondes, on peut éventuellement fare une transition d'autres attributs
-        self.tweendata = {
-            "delta x": posx - self.x,
-            "delta y": posy - self.y,
-            "delta x scale": scalex - self.scalex,
-            "delta y scale": scaley - self.scaley,
-            "delta width": width - self.width,
-            "delta height": height - self.height,
-            "delta width scale": scalew - self.scalew,
-            "delta height scale": scaleh - self.scaleh,
-            "x start": self.x,
-            "y start": self.y,
-            "scale x start": self.scalex,
-            "scale y start": self.scaley,
-            "width start": self.width,
-            "height start": self.height,
-            "scale width start": self.scalew,
-            "scale height start": self.scaleh,
+    def rotate(self, degree):  # faire la rotation d'une surface
+        self.rotation += degree
+
+    def tween(self, duration, attributes):  # transition linéaire d'attributs d'un objet, "duration" en secondes
+        self.tweendata = {  # pour ajouter des attributs à transitionner, mettre dans dans une liste un dictionnaire avec son nom ["name"] et sa valeur finale ["value"]
             "duration": duration,
-            "passed": 0
+            "passed": 0,
+            "attributes": []
         }
 
-        if otherattr:  # pour ajouter des autres attributs à transitionner, mettre dans dans une liste un dictionnaire avec son nom ["name"] et sa valeur ["value"]
-            if not "otherattr" in self.tweendata:
-                self.tweendata["otherattr"] = []
+        for attributdict in attributes:
+            attrname = attributdict["name"]
+            attrvalue = attributdict["value"]
+            currentattrvalue = self.__getattribute__(attrname)
 
-            for attributdict in otherattr:
-                attrname = attributdict["name"]
-                attrvalue = attributdict["value"]
-                currentattrvalue = self.__getattribute__(attrname)
+            tweendict = {
+                "attrname": attrname,
+                "delta " + attrname: attrvalue - currentattrvalue,
+                attrname + " start": currentattrvalue
+            }
 
-                tweendict = {
-                    "attrname": attrname,
-                    "delta " + attrname: attrvalue - currentattrvalue,
-                    attrname + " start": currentattrvalue
-                }
-
-                self.tweendata["otherattr"].append(tweendict)
+            self.tweendata["attributes"].append(tweendict)
 
     def remove(self):
         for child in list(self.children):  # ne pas oublier d'effacer également les objets descendants de celui-ci
