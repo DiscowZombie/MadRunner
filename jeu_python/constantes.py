@@ -1,3 +1,17 @@
+import json
+import sys
+import os
+
+
+def resource_path(relative_path):
+    # SI sys._MEIPASS existe, c'est que le jeu a été lancé depuis le .exe
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
 # Les couleurs
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -23,17 +37,19 @@ ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"
             "V", "W", "X", "Y", "Z"]
 
 # informations sur différents spritesheet
+perso_cour = resource_path("assets/img/personnages/gros/cour.png")
+perso_saut = resource_path("assets/img/personnages/gros/saut.png")
 Animations = {
     "gros": {
         "run": {
-            "image": "assets/img/personnages/gros/cour.png",
+            "image": perso_cour,
             "framesize": (80, 98),  # taille x et y d'une image du sprite
             "nbimage": 10,
             "initspeed": 20,  # initspeed désigne la vitesse initiale de l'animation (en image par seconde)
             "repeatimage": 1,  # permet de répéter l'image non pas depuis le début, mais depuis une certaine frame
         },
         "jump": {
-            "image": "assets/img/personnages/gros/saut.png",
+            "image": perso_saut,
             "framesize": (87, 112),
             "nbimage": 13,
             "initspeed": 60,

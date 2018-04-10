@@ -2,6 +2,7 @@ import uielements.surface as surface
 import uielements.image as image
 import constantes
 import view
+import functions as f
 
 bg_surfaces = []
 bas_surfaces = []
@@ -9,7 +10,7 @@ surface_panneau = None
 
 
 def banc(bg_surface, y):
-    REPERTOIRE = "assets/img/decors/Athènes/banc.png"
+    REPERTOIRE = f.resource_path("assets/img/decors/Athènes/banc.png")
     LARGEUR = 150
     HAUTEUR = 30
     POSITION_X = 10
@@ -57,7 +58,7 @@ def panneau(bas_surface, x):
 
     global bas_surfaces
 
-    REPERTOIRE = "assets/img/decors/Athènes/bas_gradin.png"
+    REPERTOIRE = f.resource_path("assets/img/decors/Athènes/bas_gradin.png")
     LARGEUR = 200
     HAUTEUR = 0
     POSITION_X = x

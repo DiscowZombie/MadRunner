@@ -3,6 +3,7 @@ import view as v
 import constantes
 from coregame import coregame as coregame
 from uielements import image as image
+import functions as f
 
 haies = []
 
@@ -57,7 +58,7 @@ def refresh():
             pos_x_haie = char.absx - delta_pix
 
             if pos_x_haie > -17:
-                REPERTOIRE = "assets/img/decors/Jeux Olympiques/obstacle.png"
+                REPERTOIRE = f.resource_path("assets/img/decors/Jeux Olympiques/obstacle.png")
                 LARGEUR = 17
                 HAUTEUR = 54
                 POSITION_X = pos_x_haie

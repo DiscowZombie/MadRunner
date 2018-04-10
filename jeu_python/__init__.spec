@@ -6,12 +6,11 @@ block_cipher = None
 
 added_files = [
          ( 'config', 'config' ),
-         ( 'assets', 'assets' )
-         ]
+         ( 'assets', 'assets' )]
 a = Analysis(['__init__.py'],
              pathex=['C:\\Users\\€¤\\PycharmProjects\\MadRunner\\jeu_python'],
              binaries=[],
-             datas=[],
+             datas=added_files,
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],

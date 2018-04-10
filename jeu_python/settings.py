@@ -1,6 +1,7 @@
 import json
 import constantes as c
 import pycurl
+import functions as f
 from io import BytesIO
 
 
@@ -42,7 +43,7 @@ class Settings:
         pass
 
     def get_conf_setting(self, array, setting_path):
-        return JsonManager(c.CONFIG_PATH + "settings.json").readjson()[array][setting_path]
+        return JsonManager(f.resource_path(c.CONFIG_PATH + "settings.json")).readjson()[array][setting_path]
 
     """
     Read JSON - GET Request only"""
@@ -61,8 +62,8 @@ class StatsManager:
         self.username = Settings().get_conf_setting("account_settings", "username")
         self.password = Settings().get_conf_setting("account_settings", "password")
         # TODO: Debug
-        print("[DEBUG] (settings.py > 64) Username: " + self.username)
-        print("[DEBUG] (settings.py > 65) Password: " + self.password)
+        print("[DEBUG] (settings.py > 64) Username: " + "NULL" if self.username is None else self.username)
+        print("[DEBUG] (settings.py > 65) Password: " + "NULL" if self.password is None else self.password)
 
     def loadKey(self):
         if self.username is None or self.password is None:
@@ -70,7 +71,8 @@ class StatsManager:
 
         try:
             # TODO: A RETRAVAILLER, NE SEMBLE PAS FONCTIONNER
-            resp = BDDManager(c.WEBSITE_URI + "create_session.php", True, '{ "pseudo": ' + self.username + ', "password": ' + self.password + ' }').readbdd()
+            resp = BDDManager(c.WEBSITE_URI + "create_session.php", True,
+                              '{ "pseudo": ' + self.username + ', "password": ' + self.password + ' }').readbdd()
             if resp is not None:
                 self.session_key = resp
         except pycurl.error:

@@ -80,7 +80,7 @@ class Model:
                                         BORDURE)  # creation de la l'objet surface où on va mettre le titire et l'image du jeu
 
         # état intial de l'image du logo
-        REPERTOIRE = "assets/img/menu_fond.png"
+        REPERTOIRE = f.resource_path("assets/img/menu_fond.png")
         LARGEUR = 0
         HAUTEUR = 0
         POSITION_X = 0
@@ -193,7 +193,7 @@ class Model:
 
         if not from_return:  # la fuite de mémoire était causé par le fait qu'on faisait un nouvel objet image en cliquant sur retour...
             # creation de l'image d'arrière plan du menu
-            REPERTOIRE = "assets/img/background_temporaire.jpg"
+            REPERTOIRE = f.resource_path("assets/img/background_temporaire.jpg")
             POSITION_X = 0
             POSITION_Y = 0
             SCALE_X = 0

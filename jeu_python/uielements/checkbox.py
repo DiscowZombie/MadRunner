@@ -1,13 +1,10 @@
 import uielement
-import model
 import view
-import controller
-import statemanager
 
 from uielements import image
-from uielements import surface
 from uielements import text
 import constantes
+import functions as f
 
 
 class Checkbox(uielement.UIelement):
@@ -42,7 +39,7 @@ class Checkbox(uielement.UIelement):
         self.textcenteredy = centeredy
         self.backgroundcolor = backgroundcolor
         self.textoffset = boxsize + offset
-        self.imagepath = "assets/img/coche.png"
+        self.imagepath = f.resource_path("assets/img/coche.png")
         self.checked = False
         self.clicking = False
         self.linkedcheckboxes = []  # ceci est une liste des checkbox qui sont "liés" à celui-ci, c'est à dire, si ce checkbox est coché mais qu'un des checkbox lié est coché, l'autre ce checkbox va être décoché.

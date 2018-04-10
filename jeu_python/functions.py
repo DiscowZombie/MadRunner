@@ -1,8 +1,19 @@
 import uielements.text as text
 import uielements.surface as surface
 import uielements.button as button
-import uielements.image as image
 import uielements.checkbox as checkbox
+import sys
+import os
+
+
+# Permet de récupérer le chemmin complet aux images
+def resource_path(relative_path):
+    # SI sys._MEIPASS existe, c'est que le jeu a été lancé depuis le .exe
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 def centretexte(textsize, espace):  # Utilitaire pour center un texte ! Retourne la position x et y du texte

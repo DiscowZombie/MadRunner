@@ -62,7 +62,8 @@ class Character:
     def changeState(self, new_state):
         self.state = new_state
 
-    def boost(self, attribut, amount):  # permet d'augmenter la valeur d'un attribut (ou de le diminuer si amount est négatif)
+    def boost(self, attribut,
+              amount):  # permet d'augmenter la valeur d'un attribut (ou de le diminuer si amount est négatif)
         if attribut == "energy":  # petite exception pour cette attribut qui ne peut excéder la quantité d'énergie initiale
             max_energy = self.characterfeatures["initenergy"]
             if self.energy + amount > max_energy:
@@ -241,7 +242,7 @@ class CoreGame:
 
         # Chargement de la piste
         # Mis en place de la piste
-        REPERTOIRE = "assets/img/decors/" + carte + "/piste.png"
+        REPERTOIRE = functions.resource_path("assets/img/decors/" + carte + "/piste.png")
         LARGEUR = 0
         HAUTEUR = 175
         POSITION_X = 0
@@ -254,7 +255,8 @@ class CoreGame:
         BORDURE = 0
 
         self.piste = image.Image(REPERTOIRE, v.View.screen, POSITION_X,
-                            POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                 POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                 BORDURE)
 
         LARGEUR = 0
         HAUTEUR = -175
@@ -301,7 +303,6 @@ class CoreGame:
                       SCALE_X,
                       SCALE_Y))  # plus tard dans le développement du jeu, on devra  selectionner le sprite qui convient !
 
-
     def loop(cls, passed=0):  # update l'arrière plan + chaque personnage
 
         if not CoreGame.pause:
@@ -320,7 +321,8 @@ class CoreGame:
 
             """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
             # Calcul de la position x absolue du personnage
-            delta_pix_arrive = (400 - new_distance) * 25  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
+            delta_pix_arrive = (
+                                           400 - new_distance) * 25  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
             pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
             if pos_x_ligne_arrive > -2:
@@ -338,7 +340,9 @@ class CoreGame:
                     ALPHA = 255  # opaque
                     CONVERT_ALPHA = False
 
-                    CoreGame.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                    CoreGame.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X,
+                                                              POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
+                                                              SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
                 else:  # sinon, on met juste à jour sa position
                     CoreGame.lignearriveobj.x = pos_x_ligne_arrive - 2
@@ -386,9 +390,10 @@ class CoreGame:
                 new_distance = 0.1  # pas de division par 0 !
 
             if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
-                key_chance = int(1000 / new_distance)  # la probabilité d'avoir une touche augmente avec la distance parcouru
+                key_chance = int(
+                    1000 / new_distance)  # la probabilité d'avoir une touche augmente avec la distance parcouru
             else:  # course infinie
-                key_chance = int(new_distance**0.5 / new_distance / 1000)
+                key_chance = int(new_distance ** 0.5 / new_distance / 1000)
 
             # TODO: Créé un crash en course infini:
             if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():
@@ -405,7 +410,7 @@ class CoreGame:
                 extra_y_offset = 0
                 if character.running:
                     new_state = "run"
-                    character.runsprite.adjustspeed(character.speed*6)
+                    character.runsprite.adjustspeed(character.speed * 6)
                 elif character.jumping:
                     jump_compteur = character.jumpsprite.totalcompteur
                     if jump_compteur == 27:  # atterissage d'un saut
@@ -413,7 +418,8 @@ class CoreGame:
                         character.run()
                     else:
                         new_state = "jump"
-                        extra_y_offset = (1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
+                        extra_y_offset = (
+                                                     1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
                         extra_y_offset = extra_y_offset
                 else:
                     new_state = "idle"  # fin et début de la course
