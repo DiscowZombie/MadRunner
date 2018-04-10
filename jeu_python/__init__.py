@@ -38,8 +38,8 @@ running = True
 fps = utils.GameSettings().setfps()
 # TODO: DEBUG
 print("[DEBUG] (__init__ > l.37) FPS: " + str(fps))
-imgpath = sys._MEIPASS
-print("[DEBUG] (__init__ > l.45) FPS: " + imgpath)
+# imgpath = sys._MEIPASS
+# print("[DEBUG] (__init__ > l.45)" + imgpath)
 
 passed = 0
 

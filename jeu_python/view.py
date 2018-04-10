@@ -40,20 +40,10 @@ class View:
     def checktween(self):
         tweendata = self.tweendata
         advanceratio = tweendata["passed"] / tweendata["duration"]
-        self.x = int(tweendata["x start"] + tweendata["delta x"] * advanceratio)
-        self.y = int(tweendata["y start"] + tweendata["delta y"] * advanceratio)
-        self.scalex = tweendata["scale x start"] + tweendata["delta x scale"] * advanceratio
-        self.scaley = tweendata["scale y start"] + tweendata["delta y scale"] * advanceratio
-        self.width = int(tweendata["width start"] + tweendata["delta width"] * advanceratio)
-        self.height = int(tweendata["height start"] + tweendata["delta height"] * advanceratio)
-        self.scalew = tweendata["scale width start"] + tweendata["delta width scale"] * advanceratio
-        self.scaleh = tweendata["scale height start"] + tweendata["delta height scale"] * advanceratio
 
-        if "otherattr" in tweendata:
-            for attributdict in tweendata["otherattr"]:
-                attrname = attributdict["attrname"]
-                self.__setattr__(attrname, int(
-                    attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio))
+        for attributdict in tweendata["attributes"]:
+            attrname = attributdict["attrname"]
+            self.__setattr__(attrname, int(attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio))
 
     def updatescreen(cls, passed):
         a = View.pygame.Surface(View.screensize)  # une surface pour reset l'écran
@@ -65,8 +55,7 @@ class View:
 
         for classname in UIelements:  # on met à jour les position absolues des éléments graphiques en premier...
             for obj in UIelements[classname]:
-                if hasattr(obj,
-                           "tweendata") and obj.tweendata:  # tout d'abord, on calcul leur position s'il sont en train de faire une transition
+                if hasattr(obj, "tweendata") and obj.tweendata:  # tout d'abord, on calcule la nouvelle valeur des attributs qui sont transitionnés
                     View.checktween(obj)
                     tweenobj.append(obj)
                 parentsurface = obj.parentsurface

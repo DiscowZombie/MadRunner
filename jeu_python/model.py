@@ -124,15 +124,42 @@ class Model:
                                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         # et enfin, on fait une merveilleuse transition vers l'état final de l'image et du texte
-        surface_intro.tween(-112, -112, 0.5, 0.5, 225, 225, 0, 0, 1, {
-            "name": "alpha",
-            "value": 255
-        })
-        texte_intro.tween(POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, 1,
-                          {  # transition de la taille du font également, le reste reste identique
-                              "name": "fontsize",
-                              "value": 44
-                          })
+
+        surface_intro.tween(
+            1,
+            [
+                {
+                    "name": "x",
+                    "value": -112
+                },
+                {
+                    "name": "y",
+                    "value": -112
+                },
+                {
+                    "name": "width",
+                    "value": 225
+                },
+                {
+                    "name": "height",
+                    "value": 225
+                },
+                {
+                    "name": "alpha",
+                    "value": 255
+                }
+            ]
+        )
+
+        texte_intro.tween(
+            1,
+            [
+                {
+                    "name": "fontsize",
+                    "value": 44
+                }
+            ]
+        )
 
         # Charger les statistiques de l'utilisateur et son compte en ligne
         # TODO: Charger les specs de son personnage...
@@ -145,11 +172,15 @@ class Model:
         Model.firstintro = False
         Model.secondintro = True
         surfaceintro = surface.Surface.getSurfaces()[0]
-        surfaceintro.tween(surfaceintro.x, surfaceintro.y, surfaceintro.scalex, surfaceintro.scaley, surfaceintro.width,
-                           surfaceintro.height, surfaceintro.scalew, surfaceintro.scaleh, 1, {
-                               "name": "alpha",
-                               "value": 0  # transparent
-                           })
+        surfaceintro.tween(
+            1,
+            [
+                {
+                    "name": "alpha",
+                    "value": 0  # transparent
+                }
+            ]
+        )
 
     def endintro(cls):
         statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)

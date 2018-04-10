@@ -18,17 +18,20 @@ class SpriteSheet:
 
     def load(self, nombre_images, taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement
         # Clear Strip
-        self.strip = []
+        strip = []
+        masks = []
 
         for i in range(0, nombre_images):
-            self.strip.append(self.image_at((
+            image = self.image_at((
                 i * taille_frame[0],
                 0,
                 taille_frame[0],
                 taille_frame[1]
-            )))
+            ))
+            strip.append(image)
+            masks.append(pygame.mask.from_surface(image))
 
-        return self.strip
+        return strip, masks
 
     # Load a specific image from a specific rectangle
     def image_at(self, rectangle, colorkey = None):
@@ -59,7 +62,7 @@ class SpriteStripAnim(SpriteSheet):
         self.numimage = spriteinfos["nbimage"]
         self.framesize = spriteinfos["framesize"]
         self.repeatimage = spriteinfos["repeatimage"]
-        self.strip = self.load(self.numimage, self.framesize)
+        self.strip, self.masks = self.load(self.numimage, self.framesize)
 
         SpriteStripAnim.sprite_anims.append(self)
 

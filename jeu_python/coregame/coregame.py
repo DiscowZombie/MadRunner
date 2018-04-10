@@ -55,7 +55,7 @@ class Character:
     def jump(self):
         if not self.jumping and self.energy >= 10:  # unité encore arbitraire pour l'énergie, on verra cela plus tard !
             self.energy -= 10
-            self.speed -= 0.15 * self.speed  # Sauter reduit sa vitesse de 15%
+            self.speed -= 0.1 * self.speed  # Sauter reduit sa vitesse de 10%
             self.jumping = True
             self.running = False
 
@@ -301,6 +301,7 @@ class CoreGame:
                       SCALE_X,
                       SCALE_Y))  # plus tard dans le développement du jeu, on devra  selectionner le sprite qui convient !
 
+
     def loop(cls, passed=0):  # update l'arrière plan + chaque personnage
 
         if not CoreGame.pause:
@@ -311,7 +312,7 @@ class CoreGame:
             d1 = CoreGame.distance
             d2 = d1 + charspeed * (passed / 1000)
             delta_d = d2 - d1
-            delta_pixel = int(d2 * 10) - int(d1 * 10)
+            delta_pixel = int(d2 * 10) - int(d1 * 10)  # nombre de pixels décalés pour l'arrière plan
 
             CoreGame.distance += delta_d
             CoreGame.time += passed
@@ -319,7 +320,7 @@ class CoreGame:
 
             """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
             # Calcul de la position x absolue du personnage
-            delta_pix_arrive = (400 - new_distance) * 10  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
+            delta_pix_arrive = (400 - new_distance) * 25  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
             pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
             if pos_x_ligne_arrive > -2:
@@ -397,12 +398,6 @@ class CoreGame:
                 for surfaceobj in decors:
                     surfaceobj.x += delta_pixel
 
-            # Mis à jour de l'arrière plan de la carte
-            CoreGame.mapscript.refresh()
-
-            # Mis à jour du territoire du mode de jeu
-            CoreGame.gamemodescript.refresh()
-
             # Mis à jour du state, et calcul de la vitesse, de la hauteur du saut...
             for character in CoreGame.characters_sprite:
                 state_sprite = character.__getattribute__(character.state + "sprite")
@@ -441,6 +436,12 @@ class CoreGame:
                 CoreGame.barre_energie_in.color = constantes.YELLOW
             else:
                 CoreGame.barre_energie_in.color = constantes.RED
+
+            # Mis à jour de l'arrière plan de la carte
+            CoreGame.mapscript.refresh()
+
+            # Mis à jour du territoire du mode de jeu
+            CoreGame.gamemodescript.refresh()
 
             # TODO: Debug
             """

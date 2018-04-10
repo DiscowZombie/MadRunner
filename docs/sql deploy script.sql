@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `madrunner`.`session` (
   `ip` VARCHAR(255) NOT NULL,
   `date` DATE NULL,
   PRIMARY KEY (`uuid`),
-  UNIQUE INDEX `uuid_UNIQUE` (`uuid` ASC),
   INDEX `fk_session_user_idx` (`user_id` ASC),
+  UNIQUE INDEX `uuid_UNIQUE` (`uuid` ASC),
   CONSTRAINT `fk_session_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `madrunner`.`user` (`id`)
@@ -63,17 +63,6 @@ CREATE TABLE IF NOT EXISTS `madrunner`.`score` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-ALTER TABLE `session` CHANGE `date` `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
-ALTER TABLE `score` CHANGE `date` `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
-
--- -----------------------------------------------------
--- Insert anonymous user into table
--- -----------------------------------------------------
-INSERT INTO `madrunner`.`user` (
-	`pseudo`, `password`
-) VALUES ("Anonymous", "password");
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

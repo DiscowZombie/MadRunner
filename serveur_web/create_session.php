@@ -4,9 +4,9 @@ require("includes/databases.php");
 require("includes/functions.php");
 
 // Si il y a un Id dans l'url
-if(!empty($_POST["pseudo"]) && !empty($_POST["password"])){
-  $pseudo = $_POST["pseudo"];
-  $password = $_POST["password"]; // Le mot de passe doit déjà été chiffrer
+if(!empty($_GET["pseudo"]) && !empty($_GET["password"])){
+  $pseudo = $_GET["pseudo"];
+  $password = $_GET["password"]; // Le mot de passe doit déjà été chiffrer
 
   $q = $pdo->prepare("SELECT id, password FROM user WHERE pseudo = ?");
   $q->execute([$pseudo]);
