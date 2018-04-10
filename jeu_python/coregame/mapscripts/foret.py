@@ -2,14 +2,13 @@ import uielements.surface as surface
 import uielements.image as image
 import constantes
 import view
-import functions as f
 
 bg_surfaces = []
 ligne_vide = None  # l'objet surface qui compense le vide entre les arbres et la piste
 
 def arbre(bg_surface, x):
 
-    REPERTOIRE = f.resource_path("assets/img/decors/Forêt/background.png")
+    REPERTOIRE = "assets/img/decors/Forêt/background.png"
     LARGEUR = 150
     HAUTEUR = 88
     POSITION_X = x

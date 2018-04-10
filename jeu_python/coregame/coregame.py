@@ -242,7 +242,7 @@ class CoreGame:
 
         # Chargement de la piste
         # Mis en place de la piste
-        REPERTOIRE = functions.resource_path("assets/img/decors/" + carte + "/piste.png")
+        REPERTOIRE = "assets/img/decors/" + carte + "/piste.png"
         LARGEUR = 0
         HAUTEUR = 175
         POSITION_X = 0

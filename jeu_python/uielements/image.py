@@ -1,6 +1,6 @@
 import pygame
 import uielement
-import view
+import functions
 
 
 class Image(uielement.UIelement):
@@ -14,7 +14,7 @@ class Image(uielement.UIelement):
     def __init__(self, image_path, *UIargs):
         uielement.UIelement.__init__(self, *UIargs, "Image")
 
-        self.imagepath = image_path
+        self.imagepath = functions.resource_path(image_path)
         self.originalimage = self.create(False)
         self.referance = self.create(True)  # on creer l'image pour avoir une référence vers celui-ci
 
