@@ -52,8 +52,8 @@ class EndGame:
         # Surface
         LARGEUR = 500
         HAUTEUR = 420
-        POSITION_X = 35
-        POSITION_Y = 15
+        POSITION_X = 20
+        POSITION_Y = 10
         SCALE_X = 0.05
         SCALE_Y = 0.03
         SCALE_WIDTH = 0.05  # TODO: A TRAVAILLER
@@ -72,13 +72,13 @@ class EndGame:
         # ...
 
         # Afficher des boutons
-        POSITION_X = 10
+        POSITION_X = 5
         POSITION_Y = 350
         SCALE_X = 0.05
         SCALE_Y = 0.03
-        LARGEUR = 490
+        LARGEUR = 480
         HAUTEUR = 30
-        SCALE_WIDTH = 0.05
+        SCALE_WIDTH = 0
         SCALE_HEIGHT = 0.03
         COULEUR = constantes.GRAY
         ANTIALIAS = True
@@ -102,7 +102,7 @@ class EndGame:
         ANTIALIAS = True
         COULEUR = constantes.BLACK
         FONT = "Arial"
-        TAILLE_FONT = 20
+        TAILLE_FONT = 30
         CENTRE_X = False
         CENTRE_Y = True
         ARRIERE_PLAN = constantes.WHITE
@@ -110,8 +110,8 @@ class EndGame:
         SEUL = True
         LARGEUR = 0
         HAUTEUR = 0
-        POSITION_X = 240
-        POSITION_Y = 10
+        POSITION_X = 300
+        POSITION_Y = 100
         SCALE_X = 0.2
         SCALE_Y = 0.2
         SCALE_WIDTH = 0
