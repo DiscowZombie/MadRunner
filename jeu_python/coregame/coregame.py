@@ -121,6 +121,7 @@ class CoreGame:
         self.keys = []
         self.availablekeys = list(constantes.ALPHABET)
 
+        CoreGame.carte = carte
         CoreGame.modejeu = modejeu
 
         # Création de la barre d'énergie
@@ -292,6 +293,7 @@ class CoreGame:
             CoreGame.gamemodescript = _400mhaie
 
         CoreGame.mapscript.init()
+        CoreGame.gamemodescript.init()
 
         POSITION_X = 0
         POSITION_Y = 65

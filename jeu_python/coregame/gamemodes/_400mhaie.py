@@ -1,6 +1,7 @@
 import pygame
 import view as v
 import constantes
+import functions
 from coregame import coregame as coregame
 from uielements import image as image
 
@@ -14,6 +15,19 @@ for i in range(10):
             "obj": None
         }
     )
+
+dimension_haie = None
+
+
+def init():
+
+    global dimension_haie
+
+    for info_haie in haies:
+        info_haie["touched"] = False  # reset la haie
+
+    img_haie = pygame.image.load(functions.resource_path("assets/img/decors/" + coregame.CoreGame.carte + "/obstacle.png"))
+    dimension_haie = (img_haie.get_width(), img_haie.get_height())
 
 
 def refresh():
@@ -33,7 +47,7 @@ def refresh():
                     state_sprite = char.__getattribute__(attrname)
                     offset = (int(haie_obj.absx - (state_sprite.absx + state_sprite.offsetx)), int(haie_obj.absy - (state_sprite.absy + state_sprite.offsety)))
                     num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(haie_obj.mask, offset)  # le nombre de pixels de collision entre la haie et le personnage
-                    if num_pix_col and num_pix_col > 10:  # si le personnage touche la haie de plus de 10 pixels (car bon, toucher la haie de 1 pixel...)
+                    if num_pix_col and num_pix_col > 15:  # si le personnage touche la haie de plus de 15 pixels (car bon, toucher la haie de 1 pixel...)
                         haieinfo["touched"] = True
                         char.speed -= 0.35 * char.speed  # se prendre une haie réduit la vitesse de 35%
                         haie_obj.tween(  # transition de la rotation de la haie pour voir qu'elle tombe
@@ -56,12 +70,17 @@ def refresh():
             delta_pix = (haieinfo["dist"] - distance) * 25  # nombre de pixel avant la haie par rapport au personnage
             pos_x_haie = char.absx - delta_pix
 
-            if pos_x_haie > -17:
-                REPERTOIRE = "assets/img/decors/Jeux Olympiques/obstacle.png"
-                LARGEUR = 17
-                HAUTEUR = 54
+
+            if pos_x_haie > - dimension_haie[0]:
+
+                attrname = char.state + "sprite"
+                state_sprite = char.__getattribute__(attrname)
+
+                REPERTOIRE = "assets/img/decors/" + coregame.CoreGame.carte + "/obstacle.png"
+                LARGEUR = dimension_haie[0]
+                HAUTEUR = dimension_haie[1]
                 POSITION_X = pos_x_haie
-                POSITION_Y = char.y - LARGEUR//2
+                POSITION_Y = char.y + state_sprite.framesize[1]//2 - dimension_haie[1]
                 SCALE_X = 0
                 SCALE_Y = 0.35
                 SCALE_WIDTH = 0
