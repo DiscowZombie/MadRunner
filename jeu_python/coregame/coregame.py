@@ -84,20 +84,21 @@ class CoreGame:
     pause = False
     time = 0  # temps en ms depuis lequel le jeu a commencé (le chrono)
     distance = 0  # la distance parcouru
+    dist_to_travel = 0  # la distance à parcourir (None si c'est course infinie)
     finished = False  # la course est-elle finie ?
 
     surface_boutons = None  # la surface sur laquelle les boutons à appuyer sont dessinés
 
     vitesseobj = None  # le texte sur lequel on écrit la vitesse du courreur
-    tempsobj = None  # le texte sur lequel on écrit le temps de la course (AFFICHé SEULEMENT EN 400M ET 400M HAIE)
-    distanceobj = None  # le texte sur lequel on écrit la distance parcouru (AFFICHé SEULEMENT EN COURSE INFINI)
+    game_mode_disp = None  # le texte sur lequel on écrit une information du mode de jeu (temps pour 400m et 400m haie, et distance parcouru pour course infini)
+    disp_function = None  # la fonction qui va afficher ce qu'il faut dans le texte du mode de jeu
     lignearriveobj = None  # la surface qui fait office de ligne d'arrivé (n'existe que lorqu'on est assez proche de l'arrivé)
 
     # La barre d'énergie
     barre_energie_in = None
     barre_energie_out = None
 
-    # On stoque la piste pour pouvoir l'enlever à la fin
+    # Stockage de la piste pour pouvoir l'enlever à la fin
     piste = None
 
     def __init__(self, carte, modejeu, level):
@@ -209,11 +210,10 @@ class CoreGame:
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
-        if modejeu == "400m" or modejeu == "400m haie":
-            CoreGame.tempsobj = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                          ARRIERE_PLAN, ECART, SEUL,
-                                          v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+        CoreGame.game_mode_disp = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                                            ARRIERE_PLAN, ECART, SEUL,
+                                            v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                            HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         # Création du bouton pause
         POSITION_X = 0
@@ -321,37 +321,43 @@ class CoreGame:
             CoreGame.time += passed
             new_distance = CoreGame.distance
 
-            """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
-            # Calcul de la position x absolue du personnage
-            delta_pix_arrive = (
-                                           400 - new_distance) * 25  # nombre de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
-            pos_x_ligne_arrive = char.absx - delta_pix_arrive
+            if CoreGame.dist_to_travel:
+                """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
+                # Calcul de la position x absolue du personnage
+                delta_pix_arrive = (400 - new_distance) * 25  # nb de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
+                pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
-            if pos_x_ligne_arrive > -2:
-                if not CoreGame.lignearriveobj:  # dessiner la ligne d'arrivé si elle n'existe pas encore
-                    LARGEUR = 4
-                    HAUTEUR = 175
-                    POSITION_X = pos_x_ligne_arrive - 2
-                    POSITION_Y = 0
-                    SCALE_X = 0
-                    SCALE_Y = 0.35
-                    SCALE_WIDTH = 0
-                    SCALE_HEIGHT = 0
-                    COULEUR = constantes.WHITE
-                    BORDURE = 0
-                    ALPHA = 255  # opaque
-                    CONVERT_ALPHA = False
+                if pos_x_ligne_arrive > -2:
+                    if not CoreGame.lignearriveobj:  # dessiner la ligne d'arrivé si elle n'existe pas encore
+                        LARGEUR = 4
+                        HAUTEUR = 175
+                        POSITION_X = pos_x_ligne_arrive - 2
+                        POSITION_Y = 0
+                        SCALE_X = 0
+                        SCALE_Y = 0.35
+                        SCALE_WIDTH = 0
+                        SCALE_HEIGHT = 0
+                        COULEUR = constantes.WHITE
+                        BORDURE = 0
+                        ALPHA = 255  # opaque
+                        CONVERT_ALPHA = False
 
-                    CoreGame.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X,
-                                                              POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
-                                                              SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                        CoreGame.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X,
+                                                                  POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
+                                                                  SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-                else:  # sinon, on met juste à jour sa position
-                    CoreGame.lignearriveobj.x = pos_x_ligne_arrive - 2
-            else:
-                if CoreGame.lignearriveobj:
-                    CoreGame.lignearriveobj.unreferance()
-                    CoreGame.lignearriveobj = None
+                    else:  # sinon, on met juste à jour sa position
+                        CoreGame.lignearriveobj.x = pos_x_ligne_arrive - 2
+                else:
+                    if CoreGame.lignearriveobj:
+                        CoreGame.lignearriveobj.unreferance()
+                        CoreGame.lignearriveobj = None
+
+                # Est-ce la fin du jeu ?
+                if new_distance >= CoreGame.dist_to_travel:
+                    CoreGame.finished = True
+                    CoreGame.pause = True
+                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "end").end()
 
             # Mise à jour de l'affichage de la vitesse
             # Affichage de la vitesse du personnage en km/h
@@ -360,29 +366,10 @@ class CoreGame:
             # Mise à jour des boutons à appuyer
             key.Key.updatekeys(passed)
 
-            # Affichage du temps en 400m et 400m haie
-            if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
-                temps_ms = CoreGame.time
-                aff_ms = str(temps_ms % 1000)
-                temps_s = int(temps_ms // 1000)
-                aff_s = temps_s % 60
-                temps_min = int(temps_s // 60)
+            # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haie, et distance pour course infinie)
+            CoreGame.game_mode_disp.text = CoreGame.disp_function()
 
-                if aff_s < 10:
-                    aff_s = "0" + str(aff_s)
-                else:
-                    aff_s = str(aff_s)
-
-                CoreGame.tempsobj.text = str(temps_min) + ":" + aff_s + "." + aff_ms
-
-            # On vérifie que l'on as pas atteint la distance nécessaire
-            if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
-                if new_distance >= 400:
-                    CoreGame.finished = True
-                    CoreGame.pause = True
-                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "end").end()
-
-            # On vérifie qu'il as assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
+            # Vérifie qu'il y a assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
             if char.energy <= 0:
                 CoreGame.finished = True
                 eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "energy").end()

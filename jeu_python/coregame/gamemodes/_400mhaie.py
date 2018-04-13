@@ -28,6 +28,8 @@ def init():
 
     img_haie = pygame.image.load(functions.resource_path("assets/img/decors/" + coregame.CoreGame.carte + "/obstacle.png"))
     dimension_haie = (img_haie.get_width(), img_haie.get_height())
+    coregame.CoreGame.dist_to_travel = 400
+    coregame.CoreGame.disp_function = functions.computetime
 
 
 def refresh():
@@ -70,17 +72,13 @@ def refresh():
             delta_pix = (haieinfo["dist"] - distance) * 25  # nombre de pixel avant la haie par rapport au personnage
             pos_x_haie = char.absx - delta_pix
 
-
             if pos_x_haie > - dimension_haie[0]:
-
-                attrname = char.state + "sprite"
-                state_sprite = char.__getattribute__(attrname)
 
                 REPERTOIRE = "assets/img/decors/" + coregame.CoreGame.carte + "/obstacle.png"
                 LARGEUR = dimension_haie[0]
                 HAUTEUR = dimension_haie[1]
                 POSITION_X = pos_x_haie
-                POSITION_Y = char.y + state_sprite.framesize[1]//2 - dimension_haie[1]
+                POSITION_Y = char.y + 49 - dimension_haie[1]  # on va supposer que le personnage a toujours une hauteur de 98 pixels
                 SCALE_X = 0
                 SCALE_Y = 0.35
                 SCALE_WIDTH = 0

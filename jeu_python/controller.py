@@ -1,7 +1,7 @@
 import model
 import view
 import statemanager
-import coregame.coregame as coregame
+from coregame import coregame as coregame
 
 
 class Controller:

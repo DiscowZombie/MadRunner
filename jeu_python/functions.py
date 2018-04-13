@@ -1,3 +1,4 @@
+from coregame import coregame as coregame
 import uielements.text as text
 import uielements.surface as surface
 import uielements.button as button
@@ -30,6 +31,25 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
     return False
 
 
+def computetime():
+    temps_ms = coregame.CoreGame.time
+    aff_ms = str(temps_ms % 1000)
+    temps_s = int(temps_ms // 1000)
+    aff_s = temps_s % 60
+    temps_min = int(temps_s // 60)
+
+    if aff_s < 10:
+        aff_s = "0" + str(aff_s)
+    else:
+        aff_s = str(aff_s)
+
+    return str(temps_min) + ":" + aff_s + "." + aff_ms
+
+
+def computedistance():
+    return int(coregame.CoreGame.distance)
+
+
 def delete_menu_obj():
     for bouton in list(button.Button.getButtons()):
         bouton.unreferance()
@@ -39,13 +59,6 @@ def delete_menu_obj():
         txt.unreferance()
     for check in list(checkbox.Checkbox.getCheckboxes()):
         check.unreferance()
-
-
-def click_clavier(event):
-    print('== > Evenement : ', event.type)
-    for k, v in event.dict.items():
-        print(k, v)
-    print()
 
 
 def isvalidint(supposedint):
