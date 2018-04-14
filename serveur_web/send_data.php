@@ -2,20 +2,19 @@
 
 require_once("includes/databases.php");
 
-// Si il y a un Id dans l'url
-if(!empty($_GET["key"]) AND !empty($_GET["score"]) AND !empty($_GET["coursetype"])){
-  $key = $_GET["key"];
-  $score = $_GET["score"];
-  $course_type = $_GET["coursetype"];
+if(!empty($_POST["key"]) AND !empty($_POST["score"]) AND !empty($_POST["coursetype"])){
+  $key = $_POST["key"];
+  $score = $_POST["score"];
+  $course_type = $_POST["coursetype"];
 
   $q = $pdo->prepare("SELECT user_id FROM session WHERE uuid = ?");
   $q->execute([$key]);
 
-  // FETCH_ASSOC: Retourne la ligne suivante en tant qu'un tableau
-  $id = $q->rowCount() == 1 ? $q->fetch(PDO::FETCH_ASSOC)["user_id"] : -1;
+  $r = $q->fetch(PDO::FETCH_OBJ);
   $q->closeCursor();
 
-  if($id !== -1){
+  # TODO: Problème ici: le retour est null !
+  if(!empty($r->user_id)){
     // Insérer dans la bdd qui gère le score son score !
     $q = $pdo->prepare("INSERT INTO score(user_id, score, coursetype) VALUES (:user_id, :score, :coursetype)");
     $q->execute([
@@ -23,7 +22,6 @@ if(!empty($_GET["key"]) AND !empty($_GET["score"]) AND !empty($_GET["coursetype"
       "score" => $score,
       "coursetype" => $course_type
     ]);
-
   }
 
 }

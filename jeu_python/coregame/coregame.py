@@ -324,7 +324,8 @@ class CoreGame:
             if CoreGame.dist_to_travel:
                 """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
                 # Calcul de la position x absolue du personnage
-                delta_pix_arrive = (400 - new_distance) * 25  # nb de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
+                delta_pix_arrive = (
+                                               400 - new_distance) * 25  # nb de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
                 pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
                 if pos_x_ligne_arrive > -2:
@@ -408,7 +409,7 @@ class CoreGame:
                     else:
                         new_state = "jump"
                         extra_y_offset = (
-                                                     1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
+                                                 1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
                         extra_y_offset = extra_y_offset
                 else:
                     new_state = "idle"  # fin et début de la course
@@ -437,13 +438,6 @@ class CoreGame:
 
             # Mis à jour du territoire du mode de jeu
             CoreGame.gamemodescript.refresh()
-
-            # TODO: Debug
-            """
-            CoreGame.finished = True
-            CoreGame.pause = True
-            eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "debug").end()
-            """
 
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:

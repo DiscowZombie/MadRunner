@@ -11,12 +11,13 @@ GRAY = (192, 192, 192)
 PALE = (225, 225, 225)
 YELLOW = (255, 255, 0)
 DARKYELLOW = (127, 127, 0)
+LIGHT_GRAY = (211, 211, 211)
 
 # Pour les chemins d'accès
 CONFIG_PATH = "config/"
 
 # Pour les requetes web (curl)
-WEBSITE_URI = "https://madrunner.discowzombie.fr/"
+WEBSITE_URI = "http://madrunner.discowzombie.fr/"
 
 # l'alphabet :p
 ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",

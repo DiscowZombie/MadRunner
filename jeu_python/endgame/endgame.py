@@ -33,15 +33,12 @@ class EndGame:
         self.reason = reason
         self.modejeu = modejeu
 
-        # Beau socre
+        # Beau score
         self.score = "%.0f" % round(self.score, 0)  # Enlever les décimales du score
 
-        # Nettoyer l'écran
-        coregame.CoreGame.getCharacterSprites().clear()
-        for img in list(image.Image.getImages()):
-            img.unreferance()
-        f.delete_menu_obj()
+        # TODO: Nettoyer l'écran
 
+        # Envoyé le score au serveur web
         self.sendscore()
 
     def end(self):
@@ -58,7 +55,7 @@ class EndGame:
         SCALE_Y = 0.03
         SCALE_WIDTH = 0.05  # TODO: A TRAVAILLER
         SCALE_HEIGHT = 0.03  # TODO: A TRAVAILLER
-        COULEUR = constantes.YELLOW
+        COULEUR = constantes.LIGHT_GRAY
         BORDURE = 0  # rempli
         ALPHA = 255  # opaque
         CONVERT_ALPHA = False
@@ -68,8 +65,8 @@ class EndGame:
                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                BORDURE)
 
-        # Créé une image propre et l'afficher - Image "End"
-        # ...
+        # Image "End"
+        # Charger l'image de fin
 
         # Afficher des boutons
         POSITION_X = 5
@@ -125,7 +122,7 @@ class EndGame:
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         if self.error is not None:
-            # Afficher le score
+            # Afficher l'erreur
             TEXTE = self.error
             ANTIALIAS = True
             COULEUR = constantes.BLACK

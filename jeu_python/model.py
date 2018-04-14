@@ -163,7 +163,7 @@ class Model:
 
         # Charger les statistiques de l'utilisateur et son compte en ligne
         # TODO: Charger les specs de son personnage...
-        settings.StatsManager().loadKey()
+        settings.StatsManager().loadkey()
 
     def introsurfacetweening(cls):
         return hasattr(surface.Surface.getSurfaces()[0], "tweendata")
