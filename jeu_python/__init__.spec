@@ -1,6 +1,6 @@
 # -*- mode: python -*-
 
-# Commande: pyinstaller --clean --onefile __init__.spec --version-file?
+# Commande: pyinstaller --clean --onefile __init__.spec
 
 block_cipher = None
 
@@ -37,5 +37,6 @@ exe = EXE(pyz,
           upx=True,
           runtime_tmpdir=None,
 		  icon='C:\\Users\\€¤\\PycharmProjects\\MadRunner\\jeu_python\\assets\\img\\icon\\propicon48.ico',
-          console=True
+          console=True,
+		  version='version.rc'
 		  )
