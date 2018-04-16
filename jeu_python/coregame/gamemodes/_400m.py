@@ -9,3 +9,7 @@ def init():
 
 def refresh():
     pass
+
+
+def computescore():  # le score dépend du temps
+    return 100000000 / coregame.CoreGame.time  # Prendre en compte la difficulité?

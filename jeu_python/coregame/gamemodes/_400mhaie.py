@@ -92,3 +92,12 @@ def refresh():
                 image_haie.mask = pygame.mask.from_surface(image_haie.referance)
 
                 haieinfo["obj"] = image_haie
+
+
+def computescore():  # le score dépend du temps et du nombre de haies non renversées
+    nb_passed = 0  # nombre de haies passé (càd sans le renverser)
+    dist = coregame.CoreGame.distance
+    for haieinfo in haies:
+        if not haieinfo["touched"] and dist >= haieinfo["dist"]:
+            nb_passed += 1
+    return 100000000 / coregame.CoreGame.time + nb_passed*100

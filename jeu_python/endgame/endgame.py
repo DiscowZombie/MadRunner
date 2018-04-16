@@ -18,17 +18,11 @@ class EndGame:
     modejeu = None
     error = None
 
-    def __init__(self, modejeu, carte, distance, time, reason):
-        if modejeu == "400m" or modejeu == "400 haie":
-            """
-            Exemples de score:
-            
-            Bon temps (0:50.000) -> 50000 => Score: 2k
-            Mauvais temps (2:00:000) -> 200000 => Score: 500
-            """
-            self.score = (1 / time) * 100000000  # Prendre en compte la difficulité?
-        else:
-            self.score = distance * 100  # Prendre en compte la difficulité?
+    def __init__(self, modejeu, script_modejeu, carte, script_carte, distance, time, reason):
+
+        coregame.CoreGame.finished = True
+
+        self.score = script_modejeu.computescore()
         self.carte = carte
         self.reason = reason
         self.modejeu = modejeu
@@ -47,14 +41,14 @@ class EndGame:
         # Création de l'écran de fin
 
         # Surface
-        LARGEUR = 500
-        HAUTEUR = 420
-        POSITION_X = 20
-        POSITION_Y = 10
-        SCALE_X = 0.05
-        SCALE_Y = 0.03
-        SCALE_WIDTH = 0.05  # TODO: A TRAVAILLER
-        SCALE_HEIGHT = 0.03  # TODO: A TRAVAILLER
+        LARGEUR = 400
+        HAUTEUR = 380
+        POSITION_X = - LARGEUR//2
+        POSITION_Y = - HAUTEUR//2
+        SCALE_X = 0.5
+        SCALE_Y = 0.5
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
         COULEUR = constantes.LIGHT_GRAY
         BORDURE = 0  # rempli
         ALPHA = 255  # opaque
@@ -69,14 +63,14 @@ class EndGame:
         # Charger l'image de fin
 
         # Afficher des boutons
-        POSITION_X = 5
-        POSITION_Y = 350
-        SCALE_X = 0.05
-        SCALE_Y = 0.03
-        LARGEUR = 480
-        HAUTEUR = 30
+        POSITION_X = 10
+        POSITION_Y = 335
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 380
+        HAUTEUR = 35
         SCALE_WIDTH = 0
-        SCALE_HEIGHT = 0.03
+        SCALE_HEIGHT = 0
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
@@ -113,7 +107,7 @@ class EndGame:
         SCALE_Y = 0.2
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
-        COULEUR_ARRIERE = constantes.WHITE
+        COULEUR_ARRIERE = None
         BORDURE = 0
 
         text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
@@ -121,7 +115,7 @@ class EndGame:
                   surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
-        if self.error is not None:
+        if self.error:
             # Afficher l'erreur
             TEXTE = self.error
             ANTIALIAS = True

@@ -18,6 +18,7 @@ import coregame.gamemodes._400mhaie as _400mhaie
 
 import constantes
 import view as v
+import model
 
 import endgame.endgame as eg
 
@@ -307,7 +308,7 @@ class CoreGame:
 
     def loop(cls, passed=0):  # update l'arrière plan + chaque personnage
 
-        if not CoreGame.pause:
+        if not CoreGame.pause and not CoreGame.finished:
             char = CoreGame.characters_sprite[0]  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
             # Calcul de la nouvelle distance parcouru
             charspeed = char.speed
@@ -356,9 +357,7 @@ class CoreGame:
 
                 # Est-ce la fin du jeu ?
                 if new_distance >= CoreGame.dist_to_travel:
-                    CoreGame.finished = True
-                    CoreGame.pause = True
-                    eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "end").end()
+                    eg.EndGame(CoreGame.modejeu, CoreGame.gamemodescript, CoreGame.carte, CoreGame.mapscript, new_distance, CoreGame.time, "end").end()
 
             # Mise à jour de l'affichage de la vitesse
             # Affichage de la vitesse du personnage en km/h
@@ -372,8 +371,7 @@ class CoreGame:
 
             # Vérifie qu'il y a assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
             if char.energy <= 0:
-                CoreGame.finished = True
-                eg.EndGame(CoreGame.modejeu, CoreGame.carte, new_distance, CoreGame.time, "energy").end()
+                eg.EndGame(CoreGame.modejeu, CoreGame.gamemodescript, CoreGame.carte, CoreGame.mapscript, new_distance, CoreGame.time, "energy").end()
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
             if new_distance == 0:
@@ -439,6 +437,13 @@ class CoreGame:
             # Mis à jour du territoire du mode de jeu
             CoreGame.gamemodescript.refresh()
 
+    def reset(cls):  # TODO: bien tout reset et bien retourner au menu (pas encore le cas)
+        statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
+
+        functions.delete_menu_obj()
+
+        model.Model.main_menu(True)
+
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:
             CoreGame.characters_sprite[0].jump()  # Ici, le joueur 1 saute
@@ -449,5 +454,6 @@ class CoreGame:
         return CoreGame.characters_sprite
 
     loop = classmethod(loop)
+    reset = classmethod(reset)
     keypressed = classmethod(keypressed)
     getCharacterSprites = classmethod(getCharacterSprites)

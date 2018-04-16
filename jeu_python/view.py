@@ -104,15 +104,16 @@ class View:
                 surface.parentsurface.referance.blit(surface.referance, (
                 surface.parentsurface.abswidth * surface.scalex + surface.x, surface.parentsurface.absheight * surface.scaley + surface.y))
 
-        # on dessine le personnage et les obstacles en dernier
-        characters = coregame.CoreGame.getCharacterSprites()
+        # Dessine le personnage en dernier (si le jeu n'est pas fini)
+        if not coregame.CoreGame.finished:
+            characters = coregame.CoreGame.getCharacterSprites()
 
-        for character in characters:
-            character.absx = int(View.screen.abswidth * character.scalex + character.x)
-            character.absy = int(View.screen.absheight * character.scaley + character.y)
-            attrname = character.state + "sprite"
-            state_sprite = character.__getattribute__(attrname)
-            View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (state_sprite.absx + state_sprite.offsetx, state_sprite.absy + state_sprite.offsety))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
+            for character in characters:
+                character.absx = int(View.screen.abswidth * character.scalex + character.x)
+                character.absy = int(View.screen.absheight * character.scaley + character.y)
+                attrname = character.state + "sprite"
+                state_sprite = character.__getattribute__(attrname)
+                View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (state_sprite.absx + state_sprite.offsetx, state_sprite.absy + state_sprite.offsety))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
 
         View.pygame.display.update()
 

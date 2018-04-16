@@ -96,8 +96,7 @@ class BJouer(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
-            self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+    def button1down(self):  # Défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYERNUM)
         functions.delete_menu_obj()
 
@@ -180,8 +179,7 @@ class BParam(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
-            self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+    def button1down(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.SETTINGS_MENU)
         functions.delete_menu_obj()
 
@@ -215,8 +213,7 @@ class BStats(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
-            self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+    def button1down(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.STATS_MENU)
         functions.delete_menu_obj()
 
@@ -251,8 +248,7 @@ class B1Joueur(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
-            self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+    def button1down(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
         functions.delete_menu_obj()
 
@@ -613,7 +609,7 @@ class BCommencer(Button):
         # cgame.loop()
 
 
-menu_states = [  # les états du jeu qui font retourner au menu principale lorsqu'on clique sur retour
+menu_states = [  # les états du jeu qui font retourner au menu principal lorsqu'on clique sur retour
     statemanager.StateEnum.PLAYERNUM,
     statemanager.StateEnum.STATS_MENU,
     statemanager.StateEnum.SETTINGS_MENU,
@@ -624,8 +620,7 @@ class BRetour(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
-            self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+    def button1down(self):
         functions.delete_menu_obj()
 
         game_state = statemanager.StateManager.getstate()
@@ -649,13 +644,9 @@ Un bouon de retour au menu après la fin du jeu
 
 
 class BRetourMenu(Button):
+
     def __init__(*arguments):
         Button.__init__(*arguments)
 
     def button1down(self):
-        # On change l'état du jeu
-        statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
-
-        functions.delete_menu_obj()
-
-        model.Model.main_menu(True)
+        coregame.CoreGame.reset()  # Reset tout
