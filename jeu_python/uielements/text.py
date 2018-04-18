@@ -7,10 +7,13 @@ class Text(uielement.UIelement):
     texts = []
 
     def __init__(self, text, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
-                 alone,
-                 *UIargs):
+                 alone, *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Text")
+
+        if alone:
+            self.originalx = self.x
+            self.originaly = self.y
 
         self.text = text
         self.antialias = antialias
@@ -47,15 +50,19 @@ class Text(uielement.UIelement):
         else:
             positionx, positiony = 0, 0
 
-        self.x = positionx + self.textoffset
-        self.y = positiony
+        if self.alone:
+            self.x = self.originalx + positionx + self.textoffset
+            self.y = self.originaly + positiony
+        else:
+            self.x = positionx + self.textoffset
+            self.y = positiony
 
         return surfacetext.convert_alpha()
 
     def draw(self):
         if self.recreate:
             self.recreate = False
-            self.textreferance = view.View.pygame.font.SysFont(self.font, self.fontsize)
+            self.textreferance = view.View.pygame.font.SysFont(self.font, int(self.fontsize))
         if self.alone:  # si l'objet texte fait partie d'un autre objet (ex: bouton), on laisse l'autre objet se charger de l'apparition du texte
             self.referance = self.create()
 

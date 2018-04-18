@@ -69,7 +69,7 @@ class Checkbox(uielement.UIelement):
             [posx, posy, self.boxsize, self.boxsize],
             self.bordersize
         )
-        return self.textobj.create()
+        return self.textobj.draw()
 
     def draw(self):
         self.create()

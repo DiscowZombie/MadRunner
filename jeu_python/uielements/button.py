@@ -605,8 +605,7 @@ class BCommencer(Button):
                 else:
                     level = checkboxe
 
-        cgame = coregame.CoreGame(carte.text, modejeu.text, level.text)
-        # cgame.loop()
+        coregame.CoreGame(carte.text, modejeu.text, level.text)
 
 
 menu_states = [  # les états du jeu qui font retourner au menu principal lorsqu'on clique sur retour
@@ -635,7 +634,7 @@ class BPause(Button):
         Button.__init__(*arguments)
 
     def button1down(self):
-        coregame.CoreGame.pause = not coregame.CoreGame.pause
+        coregame.CoreGame.current_core.pause = not coregame.CoreGame.current_core.pause
 
 
 """
@@ -649,4 +648,4 @@ class BRetourMenu(Button):
         Button.__init__(*arguments)
 
     def button1down(self):
-        coregame.CoreGame.reset()  # Reset tout
+        coregame.CoreGame.current_core.unreferance()  # "efface" la partie

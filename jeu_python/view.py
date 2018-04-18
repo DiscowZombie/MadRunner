@@ -1,5 +1,6 @@
 import functions as f
 import constantes
+import statemanager
 import coregame.coregame as coregame
 
 import uielement
@@ -41,7 +42,7 @@ class View:
 
         for attributdict in tweendata["attributes"]:
             attrname = attributdict["attrname"]
-            self.__setattr__(attrname, int(attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio))
+            self.__setattr__(attrname, attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio)
 
     def updatescreen(cls, passed):
         a = View.pygame.Surface(View.screensize)  # une surface pour reset l'écran
@@ -105,8 +106,8 @@ class View:
                 surface.parentsurface.abswidth * surface.scalex + surface.x, surface.parentsurface.absheight * surface.scaley + surface.y))
 
         # Dessine le personnage en dernier (si le jeu n'est pas fini)
-        if not coregame.CoreGame.finished:
-            characters = coregame.CoreGame.getCharacterSprites()
+        if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING and not coregame.CoreGame.current_core.finished:
+            characters = coregame.Character.getCharacters()
 
             for character in characters:
                 character.absx = int(View.screen.abswidth * character.scalex + character.x)

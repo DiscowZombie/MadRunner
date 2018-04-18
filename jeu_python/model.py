@@ -4,12 +4,12 @@ import statemanager
 import functions as f
 
 from uielements import text as text
-import uielements.surface as surface
-import uielements.button as button
-import uielements.image as image
-import uielements.checkbox as checkbox
+from uielements import surface as surface
+from uielements import button as button
+from uielements import image as image
+from uielements import checkbox as checkbox
 
-import coregame.coregame as coregame
+from coregame import coregame as coregame
 
 import settings
 
@@ -41,7 +41,7 @@ class Model:
         elif currentstate == statemanager.StateEnum.MAIN_MENU:
             pass
         elif currentstate == statemanager.StateEnum.PLAYING:
-            coregame.CoreGame.loop(passed)
+            coregame.CoreGame.current_core.loop(passed)
 
     def mousebutton1down(cls, position):  # click gauche
         for bouton in list(button.Button.getButtons()):

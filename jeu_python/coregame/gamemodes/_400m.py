@@ -2,14 +2,20 @@ from coregame import coregame as coregame
 import functions
 
 
-def init():
-    coregame.CoreGame.dist_to_travel = 400
-    coregame.CoreGame.disp_function = functions.computetime
+class _400m:
 
+    dist_to_travel = 400
+    disp_function = None  # va être mis plus tard lors de l'initialisation
+    coursetype = "Q"
 
-def refresh():
-    pass
+    def __init__(self):
+        _400m.disp_function = functions.computetime
 
+    def refresh(self):
+        pass
 
-def computescore():  # le score dépend du temps
-    return 100000000 / coregame.CoreGame.time  # Prendre en compte la difficulité?
+    def computescore(self):  # le score dépend du temps
+        return 100000000 / coregame.CoreGame.current_core.time  # Prendre en compte la difficulité?
+
+    def unreferance(self):
+        pass

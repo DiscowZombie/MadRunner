@@ -1,3 +1,5 @@
+
+
 from coregame import coregame as coregame
 import uielements.text as text
 import uielements.surface as surface
@@ -32,7 +34,7 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
 
 
 def computetime():
-    temps_ms = coregame.CoreGame.time
+    temps_ms = coregame.CoreGame.current_core.time
     aff_ms = str(temps_ms % 1000)
     temps_s = int(temps_ms // 1000)
     aff_s = temps_s % 60

@@ -1,4 +1,6 @@
 import functions
+import uielement
+import uielements
 from uielements import button as button
 from uielements import image as image
 from uielements import surface as surface
@@ -19,10 +21,10 @@ import coregame.gamemodes._400mhaie as _400mhaie
 import constantes
 import view as v
 import model
-
-import endgame.endgame as eg
+import settings
 
 import random
+import pycurl
 
 """
 Ne fonctionne pour piur 60 fps pour le moment
@@ -30,6 +32,8 @@ Ne fonctionne pour piur 60 fps pour le moment
 
 
 class Character:
+
+    characters = []
 
     def __init__(self, characterfeatures, characterinfos, posx, posy, scalex, scaley):
         for spritename in characterinfos:
@@ -49,12 +53,14 @@ class Character:
         self.energy = characterfeatures["initenergy"]
         self.speed = characterfeatures["initspeed"]
 
+        Character.characters.append(self)
+
     def run(self):
         self.running = True
         self.jumping = False
 
     def jump(self):
-        if not self.jumping and self.energy >= 10:  # unité encore arbitraire pour l'énergie, on verra cela plus tard !
+        if not self.jumping and self.energy > 10:  # unité encore arbitraire pour l'énergie, on verra cela plus tard !
             self.energy -= 10
             self.speed -= 0.1 * self.speed  # Sauter reduit sa vitesse de 10%
             self.jumping = True
@@ -73,58 +79,44 @@ class Character:
             amount = -self.__getattribute__(attribut)
         self.__setattr__(attribut, self.__getattribute__(attribut) + amount)
 
+    def unreferance(self):
+        Character.characters.remove(self)
+
+    def getCharacters(cls):
+        return Character.characters
+
+    getCharacters = classmethod(getCharacters)
+
 
 class CoreGame:
-    characters_sprite = []
-    carte = None
-    modejeu = None
-    level = None
-    mapscript = None
-    gamemodescript = None
 
-    pause = False
-    time = 0  # temps en ms depuis lequel le jeu a commencé (le chrono)
-    distance = 0  # la distance parcouru
-    dist_to_travel = 0  # la distance à parcourir (None si c'est course infinie)
-    finished = False  # la course est-elle finie ?
-
-    surface_boutons = None  # la surface sur laquelle les boutons à appuyer sont dessinés
-
-    vitesseobj = None  # le texte sur lequel on écrit la vitesse du courreur
-    game_mode_disp = None  # le texte sur lequel on écrit une information du mode de jeu (temps pour 400m et 400m haie, et distance parcouru pour course infini)
-    disp_function = None  # la fonction qui va afficher ce qu'il faut dans le texte du mode de jeu
-    lignearriveobj = None  # la surface qui fait office de ligne d'arrivé (n'existe que lorqu'on est assez proche de l'arrivé)
-
-    # La barre d'énergie
-    barre_energie_in = None
-    barre_energie_out = None
-
-    # Stockage de la piste pour pouvoir l'enlever à la fin
-    piste = None
+    current_core = None  # l'objet core (la partie en gros)
 
     def __init__(self, carte, modejeu, level):
 
         """
-        :param carte - Valeurs possibles: Jeux Olympiques, Athènes, Forêt
-        :param modejeu - Valeurs possibles: 400m, 400m haie, Course infinie
-        :param level - Valeurs possibles: Facile, Moyen, Difficile
+        :param carte - La carte sélectionnée. Valeurs possibles: Jeux Olympiques, Athènes, Forêt
+        :param modejeu - Le mode de jeu sélectionné. Valeurs possibles: 400m, 400m haie, Course infinie
+        :param level - Le niveau sélectionné. Valeurs possibles: Facile, Moyen, Difficile
         """
 
         functions.delete_menu_obj()
         for img in list(image.Image.getImages()):
             img.unreferance()
+
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYING)
 
+        self.time = 0
+        self.distance = 0
+        self.score = 0
+        self.pause = False
+        self.finished = False
         self.carte = carte
         self.modejeu = modejeu
         self.level = level
-        self.time = 0
-        self.distance = 0
-        self.keys = []
-        self.availablekeys = list(constantes.ALPHABET)
-
-        CoreGame.carte = carte
-        CoreGame.modejeu = modejeu
+        self.lignearriveobj = None
+        self.reason = None  # la raison de la fin du jeu. N'existe que lorsque self.end() est appelé
+        self.error = None  # l'erreur si jamais la requête d'envoie du score échoue. N'existe que si la requête en fin de partie échoue
 
         # Création de la barre d'énergie
         # la bordure
@@ -141,7 +133,7 @@ class CoreGame:
         ALPHA = 255  # opaque
         CONVERT_ALPHA = False
 
-        CoreGame.barre_energie_out = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y,
+        self.barre_energie_out = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y,
                                                      SCALE_X, SCALE_Y, LARGEUR,
                                                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                                      BORDURE)
@@ -158,7 +150,7 @@ class CoreGame:
         COULEUR = constantes.GREEN
         BORDURE = 0  # rempli
 
-        CoreGame.barre_energie_in = rect.Rect(CoreGame.barre_energie_out, POSITION_X, POSITION_Y, SCALE_X,
+        self.barre_energie_in = rect.Rect(self.barre_energie_out, POSITION_X, POSITION_Y, SCALE_X,
                                               SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                               BORDURE)
 
@@ -184,7 +176,7 @@ class CoreGame:
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
-        CoreGame.vitesseobj = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+        self.vitesseobj = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                                         ECART, SEUL,
                                         v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                                         HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
@@ -211,7 +203,7 @@ class CoreGame:
         COULEUR_ARRIERE = constantes.WHITE
         BORDURE = 0
 
-        CoreGame.game_mode_disp = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        self.game_mode_disp = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                                             ARRIERE_PLAN, ECART, SEUL,
                                             v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                                             HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
@@ -256,7 +248,7 @@ class CoreGame:
         COULEUR = constantes.WHITE
         BORDURE = 0
 
-        self.piste = image.Image(REPERTOIRE, v.View.screen, POSITION_X,
+        image.Image(REPERTOIRE, v.View.screen, POSITION_X,
                                  POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                  BORDURE)
 
@@ -278,59 +270,58 @@ class CoreGame:
                                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                                BORDURE)
 
-        CoreGame.surface_boutons = self.surface_boutons
+        CoreGame.current_core = self
 
-        # Initialisation de la carte (IL FAUT TENIR COMPTE DE LA CARTE CHOISI !!)
+        # Initialisation de la carte
         if carte == "Jeux Olympiques":
-            CoreGame.mapscript = jo
+            self.mapclass = jo.JeuxOlympiques
         elif carte == "Forêt":
-            CoreGame.mapscript = foret
+            self.mapclass = foret.Foret
         elif carte == "Athènes":
-            CoreGame.mapscript = athenes
+            self.mapclass = athenes.Athenes
 
         if modejeu == "400m":
-            CoreGame.gamemodescript = _400m
+            self.gamemodeclass = _400m._400m
         elif modejeu == "400m haie":
-            CoreGame.gamemodescript = _400mhaie
+            self.gamemodeclass = _400mhaie._400mHaie
 
-        CoreGame.mapscript.init()
-        CoreGame.gamemodescript.init()
+        self.map_obj = self.mapclass()
+        self.gamemode_obj = self.gamemodeclass()
+        self.dist_to_travel = self.gamemodeclass.dist_to_travel
+        self.disp_function = self.gamemodeclass.disp_function
 
         POSITION_X = 0
         POSITION_Y = 65
         SCALE_X = 0.85
         SCALE_Y = 0.35
 
-        CoreGame.characters_sprite.append(
-            Character(constantes.CharactersFeatures["gros"], constantes.Animations["gros"], POSITION_X, POSITION_Y,
-                      SCALE_X,
-                      SCALE_Y))  # plus tard dans le développement du jeu, on devra  selectionner le sprite qui convient !
+        Character(constantes.CharactersFeatures["gros"], constantes.Animations["gros"], POSITION_X, POSITION_Y,
+                  SCALE_X,SCALE_Y)  # plus tard dans le développement du jeu, il faudra  selectionner le sprite qui convient !
 
-    def loop(cls, passed=0):  # update l'arrière plan + chaque personnage
+    def loop(self, passed=0):  # update l'arrière plan + chaque personnage
 
-        if not CoreGame.pause and not CoreGame.finished:
-            char = CoreGame.characters_sprite[0]  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+        if not self.pause and not self.finished:
+            char = Character.getCharacters()[0]  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
             # Calcul de la nouvelle distance parcouru
             charspeed = char.speed
 
-            d1 = CoreGame.distance
+            d1 = self.distance
             d2 = d1 + charspeed * (passed / 1000)
             delta_d = d2 - d1
             delta_pixel = int(d2 * 10) - int(d1 * 10)  # nombre de pixels décalés pour l'arrière plan
 
-            CoreGame.distance += delta_d
-            CoreGame.time += passed
-            new_distance = CoreGame.distance
+            self.distance += delta_d
+            self.time += passed
+            new_distance = self.distance
 
-            if CoreGame.dist_to_travel:
+            if self.dist_to_travel:
                 """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
                 # Calcul de la position x absolue du personnage
-                delta_pix_arrive = (
-                                               400 - new_distance) * 25  # nb de pixels avant d'arriver à la ligne d'arrivé (par rapport à la position du personnage)
+                delta_pix_arrive = (400 - new_distance) * 25  # nb de pixels avant la ligne d'arrivé (par rapport à la position du personnage)
                 pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
                 if pos_x_ligne_arrive > -2:
-                    if not CoreGame.lignearriveobj:  # dessiner la ligne d'arrivé si elle n'existe pas encore
+                    if not self.lignearriveobj:  # dessiner la ligne d'arrivé si elle n'existe pas encore
                         LARGEUR = 4
                         HAUTEUR = 175
                         POSITION_X = pos_x_ligne_arrive - 2
@@ -344,56 +335,54 @@ class CoreGame:
                         ALPHA = 255  # opaque
                         CONVERT_ALPHA = False
 
-                        CoreGame.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X,
+                        self.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X,
                                                                   POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                                                                   SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
                     else:  # sinon, on met juste à jour sa position
-                        CoreGame.lignearriveobj.x = pos_x_ligne_arrive - 2
+                        self.lignearriveobj.x = pos_x_ligne_arrive - 2
                 else:
-                    if CoreGame.lignearriveobj:
-                        CoreGame.lignearriveobj.unreferance()
-                        CoreGame.lignearriveobj = None
+                    if self.lignearriveobj:
+                        self.lignearriveobj.unreferance()
+                        self.lignearriveobj = None
 
                 # Est-ce la fin du jeu ?
-                if new_distance >= CoreGame.dist_to_travel:
-                    eg.EndGame(CoreGame.modejeu, CoreGame.gamemodescript, CoreGame.carte, CoreGame.mapscript, new_distance, CoreGame.time, "end").end()
+                if new_distance >= self.dist_to_travel:
+                    self.end(True)
 
             # Mise à jour de l'affichage de la vitesse
             # Affichage de la vitesse du personnage en km/h
-            CoreGame.vitesseobj.text = str(int(charspeed * 3.6)) + " km/h"
+            self.vitesseobj.text = str(int(charspeed * 3.6)) + " km/h"
 
             # Mise à jour des boutons à appuyer
             key.Key.updatekeys(passed)
 
             # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haie, et distance pour course infinie)
-            CoreGame.game_mode_disp.text = CoreGame.disp_function()
+            self.game_mode_disp.text = self.disp_function()
 
             # Vérifie qu'il y a assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
             if char.energy <= 0:
-                eg.EndGame(CoreGame.modejeu, CoreGame.gamemodescript, CoreGame.carte, CoreGame.mapscript, new_distance, CoreGame.time, "energy").end()
+                self.end(False)
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
             if new_distance == 0:
-                new_distance = 0.1  # pas de division par 0 !
+                new_distance = 0.01  # pas de division par 0 !
 
-            if CoreGame.modejeu == "400m" or CoreGame.modejeu == "400m haie":
-                key_chance = int(
-                    1000 / new_distance)  # la probabilité d'avoir une touche augmente avec la distance parcouru
+            if self.modejeu == "400m" or self.modejeu == "400m haie":
+                key_chance = int(1000 / new_distance)  # la probabilité d'avoir une touche augmente avec la distance parcouru
             else:  # course infinie
                 key_chance = int(new_distance ** 0.5 / new_distance / 1000)
 
             # TODO: Créé un crash en course infini:
             if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():
-                key.Key(CoreGame.surface_boutons, 10)  # timeout qui dépend de la difficulté
+                key.Key(self.surface_boutons, 10)  # timeout qui dépend de la difficulté
 
-            for decors in CoreGame.mapscript.getDecors():
+            for decors in self.map_obj.getDecors():
                 for surfaceobj in decors:
                     surfaceobj.x += delta_pixel
 
             # Mis à jour du state, et calcul de la vitesse, de la hauteur du saut...
-            for character in CoreGame.characters_sprite:
-                state_sprite = character.__getattribute__(character.state + "sprite")
+            for character in Character.getCharacters():
                 characterinfos = character.characterinfos
                 extra_y_offset = 0
                 if character.running:
@@ -406,8 +395,7 @@ class CoreGame:
                         character.run()
                     else:
                         new_state = "jump"
-                        extra_y_offset = (
-                                                 1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
+                        extra_y_offset = (1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
                         extra_y_offset = extra_y_offset
                 else:
                     new_state = "idle"  # fin et début de la course
@@ -423,37 +411,192 @@ class CoreGame:
                     -int(characterinfos[new_state]["framesize"][1] / 2) + extra_y_offset)
 
             # Mis à jour de la taille et la couleur de la barre d'énergie
-            CoreGame.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
+            self.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
             if char.energy >= 70:
-                CoreGame.barre_energie_in.color = constantes.GREEN
+                color =  constantes.GREEN
             elif char.energy >= 30:
-                CoreGame.barre_energie_in.color = constantes.YELLOW
+                color = constantes.YELLOW
             else:
-                CoreGame.barre_energie_in.color = constantes.RED
+                color = constantes.RED
+            self.barre_energie_in.color = color
 
             # Mis à jour de l'arrière plan de la carte
-            CoreGame.mapscript.refresh()
+            self.map_obj.refresh()
 
             # Mis à jour du territoire du mode de jeu
-            CoreGame.gamemodescript.refresh()
+            self.gamemode_obj.refresh()
 
-    def reset(cls):  # TODO: bien tout reset et bien retourner au menu (pas encore le cas)
+    def end(self, completed):
+        self.finished = True
+
+        for k in list(key.Key.getKeys()):
+            k.unreferance()
+
+        if completed:
+            self.score = "%.0f" % round(self.gamemode_obj.computescore(), 0)  # Enlever les décimales du score
+            self.sendscore()
+        else:
+            self.score = "N/A"
+        # Transition swag ?
+
+        # Création de l'écran de fin
+
+        # Surface
+        LARGEUR = 450
+        HAUTEUR = 0
+        POSITION_X = - LARGEUR//2
+        POSITION_Y = 0
+        SCALE_X = 0.5
+        SCALE_Y = 1
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.LIGHT_GRAY
+        BORDURE = 0  # rempli
+        ALPHA = 255  # opaque
+        CONVERT_ALPHA = False
+
+        surf = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y,
+                               SCALE_X, SCALE_Y, LARGEUR,
+                               HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                               BORDURE)
+
+        surf.tween(
+            0.35,
+            [
+                {
+                    "name": "scaley",
+                    "value": 0.5
+                },
+                {
+                    "name": "height",
+                    "value": 380
+                },
+                {
+                    "name": "y",
+                    "value": -190
+                }
+            ]
+        )
+
+        # Image "End"
+        # Charger l'image de fin
+
+        # Afficher des boutons
+        POSITION_X = 10
+        POSITION_Y = 335
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 430
+        HAUTEUR = 35
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                           CENTRE_Y,
+                           ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
+                           SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        # Afficher le score
+        TEXTE = "Score: " + self.score
+        ANTIALIAS = True
+        COULEUR = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 26
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = None
+        ECART = 0
+        SEUL = True
+        LARGEUR = 430
+        HAUTEUR = 25
+        POSITION_X = 10
+        POSITION_Y = 10
+        SCALE_X = 0
+        SCALE_Y = 0
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR_ARRIERE = None
+        BORDURE = 0
+
+        text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                  ECART, SEUL,
+                  surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+        if self.error:
+
+            # Afficher l'erreur
+            TEXTE = self.error
+            ANTIALIAS = True
+            COULEUR = constantes.RED
+            FONT = "Arial"
+            TAILLE_FONT = 16
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 430
+            HAUTEUR = 15
+            POSITION_X = 10
+            POSITION_Y = 315
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = None
+            BORDURE = 0
+
+            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART, SEUL,
+                      surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+    def sendscore(self):
+        # Clé associé avec la session
+        key = settings.StatsManager.session_key
+
+        if not key:
+            return
+        try:
+            settings.BDDManager(
+                constantes.WEBSITE_URI + "send_data.php?key=" + key + "&score=" + self.score + "&coursetype=" + self.gamemodeclass.coursetype)
+        except pycurl.error:
+            self.error = "An error happened when trying to send statistics to the web server !"
+
+    def unreferance(self):  # TODO: bien tout reset et bien retourner au menu (pas encore le cas)
+
+        self.map_obj.unreferance()
+        self.gamemode_obj.unreferance()
+
+        for character in list(Character.getCharacters()):
+            character.unreferance()
+
+        UIelements = uielement.UIelement.getUIelements()
+        for classname in UIelements:
+            for obj in list(UIelements[classname]):
+                obj.unreferance()
+
+        CoreGame.current_core = None
+
         statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
-
-        functions.delete_menu_obj()
-
-        model.Model.main_menu(True)
+        model.Model.main_menu()
 
     def keypressed(cls, pygame, event):
         if event.key == pygame.K_SPACE:
-            CoreGame.characters_sprite[0].jump()  # Ici, le joueur 1 saute
+            Character.getCharacters()[0].jump()  # Ici, le joueur 1 saute
         else:
             key.Key.keypressed(event.dict["unicode"].capitalize())
 
-    def getCharacterSprites(cls):
-        return CoreGame.characters_sprite
-
-    loop = classmethod(loop)
-    reset = classmethod(reset)
     keypressed = classmethod(keypressed)
-    getCharacterSprites = classmethod(getCharacterSprites)

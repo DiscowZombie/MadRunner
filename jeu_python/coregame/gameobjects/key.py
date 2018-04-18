@@ -8,9 +8,9 @@ import random
 
 
 class Key:
+
     keys = []  # les touches qui sont affiché à l'écran (et qu'il faut appuyer)
-    availablekeys = list(
-        constantes.ALPHABET)  # les touches qui peuvent être affichées (pour éviter d'avoir 2 même touches)
+    availablekeys = list(constantes.ALPHABET)  # les touches qui peuvent être affichées (pour éviter d'avoir 2 même touches)
     avantages = ["energy", "speed"]  # les avantages possible (augmente la vitesse ou l'énergie)
     avantages_bonus = {  # l'intervalle d'augmentation possible de chaque avantage
         "energy": [5, 15],
@@ -29,22 +29,6 @@ class Key:
         surfaceheight = surface_boutons.referance.get_height()
         max_x_scale = (screenwidth - TAILLE_BOUTON) / screenwidth
         max_y_scale = (surfaceheight - TAILLE_BOUTON) / surfaceheight
-
-        """DEMANDER A MR LANGER POUR CA ! COMMENT FAIRE POUR VERIFIER LES POSITIONS POSSIBLES AFIN DE NE PAS SUPERPOSER 2 SURFACES !"""
-
-        """impossible_position_ranges = []
-
-        for keyobj in Key.keys:
-            x = keyobj.absx
-            y = keyobj.absy
-
-            impossible_position_ranges.append(((x - TAILLE_BOUTON, x + TAILLE_BOUTON), (y - TAILLE_BOUTON, y + TAILLE_BOUTON)))
-
-        possible_position_ranges = []
-
-        for impossible_range in impossible_position_ranges:
-            for impossible_range2 in impossible_position_ranges:
-                if impossible_range != impossible_range2:"""
 
         LARGEUR = TAILLE_BOUTON
         HAUTEUR = TAILLE_BOUTON
@@ -94,6 +78,9 @@ class Key:
         Key.availablekeys.remove(lettre)
         Key.keys.append(self)
 
+    def getKeys(cls):
+        return Key.keys
+
     def unreferance(self):
         self.rectreferance.unreferance()
         self.textreferance.unreferance()
@@ -125,8 +112,9 @@ class Key:
         if not keyobj:  # soustrait l'avantage (car la touche n'existe pas)
             avantage_amount = -avantage_amount
 
-        coregame.CoreGame.getCharacterSprites()[0].boost(avantage, avantage_amount)  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+        coregame.Character.getCharacters()[0].boost(avantage, avantage_amount)  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
 
+    getKeys = classmethod(getKeys)
     canCreateKey = classmethod(canCreateKey)
     updatekeys = classmethod(updatekeys)
     keypressed = classmethod(keypressed)
