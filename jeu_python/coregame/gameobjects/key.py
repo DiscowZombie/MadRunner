@@ -99,17 +99,17 @@ class Key:
                 key.unreferance()
 
     def keypressed(cls, pressed_key):
-        keyobj = None
+        exists = False
         for key in Key.keys:
             if key.key == pressed_key:
-                keyobj = key
+                exists = True
                 key.unreferance()
                 break
 
         avantage = Key.avantages[random.randint(0, len(Key.avantages) - 1)]
         avantage_amount_table = Key.avantages_bonus[avantage]
         avantage_amount = random.uniform(avantage_amount_table[0], avantage_amount_table[1])
-        if not keyobj:  # soustrait l'avantage (car la touche n'existe pas)
+        if not exists:  # soustrait l'avantage (car la touche n'existe pas)
             avantage_amount = -avantage_amount
 
         coregame.Character.getCharacters()[0].boost(avantage, avantage_amount)  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!

@@ -109,6 +109,7 @@ class CoreGame:
         self.time = 0
         self.distance = 0
         self.score = 0
+        self.gamemode_score = 0
         self.pause = False
         self.finished = False
         self.carte = carte
@@ -349,6 +350,12 @@ class CoreGame:
                 # Est-ce la fin du jeu ?
                 if new_distance >= self.dist_to_travel:
                     self.end(True)
+                    return
+
+            # Vérifie qu'il y a assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
+            if char.energy <= 0:
+                self.end(False)
+                return
 
             # Mise à jour de l'affichage de la vitesse
             # Affichage de la vitesse du personnage en km/h
@@ -359,10 +366,6 @@ class CoreGame:
 
             # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haie, et distance pour course infinie)
             self.game_mode_disp.text = self.disp_function()
-
-            # Vérifie qu'il y a assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
-            if char.energy <= 0:
-                self.end(False)
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
             if new_distance == 0:
@@ -381,10 +384,8 @@ class CoreGame:
                 for surfaceobj in decors:
                     surfaceobj.x += delta_pixel
 
-            # Mis à jour du state, et calcul de la vitesse, de la hauteur du saut...
+            # Mis à jour du state + conséquences de son changement
             for character in Character.getCharacters():
-                characterinfos = character.characterinfos
-                extra_y_offset = 0
                 if character.running:
                     new_state = "run"
                     character.runsprite.adjustspeed(character.speed * 6)
@@ -395,8 +396,6 @@ class CoreGame:
                         character.run()
                     else:
                         new_state = "jump"
-                        extra_y_offset = (1 / 2) * jump_compteur ** 2 - 13 * jump_compteur  # hauteur du saut parabolique :p
-                        extra_y_offset = extra_y_offset
                 else:
                     new_state = "idle"  # fin et début de la course
 
@@ -406,9 +405,7 @@ class CoreGame:
                 character.changeState(new_state)
 
                 # Chargement de la prochaine image du personnage
-                character.__getattribute__(new_state + "sprite").next(
-                    -int(characterinfos[new_state]["framesize"][0] / 2),
-                    -int(characterinfos[new_state]["framesize"][1] / 2) + extra_y_offset)
+                character.__getattribute__(new_state + "sprite").next()
 
             # Mis à jour de la taille et la couleur de la barre d'énergie
             self.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
@@ -420,11 +417,25 @@ class CoreGame:
                 color = constantes.RED
             self.barre_energie_in.color = color
 
-            # Mis à jour de l'arrière plan de la carte
-            self.map_obj.refresh()
+        # Mis à jour de la position absolue des personnages
+        for character in Character.getCharacters():
+            current_sprite = character.__getattribute__(character.state + "sprite")
+            characterframesize = character.characterinfos[character.state]["framesize"]
+            if character.jumping:
+                jump_compteur = character.jumpsprite.totalcompteur
+                extra_y_offset = (1 / 2) * (jump_compteur - 1) ** 2 - 13 * (jump_compteur - 1)  # hauteur du saut parabolique :p
+            else:
+                extra_y_offset = 0
+            current_sprite.updatepos(
+                -int(characterframesize[0] / 2),
+                -int(characterframesize[1] / 2) + extra_y_offset
+            )
 
-            # Mis à jour du territoire du mode de jeu
-            self.gamemode_obj.refresh()
+        # Mis à jour du territoire du mode de jeu
+        self.gamemode_obj.refresh()
+
+        # Mis à jour de l'arrière plan de la carte
+        self.map_obj.refresh()
 
     def end(self, completed):
         self.finished = True
@@ -432,11 +443,15 @@ class CoreGame:
         for k in list(key.Key.getKeys()):
             k.unreferance()
 
+        self.game_mode_disp.unreferance()
+
         if completed:
             self.score = "%.0f" % round(self.gamemode_obj.computescore(), 0)  # Enlever les décimales du score
+            self.gamemode_score = self.disp_function()
             self.sendscore()
         else:
             self.score = "N/A"
+            self.gamemode_score = "N/A"
         # Transition swag ?
 
         # Création de l'écran de fin
@@ -513,15 +528,42 @@ class CoreGame:
         COULEUR = constantes.BLACK
         FONT = "Arial"
         TAILLE_FONT = 26
-        CENTRE_X = True
+        CENTRE_X = False
         CENTRE_Y = True
         ARRIERE_PLAN = None
         ECART = 0
         SEUL = True
-        LARGEUR = 430
+        LARGEUR = 400
         HAUTEUR = 25
-        POSITION_X = 10
+        POSITION_X = 25
         POSITION_Y = 10
+        SCALE_X = 0
+        SCALE_Y = 0
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR_ARRIERE = None
+        BORDURE = 0
+
+        text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                  ECART, SEUL,
+                  surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+        # Afficher le score spécifique du mode de jeu (temps, distance...)
+        TEXTE = self.gamemodeclass.score_text + ": " + self.gamemode_score
+        ANTIALIAS = True
+        COULEUR = constantes.BLACK
+        FONT = "Arial"
+        TAILLE_FONT = 26
+        CENTRE_X = False
+        CENTRE_Y = True
+        ARRIERE_PLAN = None
+        ECART = 0
+        SEUL = True
+        LARGEUR = 400
+        HAUTEUR = 25
+        POSITION_X = 25
+        POSITION_Y = 40
         SCALE_X = 0
         SCALE_Y = 0
         SCALE_WIDTH = 0
@@ -594,9 +636,10 @@ class CoreGame:
         model.Model.main_menu()
 
     def keypressed(cls, pygame, event):
-        if event.key == pygame.K_SPACE:
-            Character.getCharacters()[0].jump()  # Ici, le joueur 1 saute
-        else:
-            key.Key.keypressed(event.dict["unicode"].capitalize())
+        if not CoreGame.current_core.pause and not CoreGame.current_core.finished:
+            if event.key == pygame.K_SPACE:
+                Character.getCharacters()[0].jump()  # Ici, le joueur 1 saute
+            else:
+                key.Key.keypressed(event.dict["unicode"].capitalize())
 
     keypressed = classmethod(keypressed)

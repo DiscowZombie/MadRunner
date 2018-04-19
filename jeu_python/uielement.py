@@ -78,6 +78,14 @@ class UIelement:
 
             self.tweendata["attributes"].append(tweendict)
 
+    def updatetween(self):
+        tweendata = self.tweendata
+        advanceratio = tweendata["passed"] / tweendata["duration"]
+
+        for attributdict in tweendata["attributes"]:
+            attrname = attributdict["attrname"]
+            self.__setattr__(attrname, attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio)
+
     def remove(self):
         for child in list(self.children):  # ne pas oublier d'effacer également les objets descendants de celui-ci
             child.unreferance()
