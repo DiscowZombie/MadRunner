@@ -36,14 +36,6 @@ class View:
                 if obj.parentsurface == old_screen_obj:  # tous les objets qui ont pour référence l'ancien objet écran sont mis à jour
                     screen.addchild(obj)
 
-    def checktween(self):
-        tweendata = self.tweendata
-        advanceratio = tweendata["passed"] / tweendata["duration"]
-
-        for attributdict in tweendata["attributes"]:
-            attrname = attributdict["attrname"]
-            self.__setattr__(attrname, attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio)
-
     def updatescreen(cls, passed):
         a = View.pygame.Surface(View.screensize)  # une surface pour reset l'écran
         a.fill((255, 255, 255))
@@ -55,7 +47,7 @@ class View:
         for classname in UIelements:  # on met à jour les position absolues des éléments graphiques en premier...
             for obj in UIelements[classname]:
                 if hasattr(obj, "tweendata") and obj.tweendata:  # tout d'abord, on calcule la nouvelle valeur des attributs qui sont transitionnés
-                    View.checktween(obj)
+                    obj.updatetween()
                     tweenobj.append(obj)
                 parentsurface = obj.parentsurface
                 obj.absx = int(parentsurface.absx + parentsurface.abswidth * obj.scalex + obj.x)
@@ -107,9 +99,7 @@ class View:
 
         # Dessine le personnage en dernier (si le jeu n'est pas fini)
         if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING and not coregame.CoreGame.current_core.finished:
-            characters = coregame.Character.getCharacters()
-
-            for character in characters:
+            for character in coregame.Character.getCharacters():
                 character.absx = int(View.screen.abswidth * character.scalex + character.x)
                 character.absy = int(View.screen.absheight * character.scaley + character.y)
                 attrname = character.state + "sprite"
@@ -122,7 +112,7 @@ class View:
             obj.tweendata["passed"] += passed / 1000
             if obj.tweendata["passed"] >= obj.tweendata["duration"]:
                 obj.tweendata["passed"] = obj.tweendata["duration"]
-                View.checktween(obj)  # on met la durée à l'état final, car il peut y avoir de gros décalage en cas de performance pas assez élevé
+                obj.updatetween()  # on met la durée à l'état final, car il peut y avoir de gros décalage en cas de performance pas assez élevé
                 delattr(obj, "tweendata")  # transition finie
 
     updatewindow = classmethod(updatewindow)

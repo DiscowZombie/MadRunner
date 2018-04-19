@@ -66,7 +66,7 @@ class SpriteStripAnim(SpriteSheet):
 
         SpriteStripAnim.sprite_anims.append(self)
 
-    def next(self, offsetx, offsety):
+    def next(self):
         # calcule et dessine la prochaine image (ou pas !)
         if self.speedcounter >= 60//self.speed:
             self.speedcounter = 0
@@ -79,6 +79,7 @@ class SpriteStripAnim(SpriteSheet):
 
         self.totalcompteur += 1
 
+    def updatepos(self, offsetx, offsety):
         # mis à jour de positions absolues et de l'offset
         self.absx = int(view.View.screen.abswidth * self.scalex + self.x)
         self.absy = int(view.View.screen.absheight * self.scaley + self.y)
