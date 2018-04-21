@@ -31,12 +31,12 @@ VSVersionInfo(
       StringTable(
         u'000004b0',
         [StringStruct(u'FileDescription', u'Mad Runner - Projet ISN'),
-        StringStruct(u'FileVersion', u'p0.1b'),
-        StringStruct(u'InternalName', u'Mad Runner p0.1b'),
+        StringStruct(u'FileVersion', u'0.1b'),
+        StringStruct(u'InternalName', u'Mad Runner 0.1b'),
         StringStruct(u'LegalCopyright', u'Licenced under the GNU GPL version 3. Copyright (C) 2018  Ahmet ADAM, Mathéo CIMBARO'),
-        StringStruct(u'OriginalFilename', u'Mad Runner p0.1b'),
+        StringStruct(u'OriginalFilename', u'Mad Runner 0.1b'),
         StringStruct(u'ProductName', u'Mad Runner'),
-        StringStruct(u'ProductVersion', u'p0.1b')])
+        StringStruct(u'ProductVersion', u'0.1b')])
       ]), 
     VarFileInfo([VarStruct(u'Translation', [0, 1200])])
   ]
