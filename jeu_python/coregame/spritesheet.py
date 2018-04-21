@@ -1,6 +1,6 @@
 # Source original (en tant que support)
 #  http://www.pygame.org/wiki/Spritesheet
-
+import functions as f
 import pygame
 import view
 
@@ -51,7 +51,7 @@ class SpriteStripAnim(SpriteSheet):
     sprite_anims = []
 
     def __init__(self, spriteinfos, posx, posy, scalex, scaley):
-        SpriteSheet.__init__(self, spriteinfos["image"], posx, posy, scalex, scaley)
+        SpriteSheet.__init__(self, f.resource_path(spriteinfos["image"]), posx, posy, scalex, scaley)
         self.speedcounter = 0
         self.compteur = 0
         self.totalcompteur = 0

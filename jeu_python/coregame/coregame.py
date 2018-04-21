@@ -1,6 +1,5 @@
 import functions
 import uielement
-import uielements
 from uielements import button as button
 from uielements import image as image
 from uielements import surface as surface
@@ -21,10 +20,8 @@ import coregame.gamemodes._400mhaie as _400mhaie
 import constantes
 import view as v
 import model
-import settings
 
 import random
-import pycurl
 
 """
 Ne fonctionne pour piur 60 fps pour le moment
