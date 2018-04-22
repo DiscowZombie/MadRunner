@@ -1,66 +1,56 @@
-import os
-import settings
-import json
-
-FILE_PATH = settings.PATH + "/user_statistics.json"
+import shelve
 
 
 class UserStatistics:
-    personnage = "gros"
 
-    course = 0
-    distance_walked = 0
-    jump = 0
+    data = None
+    stats = None
 
-    best_score = 0
-    worst_score = 0
+    def __init__(self):
+        self.best_score = {
+            "400m": None,
+            "400m haie": None,
+            "Course infinie": None
+        }
+        self.best_gm_score = {
+            "400m": None,
+            "400m haie": None,
+            "Course infinie": None
+        }
+        self.score_total = 0
+        self.nb_courses = 0
+        self.nb_courses_echouees = 0
+        self.nb_sauts = 0
+        self.total_dist = 0
+        self.correct_letters = 0
+        self.wrong_letters = 0
+        self.missed_letters = 0
+        self.haies_traversees = 0
+        self.haies_renversees = 0
+        self.temps_jeu = 0
 
-    haie_break = 0
-    letter_clicked = 0
+    def load(self):
+        base = shelve.open("game_stats")
 
-    def __init__(self, personnage="gros", course=0, distance_walked=0, jump=0, best_score=0, worst_score=0,
-                 haie_break=0,
-                 letter_clicked=0):
-        self.personnage = personnage
-        self.course = course
-        self.distance_walked = distance_walked
-        self.jump = jump
-        self.best_score = best_score
-        self.worst_score = worst_score
-        self.haie_break = haie_break
-        self.letter_clicked = letter_clicked
+        if "stats_obj" in base:
+            for attrname in self.__dict__:
+                self.__setattr__(attrname, base["stats_obj"].__getattribute__(attrname))
+        else:
+            base["stats_obj"] = self
 
-    @staticmethod
-    def loadfromfile():
-        if not os.path.exists(settings.PATH):
-            os.makedirs(settings.PATH)
+        UserStatistics.data = base
+        UserStatistics.stats = self
 
-        if not os.path.exists(FILE_PATH):
-            return UserStatistics("gros")
+    def save(self):
+        UserStatistics.data["stats_obj"] = self
+        UserStatistics.data.close()
+        UserStatistics.data = shelve.open("game_stats")
 
-        f = settings.JsonManager(FILE_PATH).readjson()
-        personnage = f["personnage"]
-        course = f["course"]
-        distance_walked = f["distance_walked"]
-        jump = f["jump"]
-        best_score = f["best_score"]
-        worst_score = f["worst_score"]
-        haie_break = f["haie_break"]
-        letter_clicked = f["letter_clicked"]
+    def set(self, statname, value, statname2=None):
+        if statname2:
+            self.__getattribute__(statname)[statname2] = value
+        else:
+            self.__setattr__(statname, value)
 
-        return UserStatistics(personnage, course, distance_walked, jump, best_score, worst_score, haie_break,
-                              letter_clicked)
-
-    def savetofile(self):
-        f = open(FILE_PATH, "w")
-        f.write(json.dumps({
-            "personnage": self.personnage,
-            "course": self.course,
-            "distance_walked": self.distance_walked,
-            "jump": self.jump,
-            "best_score": self.best_score,
-            "worst_score": self.worst_score,
-            "haie_break": self.haie_break,
-            "letter_clicked": self.letter_clicked
-        }))
-        f.close()
+    def increment(self, statname, delta):
+        self.__setattr__(statname, self.__getattribute__(statname) + delta)

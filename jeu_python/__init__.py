@@ -18,6 +18,8 @@ import utils
 
 import settings
 
+import userstatistics
+
 # Initialisation du module
 pygame.init()
 
@@ -44,6 +46,8 @@ settings.DEBUG = True if settings.SettingsManager().readjson()["debug"] is not N
 if settings.DEBUG:
     print("[DEBUG] Debug mode is enabled.")
     print("[DEBUG] (__init__ > l.46) FPS: " + str(fps))
+
+userstatistics.UserStatistics().load()  # chargement des statistiques
 
 passed = 0
 

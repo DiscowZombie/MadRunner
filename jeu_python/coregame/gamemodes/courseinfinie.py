@@ -2,6 +2,7 @@ import pygame
 import view as v
 import functions
 import constantes
+import userstatistics
 
 import random
 
@@ -144,6 +145,9 @@ class CourseInfinie:
     def computescore(self):  # le score dépend de la distance parcourue et du nombre d'obstacles non renversées
         dist = coregame.CoreGame.current_core.distance
         return dist + 100 * self.nb_passed
+
+    def isrecord(self, gm_score):
+        return gm_score > userstatistics.UserStatistics.stats.best_gm_score["Course infinie"]
 
     def unreferance(self):
         for obstacle in list(Obstacle.getObstacles()):

@@ -1,5 +1,7 @@
 import view
 import constantes
+import userstatistics
+
 from uielements import text as text
 from uielements import rect as rect
 from coregame import coregame as coregame
@@ -97,12 +99,15 @@ class Key:
             key.time += passed
             if key.time >= key.timeout:
                 key.unreferance()
+                userstatistics.UserStatistics.stats.increment("missed_letters", 1)
 
     def keypressed(cls, pressed_key):
         exists = False
+        prefix = "wrong"
         for key in Key.keys:
             if key.key == pressed_key:
                 exists = True
+                prefix = "correct"
                 key.unreferance()
                 break
 
@@ -113,6 +118,7 @@ class Key:
             avantage_amount = -avantage_amount
 
         coregame.Character.getCharacters()[0].boost(avantage, avantage_amount)  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+        userstatistics.UserStatistics.stats.increment(prefix + "_letters", 1)
 
     getKeys = classmethod(getKeys)
     canCreateKey = classmethod(canCreateKey)

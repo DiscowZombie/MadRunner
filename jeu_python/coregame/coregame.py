@@ -21,6 +21,7 @@ import coregame.gamemodes.courseinfinie as courseinfinie
 import constantes
 import view as v
 import model
+import userstatistics
 
 import random
 
@@ -63,6 +64,7 @@ class Character:
             self.speed -= 0.1 * self.speed  # Sauter reduit sa vitesse de 10%
             self.jumping = True
             self.running = False
+            userstatistics.UserStatistics.stats.increment("nb_sauts", 1)
 
     def changeState(self, new_state):
         self.state = new_state
@@ -368,7 +370,7 @@ class CoreGame:
             key.Key.updatekeys(passed)
 
             # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haie, et distance pour course infinie)
-            self.game_mode_disp.text = self.disp_function()
+            self.game_mode_disp.text = self.disp_function(False)
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
             if new_distance == 0:
@@ -449,17 +451,39 @@ class CoreGame:
 
         self.game_mode_disp.unreferance()
 
+        new_score_record = False
+        new_gm_record = False
         if completed:
-            self.score = "%.0f" % round(self.gamemode_obj.computescore(), 0)  # Enlever les décimales du score
-            self.gamemode_score = self.disp_function()
+            num_score = self.gamemode_obj.computescore()
+            self.score = "%.0f" % round(num_score, 0)  # Enlever les décimales du score
+            self.gamemode_score, num_gm_score = self.disp_function(False), self.disp_function(True)
             self.sendscore()
+
+            # Comparer au meilleur score (local)
+            userstatistics.UserStatistics.stats.increment("score_total", num_score)
+            if userstatistics.UserStatistics.stats.best_score[self.modejeu]:
+                if num_score > userstatistics.UserStatistics.stats.best_score[self.modejeu]:
+                    new_score_record = True
+                    userstatistics.UserStatistics.stats.set("best_score", num_score, self.modejeu)
+            else:
+                userstatistics.UserStatistics.stats.set("best_score", num_score, self.modejeu)
+
+            if userstatistics.UserStatistics.stats.best_gm_score[self.modejeu]:
+                if self.gamemode_obj.isrecord(num_gm_score):
+                    new_gm_record = True
+                    userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.modejeu)
+            else:
+                userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.modejeu)
         else:
             self.score = "N/A"
             self.gamemode_score = "N/A"
-        # Transition swag ?
+            userstatistics.UserStatistics.stats.increment("nb_courses_echouees", 1)
+
+        userstatistics.UserStatistics.stats.increment("nb_courses", 1)
+        userstatistics.UserStatistics.stats.increment("total_dist", self.distance)
+        userstatistics.UserStatistics.stats.save()
 
         # Création de l'écran de fin
-
         # Surface
         LARGEUR = 450
         HAUTEUR = 0
@@ -537,10 +561,10 @@ class CoreGame:
         ARRIERE_PLAN = None
         ECART = 0
         SEUL = True
-        LARGEUR = 400
+        LARGEUR = 200
         HAUTEUR = 25
-        POSITION_X = 25
-        POSITION_Y = 10
+        POSITION_X = 12
+        POSITION_Y = 15
         SCALE_X = 0
         SCALE_Y = 0
         SCALE_WIDTH = 0
@@ -552,6 +576,33 @@ class CoreGame:
                   ECART, SEUL,
                   surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+        if new_score_record:
+            TEXTE = "NOUVEAU RECORD !"
+            ANTIALIAS = True
+            COULEUR = constantes.RED
+            FONT = "Arial"
+            TAILLE_FONT = 20
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 200
+            HAUTEUR = 25
+            POSITION_X = 225
+            POSITION_Y = 15
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = None
+            BORDURE = 0
+
+            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART, SEUL,
+                      surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         # Afficher le score spécifique du mode de jeu (temps, distance...)
         TEXTE = self.gamemodeclass.score_text + ": " + self.gamemode_score
@@ -564,10 +615,10 @@ class CoreGame:
         ARRIERE_PLAN = None
         ECART = 0
         SEUL = True
-        LARGEUR = 400
+        LARGEUR = 200
         HAUTEUR = 25
-        POSITION_X = 25
-        POSITION_Y = 40
+        POSITION_X = 12
+        POSITION_Y = 50
         SCALE_X = 0
         SCALE_Y = 0
         SCALE_WIDTH = 0
@@ -579,6 +630,33 @@ class CoreGame:
                   ECART, SEUL,
                   surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+        if new_gm_record:
+            TEXTE = "NOUVEAU RECORD !"
+            ANTIALIAS = True
+            COULEUR = constantes.RED
+            FONT = "Arial"
+            TAILLE_FONT = 20
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 200
+            HAUTEUR = 25
+            POSITION_X = 225
+            POSITION_Y = 50
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = None
+            BORDURE = 0
+
+            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART, SEUL,
+                      surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         if self.error:
             # Afficher l'erreur

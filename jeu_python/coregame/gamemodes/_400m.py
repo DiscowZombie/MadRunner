@@ -1,5 +1,7 @@
 from coregame import coregame as coregame
+
 import functions
+import userstatistics
 
 
 class _400m:
@@ -17,6 +19,9 @@ class _400m:
 
     def computescore(self):  # le score dépend du temps
         return 100000000 / coregame.CoreGame.current_core.time  # Prendre en compte la difficulité?
+
+    def isrecord(self, gm_score):
+        return gm_score < userstatistics.UserStatistics.stats.best_gm_score["400m"]
 
     def unreferance(self):
         pass

@@ -1,6 +1,7 @@
 import view
 import constantes
 import statemanager
+import userstatistics
 import functions as f
 
 from uielements import text as text
@@ -26,6 +27,7 @@ class Model:
         Model.pygame = pygame
 
     def updatemodel(cls, passed):
+        userstatistics.UserStatistics.stats.increment("temps_jeu", passed)
         currentstate, statetime = statemanager.StateManager.getstate(), statemanager.StateManager.getstatetime()
         if currentstate == statemanager.StateEnum.INITIALISATION:
             if statetime >= 3000:  # on attends 3 secondes avant de commencer, parce que sinon, la transition de l'intro est moins fluide

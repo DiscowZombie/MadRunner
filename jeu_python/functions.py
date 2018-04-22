@@ -33,8 +33,12 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
     return False
 
 
-def computetime():
+def computetime(num_value):
     temps_ms = coregame.CoreGame.current_core.time
+
+    if num_value:
+        return temps_ms
+
     aff_ms = str(temps_ms % 1000)
     temps_s = int(temps_ms // 1000)
     aff_s = temps_s % 60
@@ -48,8 +52,13 @@ def computetime():
     return str(temps_min) + ":" + aff_s + "." + aff_ms
 
 
-def computedistance():
-    return "%.0f" % round(coregame.CoreGame.current_core.distance, 0) + " m"
+def computedistance(num_value):
+    distance = coregame.CoreGame.current_core.distance
+
+    if num_value:
+        return distance
+
+    return "%.0f" % round(distance, 0) + " m"
 
 
 def delete_menu_obj():

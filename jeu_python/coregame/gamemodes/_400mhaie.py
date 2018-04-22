@@ -2,6 +2,8 @@ import pygame
 import view as v
 import constantes
 import functions
+import userstatistics
+
 from coregame import coregame as coregame
 from uielements import image as image
 
@@ -63,8 +65,11 @@ class Haie:
                 }
             ]
         )
+        userstatistics.UserStatistics.stats.increment("haies_renversees", 1)
 
     def unreferance(self):
+        if self.distance < coregame.CoreGame.current_core.distance and not self.touched:
+            userstatistics.UserStatistics.stats.increment("haies_traversees", 1)
         if self.image:
             self.image.unreferance()
             self.image = None
@@ -126,6 +131,9 @@ class _400mHaie:
             if not haie.touched and dist >= haie.distance:
                 nb_passed += 1
         return 100000000 / coregame.CoreGame.current_core.time + nb_passed*100
+
+    def isrecord(self, gm_score):
+        return gm_score < userstatistics.UserStatistics.stats.best_gm_score["400m haie"]
 
     def unreferance(self):
         for haie in list(Haie.getHaies()):

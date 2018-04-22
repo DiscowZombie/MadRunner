@@ -17,8 +17,8 @@ class View:
         self.updatewindow(View.screensize)
         self.pygame.display.set_caption("Mad Runner")
 
-        image_menu = self.pygame.image.load(f.resource_path("assets/img/menu_fond.png")).convert_alpha()
-        self.pygame.display.set_icon(image_menu)  # Icone du jeu
+        image_menu = self.pygame.image.load(f.resource_path("assets\img\menu_fond.png")).convert_alpha()
+        self.pygame.display.set_icon(image_menu)  # Icône du jeu
         View.pygame = pygame
 
     def updatewindow(cls, newsize):  # quand la fenêtre est redimensionnée, ou initialisée
