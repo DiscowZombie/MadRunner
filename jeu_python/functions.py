@@ -49,7 +49,7 @@ def computetime():
 
 
 def computedistance():
-    return int(coregame.CoreGame.distance)
+    return "%.0f" % round(coregame.CoreGame.current_core.distance, 0) + " m"
 
 
 def delete_menu_obj():

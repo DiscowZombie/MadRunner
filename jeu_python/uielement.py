@@ -41,6 +41,7 @@ class UIelement:
         self.alpha = alpha
         self.rotation = 0
         self.classname = classname  # pas sûr que ce sera utile
+        self.visible = True
         self.ismousein = False
         self.tweendata = None
         self.children = []  # pour ajouter des éléments graphiques dans d'autres

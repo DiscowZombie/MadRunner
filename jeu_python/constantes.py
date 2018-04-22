@@ -43,28 +43,34 @@ Animations = {
     },
     "normal": {
         "run": {
-            "image": "",
-            "nbimage": 0,
-            "initspeed": 20,
+            "image": "assets/img/personnages/normal/cour.png",
+            "framesize": (80, 98),
+            "nbimage": 10,
+            "initspeed": 25,
             "repeatimage": 1
         },
         "jump": {
-            "image": "",
-            "nbimage": 0,
-            "initspeed": 20,
-            "repeatimage": 1
+            "image": "assets/img/personnages/normal/saut.png",
+            "framesize": (80, 98),
+            "nbimage": 8,
+            "initspeed": 60,
+            "repeatimage": 5
         }
     },
     "athlete": {
         "run": {
-            "image": "",
-            "nbimage": 0,
-            "initspeed": 20
+            "image": "assets/img/personnages/athlete/cour.png",
+            "framesize": (80, 98),
+            "nbimage": 8,
+            "initspeed": 30,
+            "repeatimage": 1
         },
         "jump": {
-            "image": "",
-            "nbimage": 0,
-            "initspeed": 20
+            "image": "assets/img/personnages/athlete/saut.png",
+            "framesize": (80, 98),
+            "nbimage": 13,
+            "initspeed": 60,
+            "repeatimage": 11
         }
     }
 }
@@ -73,5 +79,13 @@ CharactersFeatures = {
     "gros": {
         "initspeed": 3,  # la vitesse à laquelle court le personnage à l'état initial, en m/s
         "initenergy": 100  # la quantité d'énergie initiale du personnage (et maximale)
+    },
+    "normal": {
+        "initspeed": 3.5,
+        "initenergy": 120
+    },
+    "athlete": {
+        "initspeed": 4.5,
+        "initenergy": 150
     }
 }

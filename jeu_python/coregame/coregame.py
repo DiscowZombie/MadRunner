@@ -17,6 +17,7 @@ import coregame.mapscripts.athenes as athenes
 
 import coregame.gamemodes._400m as _400m
 import coregame.gamemodes._400mhaie as _400mhaie
+import coregame.gamemodes.courseinfinie as courseinfinie
 
 import constantes
 import view as v
@@ -35,10 +36,10 @@ class Character:
 
     characters = []
 
-    def __init__(self, characterfeatures, characterinfos, posx, posy, scalex, scaley):
+    def __init__(self, characterfeatures, characterinfos, posx, posy, scalex, scaley, initdist):
         for spritename in characterinfos:
             self.__setattr__(spritename + "sprite",
-                             sprit.SpriteStripAnim(characterinfos[spritename], posx, posy, scalex, scaley))
+                             sprit.SpriteStripAnim(characterinfos[spritename]))
         self.characterinfos = characterinfos
         self.characterfeatures = characterfeatures
         self.x = posx
@@ -52,6 +53,7 @@ class Character:
         self.jumping = False  # le personnage est-il en train de sauter ?
         self.energy = characterfeatures["initenergy"]
         self.speed = characterfeatures["initspeed"]
+        self.distance = initdist  # distance du personnage par rapport à la ligne de départ
 
         Character.characters.append(self)
 
@@ -80,6 +82,8 @@ class Character:
         self.__setattr__(attribut, self.__getattribute__(attribut) + amount)
 
     def unreferance(self):
+        for spritename in self.characterinfos:
+            self.__getattribute__(spritename + "sprite").unreferance()
         Character.characters.remove(self)
 
     def getCharacters(cls):
@@ -273,7 +277,17 @@ class CoreGame:
 
         CoreGame.current_core = self
 
-        # Initialisation de la carte
+        # Chargement du personnage
+        POSITION_X = 0
+        POSITION_Y = 65
+        SCALE_X = 0.85
+        SCALE_Y = 0.35
+        INITDIST = 0
+
+        Character(constantes.CharactersFeatures["gros"], constantes.Animations["gros"], POSITION_X, POSITION_Y,
+                  SCALE_X, SCALE_Y, INITDIST)  # plus tard dans le développement du jeu, il faudra  selectionner le sprite qui convient !
+
+        # Initialisation de la carte et du mode de jeu
         if carte == "Jeux Olympiques":
             self.mapclass = jo.JeuxOlympiques
         elif carte == "Forêt":
@@ -285,19 +299,13 @@ class CoreGame:
             self.gamemodeclass = _400m._400m
         elif modejeu == "400m haie":
             self.gamemodeclass = _400mhaie._400mHaie
+        elif modejeu == "Course infinie":
+            self.gamemodeclass = courseinfinie.CourseInfinie
 
         self.map_obj = self.mapclass()
         self.gamemode_obj = self.gamemodeclass()
         self.dist_to_travel = self.gamemodeclass.dist_to_travel
         self.disp_function = self.gamemodeclass.disp_function
-
-        POSITION_X = 0
-        POSITION_Y = 65
-        SCALE_X = 0.85
-        SCALE_Y = 0.35
-
-        Character(constantes.CharactersFeatures["gros"], constantes.Animations["gros"], POSITION_X, POSITION_Y,
-                  SCALE_X,SCALE_Y)  # plus tard dans le développement du jeu, il faudra  selectionner le sprite qui convient !
 
     def loop(self, passed=0):  # update l'arrière plan + chaque personnage
 
@@ -308,12 +316,12 @@ class CoreGame:
 
             d1 = self.distance
             d2 = d1 + charspeed * (passed / 1000)
-            delta_d = d2 - d1
             delta_pixel = int(d2 * 10) - int(d1 * 10)  # nombre de pixels décalés pour l'arrière plan
 
-            self.distance += delta_d
+            self.distance = d2
             self.time += passed
             new_distance = self.distance
+            char.distance = new_distance
 
             if self.dist_to_travel:
                 """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
@@ -371,10 +379,7 @@ class CoreGame:
             if new_distance == 0:
                 new_distance = 0.01  # pas de division par 0 !
 
-            if self.modejeu == "400m" or self.modejeu == "400m haie":
-                key_chance = int(1000 / new_distance)  # la probabilité d'avoir une touche augmente avec la distance parcouru
-            else:  # course infinie
-                key_chance = int(new_distance ** 0.5 / new_distance / 1000)
+            key_chance = self.gamemodeclass.computekeychance()  # la probabilité d'avoir une touche qui s'affiche
 
             # TODO: Créé un crash en course infini:
             if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():
@@ -386,6 +391,14 @@ class CoreGame:
 
             # Mis à jour du state + conséquences de son changement
             for character in Character.getCharacters():
+
+                # Calcul de la position x des personnages autre que le joueur
+                if character != char:
+                    previous_dist = character.distance
+                    new_dist = previous_dist + character.speed * (passed / 1000)
+                    character.distance = new_dist
+                    character.x = (new_distance - character.distance) * 25
+
                 if character.running:
                     new_state = "run"
                     character.runsprite.adjustspeed(character.speed * 6)
@@ -420,16 +433,12 @@ class CoreGame:
         # Mis à jour de la position absolue des personnages
         for character in Character.getCharacters():
             current_sprite = character.__getattribute__(character.state + "sprite")
-            characterframesize = character.characterinfos[character.state]["framesize"]
             if character.jumping:
                 jump_compteur = character.jumpsprite.totalcompteur
-                extra_y_offset = (1 / 2) * (jump_compteur - 1) ** 2 - 13 * (jump_compteur - 1)  # hauteur du saut parabolique :p
+                y = (1 / 2) * (jump_compteur - 1) ** 2 - 13 * (jump_compteur - 1)  # hauteur du saut parabolique :p
             else:
-                extra_y_offset = 0
-            current_sprite.updatepos(
-                -int(characterframesize[0] / 2),
-                -int(characterframesize[1] / 2) + extra_y_offset
-            )
+                y = 0
+            current_sprite.updatepos(0, y)  # pas de x pour l'instant
 
         # Mis à jour du territoire du mode de jeu
         self.gamemode_obj.refresh()

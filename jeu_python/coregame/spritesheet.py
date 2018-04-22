@@ -7,14 +7,8 @@ import view
 
 class SpriteSheet:
 
-    def __init__(self, filename, posx, posy, scalex, scaley):
+    def __init__(self, filename):
         self.sheet = view.View.pygame.image.load(filename).convert_alpha()
-        self.x = posx
-        self.y = posy
-        self.scalex = scalex
-        self.scaley = scaley
-        self.absx = int(view.View.screen.absx + view.View.screen.abswidth*scalex + posx)
-        self.absy = int(view.View.screen.absy + view.View.screen.abswidth*scaley + posy)
 
     def load(self, nombre_images, taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement
         # Clear Strip
@@ -50,13 +44,13 @@ class SpriteStripAnim(SpriteSheet):
 
     sprite_anims = []
 
-    def __init__(self, spriteinfos, posx, posy, scalex, scaley):
-        SpriteSheet.__init__(self, spriteinfos["image"], posx, posy, scalex, scaley)
+    def __init__(self, spriteinfos):
+        SpriteSheet.__init__(self, spriteinfos["image"])
+        self.x = spriteinfos["framesize"][0]//2
+        self.y = spriteinfos["framesize"][1]//2
         self.speedcounter = 0
         self.compteur = 0
         self.totalcompteur = 0
-        self.offsetx = 0
-        self.offsety = 0
         self.state = "run"
         self.speed = spriteinfos["initspeed"]
         self.numimage = spriteinfos["nbimage"]
@@ -66,8 +60,7 @@ class SpriteStripAnim(SpriteSheet):
 
         SpriteStripAnim.sprite_anims.append(self)
 
-    def next(self):
-        # calcule et dessine la prochaine image (ou pas !)
+    def next(self):  # calcule et dessine la prochaine image (ou pas !)
         if self.speedcounter >= 60//self.speed:
             self.speedcounter = 0
             self.compteur += 1
@@ -79,23 +72,20 @@ class SpriteStripAnim(SpriteSheet):
 
         self.totalcompteur += 1
 
-    def updatepos(self, offsetx, offsety):
-        # mis à jour de positions absolues et de l'offset
-        self.absx = int(view.View.screen.abswidth * self.scalex + self.x)
-        self.absy = int(view.View.screen.absheight * self.scaley + self.y)
-        self.offsetx = offsetx
-        self.offsety = offsety
+    def updatepos(self, x, y):  # mis à jour de la position du sprite (par rapport à la position du personnage)
+        self.x = -int(self.framesize[0]/2) + x
+        self.y = -int(self.framesize[1]/2) + y
 
     def reset(self):
         self.totalcompteur = 0
         self.compteur = 0
         self.speedcounter = 0
 
-    def setOffset(self, offset):
-        self.offsety = offset
-
     def adjustspeed(self, new_speed):
         self.speed = new_speed
+
+    def unreferance(self):
+        SpriteStripAnim.sprite_anims.remove(self)
 
     def getSpriteAnims(cls):
         return SpriteStripAnim.sprite_anims
