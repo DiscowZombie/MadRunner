@@ -60,12 +60,13 @@ class View:
                 surface.draw()
         if "Rect" in UIelements:
             for rect in UIelements["Rect"]:  # ...puis les rectangles contenues dans les surfaces...
-                rect.draw()
+                if rect.visible:
+                    rect.draw()
         for classname in UIelements:  # ...puis le reste...
             if classname != "Surface" and classname != "Rect":
                 for obj in UIelements[classname]:
                     obj.draw()
-                    if hasattr(obj, "referance"):
+                    if hasattr(obj, "referance") and obj.visible:
                         if classname == "Button":  # exception pour les boutons qui ne vont pas être blité comme les autres...
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
@@ -94,8 +95,9 @@ class View:
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:
-                surface.parentsurface.referance.blit(surface.referance, (
-                surface.parentsurface.abswidth * surface.scalex + surface.x, surface.parentsurface.absheight * surface.scaley + surface.y))
+                if surface.visible:
+                    surface.parentsurface.referance.blit(surface.referance, (
+                    surface.parentsurface.abswidth * surface.scalex + surface.x, surface.parentsurface.absheight * surface.scaley + surface.y))
 
         # Dessine le personnage en dernier (si le jeu n'est pas fini)
         if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING and not coregame.CoreGame.current_core.finished:
@@ -104,7 +106,7 @@ class View:
                 character.absy = int(View.screen.absheight * character.scaley + character.y)
                 attrname = character.state + "sprite"
                 state_sprite = character.__getattribute__(attrname)
-                View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (state_sprite.absx + state_sprite.offsetx, state_sprite.absy + state_sprite.offsety))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
+                View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (character.absx + state_sprite.x, character.absy + state_sprite.y))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
 
         View.pygame.display.update()
 

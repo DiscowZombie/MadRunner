@@ -104,7 +104,7 @@ class _400mHaie:
                     if not haie.touched:
                         attrname = char.state + "sprite"
                         state_sprite = char.__getattribute__(attrname)
-                        offset = (int(haie.image.absx - (state_sprite.absx + state_sprite.offsetx)), int(haie.image.absy - (state_sprite.absy + state_sprite.offsety)))
+                        offset = (int(haie.image.absx - (char.absx + state_sprite.x)), int(haie.image.absy - (char.absy + state_sprite.y)))
                         num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(haie.image.mask, offset)  # le nombre de pixels de collision entre la haie et le personnage
                         if num_pix_col and num_pix_col > 15:  # si le personnage touche la haie de plus de 15 pixels (car bon, toucher la haie de 1 pixel...)
                             haie.tombe()
@@ -130,3 +130,8 @@ class _400mHaie:
     def unreferance(self):
         for haie in list(Haie.getHaies()):
             haie.unreferance()
+
+    def computekeychance(cls):
+        return int(800 / coregame.CoreGame.current_core.distance)  # un peut plus de chance qu'en 400m :p
+
+    computekeychance = classmethod(computekeychance)

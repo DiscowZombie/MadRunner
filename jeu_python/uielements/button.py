@@ -5,6 +5,7 @@ import controller
 import statemanager
 
 from coregame import coregame as coregame
+from coregame.gameobjects import key
 
 from uielements import surface
 from uielements import text
@@ -630,12 +631,14 @@ class BRetour(Button):
 
 
 class BPause(Button):
-    def __init__(*arguments):
-        Button.__init__(*arguments)
+    def __init__(self, *arguments):
+        Button.__init__(self, *arguments)
+        self.on = False  # est-ce en pause
 
     def button1down(self):
-        coregame.CoreGame.current_core.pause = not coregame.CoreGame.current_core.pause
-
+        self.on = not self.on
+        coregame.CoreGame.current_core.pause = self.on
+        coregame.CoreGame.current_core.surface_boutons.visible = not self.on
 
 """
 Un bouon de retour au menu après la fin du jeu
