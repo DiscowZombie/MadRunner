@@ -5,6 +5,8 @@ import os
 import functions as f
 from io import BytesIO
 
+DEBUG = False
+
 
 # Lire facilement les fichiers JSON \ Classe "privé"
 class JsonManager:
@@ -52,7 +54,7 @@ class SettingsManager:
         if not os.path.exists(self.FILE_PATH):
             file = open(self.FILE_PATH, "w")
             file.write(
-                '{ "account_settings": { "username": null, "password": null }, "game_settings": { "limit_fps": 60 } }')
+                '{ "account_settings": { "username": null, "password": null }, "game_settings": { "limit_fps": 60 }, "debug": false }')
             file.close()
 
         self.settings_file = JsonManager(self.FILE_PATH).readjson()
@@ -70,13 +72,15 @@ class StatsManager:
     def __init__(self):
         self.username = SettingsManager().readjson()["account_settings"]["username"]
         self.password = SettingsManager().readjson()["account_settings"]["password"]
-        # TODO: Debug
-        print("[DEBUG] (settings.py > l.62) Username: " + ("NULL" if self.username is None else self.username))
-        print("[DEBUG] (settings.py > l.63) Password: " + ("NULL" if self.password is None else self.password))
+
+        if DEBUG:
+            print("[DEBUG] (settings.py > l.77) Username: " + ("NULL" if self.username is None else self.username))
+            print("[DEBUG] (settings.py > l.78) Password: " + ("NULL" if self.password is None else self.password))
 
     def loadkey(self):
         if self.username is None or self.password is None:
-            print("[DEBUG] (settings.py > l.67) Using anonymous user.")
+            if DEBUG:
+                print("[DEBUG] (settings.py > l.83) Using anonymous user.")
             return
 
         try:
@@ -84,9 +88,11 @@ class StatsManager:
                                    "pseudo=" + self.username + "&password=" + self.password).readjson()
             if response is not None:
                 self.session_key = response
-                print("[DEBUG] (settings.py > l.75) Succesfully loaded a new key for user " + self.username + ".")
+                if DEBUG:
+                    print("[DEBUG] (settings.py > l.92) Succesfully loaded a new key for user " + self.username + ".")
                 return
         except pycurl.error:
             pass
 
-        print("[DEBUG] (settings.py > l.80) Can't load a key for user " + self.username + ".")
+        if DEBUG:
+            print("[DEBUG] (settings.py > l.98) Can't load a key for user " + self.username + ".")

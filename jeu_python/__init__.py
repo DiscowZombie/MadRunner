@@ -16,6 +16,8 @@ import statemanager
 
 import utils
 
+import settings
+
 # Initialisation du module
 pygame.init()
 
@@ -35,8 +37,13 @@ running = True
 
 # Limite à 60 fps ou à la valeur en config si elle est valide
 fps = utils.GameSettings().setfps()
-# TODO: DEBUG
-print("[DEBUG] (__init__ > l.37) FPS: " + str(fps))
+
+# On charge le mode DEBUG pour les développeurs
+settings.DEBUG = True if settings.SettingsManager().readjson()["debug"] is not None and settings.SettingsManager().readjson()["debug"] is True else False
+
+if settings.DEBUG:
+    print("[DEBUG] Debug mode is enabled.")
+    print("[DEBUG] (__init__ > l.46) FPS: " + str(fps))
 
 passed = 0
 
