@@ -25,7 +25,7 @@ import model
 import random
 
 """
-Ne fonctionne pour piur 60 fps pour le moment
+Ne fonctionne pour pour 60 fps pour le moment
 """
 
 
@@ -92,7 +92,6 @@ class CoreGame:
     current_core = None  # l'objet core (la partie en gros)
 
     def __init__(self, carte, modejeu, level):
-
         """
         :param carte - La carte sélectionnée. Valeurs possibles: Jeux Olympiques, Athènes, Forêt
         :param modejeu - Le mode de jeu sélectionné. Valeurs possibles: 400m, 400m haie, Course infinie
