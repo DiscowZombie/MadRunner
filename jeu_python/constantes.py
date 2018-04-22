@@ -13,9 +13,6 @@ YELLOW = (255, 255, 0)
 DARKYELLOW = (127, 127, 0)
 LIGHT_GRAY = (211, 211, 211)
 
-# Pour les chemins d'accès
-CONFIG_PATH = "config/"
-
 # Pour les requetes web (curl)
 WEBSITE_URI = "http://madrunner.discowzombie.fr/"
 

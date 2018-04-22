@@ -375,7 +375,7 @@ class CoreGame:
             if new_distance == 0:
                 new_distance = 0.01  # pas de division par 0 !
 
-          key_chance = self.gamemodeclass.computekeychance()  # la probabilité d'avoir une touche qui s'affiche
+            key_chance = self.gamemodeclass.computekeychance()  # la probabilité d'avoir une touche qui s'affiche
 
             # TODO: Créé un crash en course infini:
             if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():

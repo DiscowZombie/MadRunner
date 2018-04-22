@@ -1,6 +1,7 @@
 import json
 import constantes as c
 import pycurl
+import os
 import functions as f
 from io import BytesIO
 
@@ -40,10 +41,21 @@ class CurlManager:
 
 # Permet de récupérer les options du joueur (nombre de fps, etc...)
 class SettingsManager:
+    PATH = os.getenv('APPDATA') + "/MadRunner"
+    FILE_PATH = PATH + "/settings.json"
     settings_file = None
 
     def __init__(self):
-        self.settings_file = JsonManager(f.resource_path(c.CONFIG_PATH + "settings.json")).readjson()
+        if not os.path.exists(self.PATH):
+            os.makedirs(self.PATH)
+
+        if not os.path.exists(self.FILE_PATH):
+            file = open(self.FILE_PATH, "w")
+            file.write(
+                '{ "account_settings": { "username": null, "password": null }, "game_settings": { "limit_fps": 60 } }')
+            file.close()
+
+        self.settings_file = JsonManager(self.FILE_PATH).readjson()
 
     def readjson(self):
         return self.settings_file
