@@ -1,6 +1,5 @@
 import functions
 import uielement
-import uielements
 from uielements import button as button
 from uielements import image as image
 from uielements import surface as surface
@@ -22,10 +21,8 @@ import coregame.gamemodes.courseinfinie as courseinfinie
 import constantes
 import view as v
 import model
-import settings
 
 import random
-import pycurl
 
 """
 Ne fonctionne pour piur 60 fps pour le moment
@@ -33,7 +30,6 @@ Ne fonctionne pour piur 60 fps pour le moment
 
 
 class Character:
-
     characters = []
 
     def __init__(self, characterfeatures, characterinfos, posx, posy, scalex, scaley, initdist):
@@ -93,7 +89,6 @@ class Character:
 
 
 class CoreGame:
-
     current_core = None  # l'objet core (la partie en gros)
 
     def __init__(self, carte, modejeu, level):
@@ -139,9 +134,9 @@ class CoreGame:
         CONVERT_ALPHA = False
 
         self.barre_energie_out = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y,
-                                                     SCALE_X, SCALE_Y, LARGEUR,
-                                                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                                     BORDURE)
+                                                 SCALE_X, SCALE_Y, LARGEUR,
+                                                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                                 BORDURE)
 
         # l'intérieur (en tant qu'objet rect, et non en tant qu'objet surface)
         LARGEUR = -4
@@ -156,8 +151,8 @@ class CoreGame:
         BORDURE = 0  # rempli
 
         self.barre_energie_in = rect.Rect(self.barre_energie_out, POSITION_X, POSITION_Y, SCALE_X,
-                                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                              BORDURE)
+                                          SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                          BORDURE)
 
         # Création du texte qui affiche la vitesse
         TEXTE = ""
@@ -182,9 +177,9 @@ class CoreGame:
         BORDURE = 0
 
         self.vitesseobj = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
-                                        ECART, SEUL,
-                                        v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+                                    ECART, SEUL,
+                                    v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         # Création du texte soit pour la distance (course infinie), soit pour le temps (400m et 400m haie)
         TEXTE = ""
@@ -209,9 +204,9 @@ class CoreGame:
         BORDURE = 0
 
         self.game_mode_disp = text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                            ARRIERE_PLAN, ECART, SEUL,
-                                            v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                            HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+                                        ARRIERE_PLAN, ECART, SEUL,
+                                        v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         # Création du bouton pause
         POSITION_X = 0
@@ -254,8 +249,8 @@ class CoreGame:
         BORDURE = 0
 
         image.Image(REPERTOIRE, v.View.screen, POSITION_X,
-                                 POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                 BORDURE)
+                    POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                    BORDURE)
 
         LARGEUR = 0
         HAUTEUR = -175
@@ -326,7 +321,8 @@ class CoreGame:
             if self.dist_to_travel:
                 """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
                 # Calcul de la position x absolue du personnage
-                delta_pix_arrive = (400 - new_distance) * 25  # nb de pixels avant la ligne d'arrivé (par rapport à la position du personnage)
+                delta_pix_arrive = (
+                                           400 - new_distance) * 25  # nb de pixels avant la ligne d'arrivé (par rapport à la position du personnage)
                 pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
                 if pos_x_ligne_arrive > -2:
@@ -345,8 +341,8 @@ class CoreGame:
                         CONVERT_ALPHA = False
 
                         self.lignearriveobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X,
-                                                                  POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
-                                                                  SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                                              POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
+                                                              SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
                     else:  # sinon, on met juste à jour sa position
                         self.lignearriveobj.x = pos_x_ligne_arrive - 2
@@ -379,7 +375,7 @@ class CoreGame:
             if new_distance == 0:
                 new_distance = 0.01  # pas de division par 0 !
 
-            key_chance = self.gamemodeclass.computekeychance()  # la probabilité d'avoir une touche qui s'affiche
+          key_chance = self.gamemodeclass.computekeychance()  # la probabilité d'avoir une touche qui s'affiche
 
             # TODO: Créé un crash en course infini:
             if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():
@@ -423,7 +419,7 @@ class CoreGame:
             # Mis à jour de la taille et la couleur de la barre d'énergie
             self.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
             if char.energy >= 70:
-                color =  constantes.GREEN
+                color = constantes.GREEN
             elif char.energy >= 30:
                 color = constantes.YELLOW
             else:
@@ -468,7 +464,7 @@ class CoreGame:
         # Surface
         LARGEUR = 450
         HAUTEUR = 0
-        POSITION_X = - LARGEUR//2
+        POSITION_X = - LARGEUR // 2
         POSITION_Y = 0
         SCALE_X = 0.5
         SCALE_Y = 1
@@ -586,7 +582,6 @@ class CoreGame:
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         if self.error:
-
             # Afficher l'erreur
             TEXTE = self.error
             ANTIALIAS = True
@@ -616,15 +611,18 @@ class CoreGame:
 
     def sendscore(self):
         # Clé associé avec la session
+        """
+        TODO [BUG]: Pour le moment, elle est sur None
         key = settings.StatsManager.session_key
 
-        if not key:
+        if key is None:
             return
         try:
-            settings.BDDManager(
-                constantes.WEBSITE_URI + "send_data.php?key=" + key + "&score=" + self.score + "&coursetype=" + self.gamemodeclass.coursetype)
+            settings.CurlManager(constantes.WEBSITE_URI + "send_data.php?key=" + key + "&score=" +
+                                 self.score + "&coursetype=" + self.gamemodeclass.coursetype)
         except pycurl.error:
             self.error = "An error happened when trying to send statistics to the web server !"
+        """
 
     def unreferance(self):  # TODO: bien tout reset et bien retourner au menu (pas encore le cas)
 

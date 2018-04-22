@@ -9,5 +9,6 @@ jeu_python/test.py
 jeu_python/dist/
 jeu_python/build/
 
-# Web
+# Config (generer par l'executable)
 serveur_web/config/config.json
+jeu_python/config/settings.json

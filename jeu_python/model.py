@@ -193,7 +193,7 @@ class Model:
 
         if not from_return:  # la fuite de mémoire était causé par le fait qu'on faisait un nouvel objet image en cliquant sur retour...
             # creation de l'image d'arrière plan du menu
-            REPERTOIRE = "assets/img/background_temporaire.jpg"
+            REPERTOIRE = "assets/img/background_temporaire.png"
             POSITION_X = 0
             POSITION_Y = 0
             SCALE_X = 0

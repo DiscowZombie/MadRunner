@@ -1,6 +1,6 @@
 # Source original (en tant que support)
 #  http://www.pygame.org/wiki/Spritesheet
-
+import functions as f
 import pygame
 import view
 
