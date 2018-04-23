@@ -109,7 +109,7 @@ class CourseInfinie:
 
         for obstacle in Obstacle.getObstacles():
             if obstacle.shown:
-                if obstacle.image.absx > v.View.screen.abswidth or obstacle.image.absx + obstacle.image.abswidth < 0:  # efface les obstacles qui ne sont plus visibles
+                if obstacle.image.absx > v.View.screen.abswidth and obstacle.distance < distance:  # efface les obstacles qui ne sont plus visibles
                     obstacle.unreferance()
                 else:
                     if not obstacle.touched:
@@ -123,16 +123,16 @@ class CourseInfinie:
                     delta_pix = (obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
                     pos_x_haie = char.absx - delta_pix
                     obstacle.image.x = pos_x_haie
+                    if not obstacle.passed and obstacle.image.absx >= char.absx + 40:  # on va supposer que le personnage a toujours une largeur de 80 pixels
+                        obstacle.passed = True
+                        if not obstacle.touched:
+                            self.nb_passed += 1
             else:
                 delta_pix = (obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
                 pos_x_obstacle = char.absx - delta_pix
 
                 if pos_x_obstacle > - self.dimension_obstacle[0]:
                     obstacle.show(pos_x_obstacle, char.y + 49 - self.dimension_obstacle[1], self.dimension_obstacle[0], self.dimension_obstacle[1])  # on va supposer que le personnage a toujours une hauteur de 98 pixels
-            if not obstacle.passed and obstacle.image.absx >= char.absx + 40:  # on va supposer que le personnage a toujours une largeur de 80 pixels
-                obstacle.passed = True
-                if not obstacle.touched:
-                    self.nb_passed += 1
 
         distleft = distance + (char.absx / 25)  # distance à gauche de l'écran de la ligne de départ
         if distleft >= self.next_obstacle:

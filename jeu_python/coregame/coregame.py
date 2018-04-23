@@ -59,7 +59,7 @@ class Character:
         self.jumping = False
 
     def jump(self):
-        if not self.jumping and self.energy > 10:  # unité encore arbitraire pour l'énergie, on verra cela plus tard !
+        if not self.jumping and self.energy > 10:
             self.energy -= 10
             self.speed -= 0.1 * self.speed  # Sauter reduit sa vitesse de 10%
             self.jumping = True
@@ -359,6 +359,16 @@ class CoreGame:
                     self.end(True)
                     return
 
+            # Mis à jour de la taille et la couleur de la barre d'énergie
+            self.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
+            if char.energy >= 70:
+                color = constantes.GREEN
+            elif char.energy >= 30:
+                color = constantes.YELLOW
+            else:
+                color = constantes.RED
+            self.barre_energie_in.color = color
+
             # Vérifie qu'il y a assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
             if char.energy <= 0:
                 self.end(False)
@@ -397,13 +407,15 @@ class CoreGame:
                     new_dist = previous_dist + character.speed * (passed / 1000)
                     character.distance = new_dist
                     character.x = (new_distance - character.distance) * 25
-
+                y = 0
                 if character.running:
                     new_state = "run"
                     character.runsprite.adjustspeed(character.speed * 6)
                 elif character.jumping:
-                    jump_compteur = character.jumpsprite.totalcompteur
-                    if jump_compteur == 27:  # atterissage d'un saut
+                    t = character.jumpsprite.time/1000
+                    z = (1 / 2) * 9.81 * t ** 2 - 8 * t  # physique
+                    y = z * 25
+                    if y > 0:
                         new_state = "run"
                         character.run()
                     else:
@@ -417,27 +429,9 @@ class CoreGame:
                 character.changeState(new_state)
 
                 # Chargement de la prochaine image du personnage
-                character.__getattribute__(new_state + "sprite").next()
-
-            # Mis à jour de la taille et la couleur de la barre d'énergie
-            self.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
-            if char.energy >= 70:
-                color = constantes.GREEN
-            elif char.energy >= 30:
-                color = constantes.YELLOW
-            else:
-                color = constantes.RED
-            self.barre_energie_in.color = color
-
-        # Mis à jour de la position absolue des personnages
-        for character in Character.getCharacters():
-            current_sprite = character.__getattribute__(character.state + "sprite")
-            if character.jumping:
-                jump_compteur = character.jumpsprite.totalcompteur
-                y = (1 / 2) * (jump_compteur - 1) ** 2 - 13 * (jump_compteur - 1)  # hauteur du saut parabolique :p
-            else:
-                y = 0
-            current_sprite.updatepos(0, y)  # pas de x pour l'instant
+                new_state_sprite = character.__getattribute__(new_state + "sprite")
+                new_state_sprite.next(passed)
+                new_state_sprite.updatepos(0, y)  # pas de x pour l'instant
 
         # Mis à jour du territoire du mode de jeu
         self.gamemode_obj.refresh()

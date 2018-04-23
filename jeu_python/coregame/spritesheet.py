@@ -51,6 +51,7 @@ class SpriteStripAnim(SpriteSheet):
         self.speedcounter = 0
         self.compteur = 0
         self.totalcompteur = 0
+        self.time = 0
         self.state = "run"
         self.speed = spriteinfos["initspeed"]
         self.numimage = spriteinfos["nbimage"]
@@ -60,7 +61,7 @@ class SpriteStripAnim(SpriteSheet):
 
         SpriteStripAnim.sprite_anims.append(self)
 
-    def next(self):  # calcule et dessine la prochaine image (ou pas !)
+    def next(self, passed):  # calcule et dessine la prochaine image (ou pas !)
         if self.speedcounter >= 60//self.speed:
             self.speedcounter = 0
             self.compteur += 1
@@ -71,6 +72,7 @@ class SpriteStripAnim(SpriteSheet):
             self.compteur = self.repeatimage - 1
 
         self.totalcompteur += 1
+        self.time += passed
 
     def updatepos(self, x, y):  # mis à jour de la position du sprite (par rapport à la position du personnage)
         self.x = -int(self.framesize[0]/2) + x
@@ -80,6 +82,7 @@ class SpriteStripAnim(SpriteSheet):
         self.totalcompteur = 0
         self.compteur = 0
         self.speedcounter = 0
+        self.time = 0
 
     def adjustspeed(self, new_speed):
         self.speed = new_speed
