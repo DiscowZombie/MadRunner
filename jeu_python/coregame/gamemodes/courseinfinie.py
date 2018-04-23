@@ -45,7 +45,7 @@ class Obstacle:
 
     def tombe(self):  # faire tomber l'obstacle
         self.touched = True
-        self.image.tween(  # transition de la rotation de l(obstacle pour voir qu'il tombe
+        self.image.tween(  # transition de la rotation de l'obstacle pour voir qu'il tombe
             0.2,
             [
                 {
@@ -82,7 +82,7 @@ class CourseInfinie:
         img_obstacle = pygame.image.load(functions.resource_path("assets/img/decors/" + coregame.CoreGame.current_core.carte + "/obstacle.png"))
         self.dimension_obstacle = (img_obstacle.get_width(), img_obstacle.get_height())
         self.farthest = 20  # la distace de l'obstacle le plus éloigné de la ligne de départ
-        self.nb_passed = 0 # nombre d'obstacles passés (càd sans le renverser)
+        self.nb_passed = 0  # nombre d'obstacles passés (càd sans le renverser)
         CourseInfinie.disp_function = functions.computedistance
         Obstacle(self.farthest)  # premier obstacle à 20 mètres de la ligne de départ
         self.next_obstacle = self.farthest + 35*random.randint(5, 10)/10
@@ -94,7 +94,7 @@ class CourseInfinie:
         SCALE_Y = 0.35
         INITDIST = - 2
 
-        self.courseur = coregame.Character(constantes.CharactersFeatures["normal"], constantes.Animations["normal"], POSITION_X, POSITION_Y,
+        self.courseur = coregame.Character(constantes.CharactersFeatures["normal"], constantes.Animations["poursuiveur"], POSITION_X, POSITION_Y,
                   SCALE_X, SCALE_Y, INITDIST)
 
     def refresh(self):

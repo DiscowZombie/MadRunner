@@ -1,6 +1,8 @@
 import shelve
 import settings
 
+SAVE_PATH = settings.PATH + "/game_stats"
+
 
 class UserStatistics:
 
@@ -31,7 +33,7 @@ class UserStatistics:
         self.temps_jeu = 0
 
     def load(self):
-        base = shelve.open(settings.PATH + "/game_stats")
+        base = shelve.open(SAVE_PATH)
 
         if "stats_obj" in base:
             for attrname in self.__dict__:
@@ -45,7 +47,7 @@ class UserStatistics:
     def save(self):
         UserStatistics.data["stats_obj"] = self
         UserStatistics.data.close()
-        UserStatistics.data = shelve.open("game_stats")
+        UserStatistics.data = shelve.open(SAVE_PATH)
 
     def set(self, statname, value, statname2=None):
         if statname2:

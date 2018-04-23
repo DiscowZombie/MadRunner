@@ -69,20 +69,39 @@ Animations = {
             "initspeed": 60,
             "repeatimage": 11
         }
+    },
+    "poursuiveur": {
+        "run": {
+            "image": "assets/img/personnages/poursuiveur/cour.png",
+            "framesize": (80, 98),
+            "nbimage": 10,
+            "initspeed": 30,
+            "repeatimage": 1
+        },
+        "jump": {
+            "image": "assets/img/personnages/poursuiveur/saut.png",
+            "framesize": (80, 98),
+            "nbimage": 8,
+            "initspeed": 60,
+            "repeatimage": 6
+        }
     }
 }
 
 CharactersFeatures = {
     "gros": {
+        "image": "assets\img\personnages\gros\idle.png",
         "initspeed": 3,  # la vitesse à laquelle court le personnage à l'état initial, en m/s
         "initenergy": 100  # la quantité d'énergie initiale du personnage (et maximale)
     },
     "normal": {
-        "initspeed": 3.5,
+        "image": "assets/img/personnages/normal/idle.png",
+        "initspeed": 4,
         "initenergy": 120
     },
     "athlete": {
-        "initspeed": 4.5,
+        "image": "assets/img/personnages/athlete/idle.png",
+        "initspeed": 5,
         "initenergy": 150
     }
 }

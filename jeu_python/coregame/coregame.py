@@ -280,7 +280,9 @@ class CoreGame:
         SCALE_Y = 0.35
         INITDIST = 0
 
-        Character(constantes.CharactersFeatures["gros"], constantes.Animations["gros"], POSITION_X, POSITION_Y,
+        self.personnage = functions.getrunner()  # le personnage avec lequel le joueur va jouer
+
+        Character(constantes.CharactersFeatures[self.personnage], constantes.Animations[self.personnage], POSITION_X, POSITION_Y,
                   SCALE_X, SCALE_Y, INITDIST)  # plus tard dans le développement du jeu, il faudra  selectionner le sprite qui convient !
 
         # Initialisation de la carte et du mode de jeu
@@ -503,53 +505,6 @@ class CoreGame:
                                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                BORDURE)
 
-        surf.tween(
-            0.35,
-            [
-                {
-                    "name": "scaley",
-                    "value": 0.5
-                },
-                {
-                    "name": "height",
-                    "value": 380
-                },
-                {
-                    "name": "y",
-                    "value": -190
-                }
-            ]
-        )
-
-        # Image "End"
-        # Charger l'image de fin
-
-        # Afficher des boutons
-        POSITION_X = 10
-        POSITION_Y = 335
-        SCALE_X = 0
-        SCALE_Y = 0
-        LARGEUR = 430
-        HAUTEUR = 35
-        SCALE_WIDTH = 0
-        SCALE_HEIGHT = 0
-        COULEUR = constantes.GRAY
-        ANTIALIAS = True
-        COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
-        FONT = "Arial"
-        TAILLE_FONT = 24
-        CENTRE_X = True
-        CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
-        ECART = 0
-        BORDURE = 0  # rempli
-
-        button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                           CENTRE_Y,
-                           ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
-                           SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
-
         # Afficher le score
         TEXTE = "Score: " + self.score
         ANTIALIAS = True
@@ -685,6 +640,211 @@ class CoreGame:
                       ECART, SEUL,
                       surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+        def surf_tween_ended():
+            # Image "End"
+            # Charger l'image de fin
+
+            new_runner = functions.getrunner()
+
+            # Afficher des boutons
+            POSITION_X = 10
+            POSITION_Y = 335
+            SCALE_X = 0
+            SCALE_Y = 0
+            LARGEUR = 430
+            HAUTEUR = 35
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR = constantes.GRAY
+            ANTIALIAS = True
+            COULEUR_TEXTE = constantes.BLACK
+            ARRIERE_PLAN_TEXTE = COULEUR
+            FONT = "Arial"
+            TAILLE_FONT = 24
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = COULEUR
+            ECART = 0
+            BORDURE = 0  # rempli
+
+            bouton_menu = button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                               CENTRE_Y,
+                               ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
+                               SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+            bouton_menu.visible = self.personnage == new_runner
+
+            if self.personnage != new_runner:  # le personnage a-t-il évoluer ?
+
+                TEXTE = "Félicitation ! Votre personnage s'est amélioré !"
+                ANTIALIAS = True
+                COULEUR = constantes.RED
+                FONT = "Arial"
+                TAILLE_FONT = 24
+                CENTRE_X = True
+                CENTRE_Y = True
+                ARRIERE_PLAN = None
+                ECART = 0
+                SEUL = True
+                LARGEUR = 400
+                HAUTEUR = 25
+                POSITION_X = 15
+                POSITION_Y = 110
+                SCALE_X = 0
+                SCALE_Y = 0
+                SCALE_WIDTH = 0
+                SCALE_HEIGHT = 0
+                COULEUR_ARRIERE = None
+                BORDURE = 0
+
+                text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                          ECART, SEUL,
+                          surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+                # Surface sur laquelle le personnage est blité
+                LARGEUR = 150
+                HAUTEUR = 150
+                POSITION_X = -70
+                POSITION_Y = -35
+                SCALE_X = 0.5
+                SCALE_Y = 0.5
+                SCALE_WIDTH = 0
+                SCALE_HEIGHT = 0
+                COULEUR = constantes.LIGHT_GRAY
+                BORDURE = 0  # rempli
+                ALPHA = 255  # opaque
+                CONVERT_ALPHA = False
+
+                surf_pers = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y,
+                                       SCALE_X, SCALE_Y, LARGEUR,
+                                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                       BORDURE)
+
+                REPERTOIRE = constantes.CharactersFeatures[self.personnage]["image"]
+                LARGEUR = 150
+                HAUTEUR = 150
+                POSITION_X = 0
+                POSITION_Y = 0
+                SCALE_X = 0
+                SCALE_Y = 0
+                SCALE_WIDTH = 0
+                SCALE_HEIGHT = 0
+                COULEUR = None
+                BORDURE = 0
+
+                self.old_pers = image.Image(REPERTOIRE, surf_pers, POSITION_X,
+                                          POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                          BORDURE)
+
+                self.old_pers.tween(
+                    2,
+                    [
+                       {
+                           "name": "width",
+                           "value": 0
+                        },
+                        {
+                            "name": "height",
+                            "value": 0
+                        },
+                        {
+                            "name": "x",
+                            "value": 75
+                        },
+                        {
+                            "name": "y",
+                            "value": 75
+                        },
+                    ]
+
+                )
+
+                def surf_pers_end():
+                    self.old_pers.unreferance()
+                    self.old_pers = None
+
+                    REPERTOIRE = constantes.CharactersFeatures[new_runner]["image"]
+                    LARGEUR = 0
+                    HAUTEUR = 0
+                    POSITION_X = 75
+                    POSITION_Y = 75
+                    SCALE_X = 0
+                    SCALE_Y = 0
+                    SCALE_WIDTH = 0
+                    SCALE_HEIGHT = 0
+                    COULEUR = None
+                    BORDURE = 0
+
+                    new_pers = image.Image(REPERTOIRE, surf_pers, POSITION_X,
+                                              POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                              BORDURE)
+
+                    new_pers.tween(
+                        2,
+                        [
+                            {
+                                "name": "width",
+                                "value": 150
+                            },
+                            {
+                                "name": "height",
+                                "value": 150
+                            },
+                            {
+                                "name": "x",
+                                "value": 0
+                            },
+                            {
+                                "name": "y",
+                                "value": 0
+                            }
+                        ],
+                    )
+
+                    def on_new_pers():
+                        bouton_menu.visible = True
+
+                    surf_pers.tween(
+                        2,
+                        [
+                            {
+                                "name": "alpha",
+                                "value": 255
+                            }
+                        ],
+                        on_new_pers
+                    )
+
+                surf_pers.tween(
+                    2,
+                    [
+                        {
+                            "name": "alpha",
+                            "value": 0
+                        }
+                    ],
+                    surf_pers_end
+                )
+
+        surf.tween(
+            0.35,
+            [
+                {
+                    "name": "scaley",
+                    "value": 0.5
+                },
+                {
+                    "name": "height",
+                    "value": 380
+                },
+                {
+                    "name": "y",
+                    "value": -190
+                }
+            ],
+            surf_tween_ended
+        )
 
     def sendscore(self):
         # Clé associé avec la session

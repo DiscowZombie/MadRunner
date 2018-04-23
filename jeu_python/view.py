@@ -46,7 +46,7 @@ class View:
 
         for classname in UIelements:  # on met à jour les position absolues des éléments graphiques en premier...
             for obj in UIelements[classname]:
-                if hasattr(obj, "tweendata") and obj.tweendata:  # tout d'abord, on calcule la nouvelle valeur des attributs qui sont transitionnés
+                if obj.tweendata:  # tout d'abord, on calcule la nouvelle valeur des attributs qui sont transitionnés
                     obj.updatetween()
                     tweenobj.append(obj)
                 parentsurface = obj.parentsurface
@@ -114,8 +114,12 @@ class View:
             obj.tweendata["passed"] += passed / 1000
             if obj.tweendata["passed"] >= obj.tweendata["duration"]:
                 obj.tweendata["passed"] = obj.tweendata["duration"]
-                obj.updatetween()  # on met la durée à l'état final, car il peut y avoir de gros décalage en cas de performance pas assez élevé
-                delattr(obj, "tweendata")  # transition finie
+                obj.updatetween()
+                previous_tween_data = obj.tweendata
+                if obj.tweendata["endfunction"]:
+                    obj.tweendata["endfunction"]()
+                if obj.tweendata == previous_tween_data:
+                    obj.tweendata = None
 
     updatewindow = classmethod(updatewindow)
     updatescreen = classmethod(updatescreen)

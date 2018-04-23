@@ -63,20 +63,23 @@ class Button(uielement.UIelement):
         self.ismousein = isin
         if isin:
             # vérifie si on est en train de cliquer dessus
-            if controller.Controller.getpressingbuttons()["Mouse1"]:
+            if controller.Controller.getpressingbuttons()["Mouse1"] and self.visible:
                 self.button1down()
 
     mousein = property(getmousein, setmousein)
 
     def create(self):  # pour créer l'élément graphique
         parentsurface = self.parentsurface
-        rectangle = view.View.pygame.draw.rect(
-            self.parentsurface.referance,
-            self.color,
-            [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
-             parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height],
-            self.bordersize
-        )
+        if self.visible:
+            rectangle = view.View.pygame.draw.rect(
+                self.parentsurface.referance,
+                self.color,
+                [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
+                 parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height],
+                self.bordersize
+            )
+        else:
+            rectangle = self.referance
         self.textobj.create()
         return rectangle
 

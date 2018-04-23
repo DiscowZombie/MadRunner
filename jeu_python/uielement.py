@@ -16,7 +16,7 @@ class UIelement:
     """
 
     def __init__(self, surface_obj, posx, posy, scalex, scaley, width, height, scalew, scaleh, color, bordersize, classname,
-                 alpha = None, isscreen = False):
+                 alpha=255, isscreen=False):
         self.x = posx
         self.y = posy
         if isscreen:  # petite exception pour l'objet écran, car celui-ci n'a pas de descendant, donc ça pose problème pour les positions et tailles absolues (qui dépendent des valeurs des parents)
@@ -59,11 +59,12 @@ class UIelement:
     def rotate(self, degree):  # faire la rotation d'une surface
         self.rotation += degree
 
-    def tween(self, duration, attributes):  # transition linéaire d'attributs d'un objet, "duration" en secondes
+    def tween(self, duration, attributes, endfunction=None):  # transition linéaire d'attributs d'un objet, "duration" en secondes
         self.tweendata = {  # pour ajouter des attributs à transitionner, mettre dans dans une liste un dictionnaire avec son nom ["name"] et sa valeur finale ["value"]
             "duration": duration,
             "passed": 0,
-            "attributes": []
+            "attributes": [],
+            "endfunction": endfunction
         }
 
         for attributdict in attributes:

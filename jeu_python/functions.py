@@ -1,10 +1,12 @@
-
-
 from coregame import coregame as coregame
+
 import uielements.text as text
 import uielements.surface as surface
 import uielements.button as button
 import uielements.checkbox as checkbox
+
+import userstatistics
+
 import sys
 import os
 
@@ -31,6 +33,17 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
     if posx >= minx and posx <= maxx and posy >= miny and posy <= maxy:
         return True
     return False
+
+
+def getrunner():  # retourne le personnage avec lequel le joueur va jouer à partir de ses stats (gros, normal ou athlète)
+    stats_obj = userstatistics.UserStatistics.stats
+    if stats_obj.nb_courses - stats_obj.nb_courses_echouees >= 100 and stats_obj.score_total >= 250000 and stats_obj.haies_traversees >= 300 and stats_obj.total_dist >= 42195:
+        # Au moins 100 courses gagnés, un score total d'au moins 250000, avoir traversé au moins 300 haies, avoir une distance totale d'au moins 42,195 km (marathon :p)
+        return "athlete"
+    if stats_obj.nb_courses - stats_obj.nb_courses_echouees >= 10 and stats_obj.score_total >= 20000 and stats_obj.haies_traversees >= 50:
+        # Au moins 10 courses gagnés, un score total d'au moins 20000, avoir traversé au moins 50 haies
+        return "normal"
+    return "gros"
 
 
 def computetime(num_value):

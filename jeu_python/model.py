@@ -168,7 +168,7 @@ class Model:
         settings.StatsManager().loadkey()
 
     def introsurfacetweening(cls):
-        return hasattr(surface.Surface.getSurfaces()[0], "tweendata")
+        return surface.Surface.getSurfaces()[0].tweendata
 
     def middleintro(cls):
         Model.firstintro = False

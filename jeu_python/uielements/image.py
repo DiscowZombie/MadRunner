@@ -21,18 +21,16 @@ class Image(uielement.UIelement):
         Image.images.append(self)
 
     def create(self, resize, xresize=None, yresize=None):
-        image = pygame.image.load(self.imagepath)
+        image = pygame.image.load(self.imagepath).convert_alpha()
         if resize:
             image = pygame.transform.scale(image, (
             xresize or int(self.parentsurface.abswidth * self.scalew + self.width),
             yresize or int(self.parentsurface.absheight * self.scaleh + self.height)))
-        image.convert_alpha()
         return image
 
     def draw(self):
         self.referance = pygame.transform.scale(self.originalimage, (int(self.abswidth), int(self.absheight)))
         self.referance = pygame.transform.rotate(self.referance, self.rotation)
-        self.referance.convert_alpha()
 
     def unreferance(self):
         Image.images.remove(self)
