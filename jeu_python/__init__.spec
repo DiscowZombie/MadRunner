@@ -5,7 +5,7 @@
 block_cipher = None
 
 added_files = [
-         ( '..\\LICENSE', 'LICENSE' ),
+         ( '..\\LICENSE', '' ),
          ( 'assets', 'assets' )]
 a = Analysis(['__init__.py'],
              pathex=['C:\\Users\\€¤\\PycharmProjects\\MadRunner\\jeu_python'],
