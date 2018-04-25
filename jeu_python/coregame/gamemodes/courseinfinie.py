@@ -119,10 +119,10 @@ class CourseInfinie:
                         num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(obstacle.image.mask, offset)  # le nombre de pixels de collision entre l'obstacle et le personnage
                         if num_pix_col and num_pix_col > 15:  # si le personnage touche l'obstacle de plus de 15 pixels (car bon, toucher l'obstacle de 1 pixel...)
                             obstacle.tombe()
-                            char.speed -= 0.35 * char.speed  # se prendre un obstacle réduit la vitesse de 35%
+                            char.speed -= (coregame.CoreGame.current_core.level_obj.hitpenality/100) * char.speed  # se prendre un obstacle réduit la vitesse de 35%
                     delta_pix = (obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
-                    pos_x_haie = char.absx - delta_pix
-                    obstacle.image.x = pos_x_haie
+                    pos_x_obs = char.absx - delta_pix
+                    obstacle.image.x = pos_x_obs
                     if not obstacle.passed and obstacle.image.absx >= char.absx + 40:  # on va supposer que le personnage a toujours une largeur de 80 pixels
                         obstacle.passed = True
                         if not obstacle.touched:
@@ -140,14 +140,14 @@ class CourseInfinie:
             self.farthest = self.next_obstacle
             self.next_obstacle = self.farthest + 35*random.randint(5, 15)/10
 
-        self.courseur.speed = distance/distance**0.73
+        self.courseur.speed = distance/distance**(0.73 + coregame.CoreGame.current_core.level_obj.courseurspeed/100)
 
     def computescore(self):  # le score dépend de la distance parcourue et du nombre d'obstacles non renversées
         dist = coregame.CoreGame.current_core.distance
         return dist + 100 * self.nb_passed
 
-    def isrecord(self, gm_score):
-        return gm_score > userstatistics.UserStatistics.stats.best_gm_score["Course infinie"]
+    def isrecord(self, level, gm_score):
+        return gm_score > userstatistics.UserStatistics.stats.best_gm_score[level]["Course infinie"]
 
     def unreferance(self):
         for obstacle in list(Obstacle.getObstacles()):

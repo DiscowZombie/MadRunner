@@ -29,6 +29,7 @@ class View:
                                      None, True)
         screen.referance = View.pygame.display.set_mode(newsize, View.pygame.RESIZABLE)
         View.screen = screen
+        View.screen.updated = True  # n'est sur True que pendant 1 image ! Il permet aux objets de savoir que l'écran a été redimensionné
 
         UIelements = uielement.UIelement.getUIelements()
         for classname in UIelements:
@@ -42,18 +43,6 @@ class View:
         View.screen.referance.blit(a, (0, 0))
 
         UIelements = uielement.UIelement.getUIelements()
-        tweenobj = []
-
-        for classname in UIelements:  # on met à jour les position absolues des éléments graphiques en premier...
-            for obj in UIelements[classname]:
-                if obj.tweendata:  # tout d'abord, on calcule la nouvelle valeur des attributs qui sont transitionnés
-                    obj.updatetween()
-                    tweenobj.append(obj)
-                parentsurface = obj.parentsurface
-                obj.absx = int(parentsurface.absx + parentsurface.abswidth * obj.scalex + obj.x)
-                obj.absy = int(parentsurface.absy + parentsurface.absheight * obj.scaley + obj.y)
-                obj.abswidth = int(parentsurface.abswidth * obj.scalew + obj.width)
-                obj.absheight = int(parentsurface.absheight * obj.scaleh + obj.height)
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:  # ...puis on met à jour les surfaces...
@@ -109,17 +98,7 @@ class View:
                 View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (character.absx + state_sprite.x, character.absy + state_sprite.y))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
 
         View.pygame.display.update()
-
-        for obj in tweenobj:
-            obj.tweendata["passed"] += passed / 1000
-            if obj.tweendata["passed"] >= obj.tweendata["duration"]:
-                obj.tweendata["passed"] = obj.tweendata["duration"]
-                obj.updatetween()
-                previous_tween_data = obj.tweendata
-                if obj.tweendata["endfunction"]:
-                    obj.tweendata["endfunction"]()
-                if obj.tweendata == previous_tween_data:
-                    obj.tweendata = None
+        View.screen.updated = False
 
     updatewindow = classmethod(updatewindow)
     updatescreen = classmethod(updatescreen)

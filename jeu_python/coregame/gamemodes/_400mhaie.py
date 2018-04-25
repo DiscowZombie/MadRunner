@@ -113,7 +113,7 @@ class _400mHaie:
                         num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(haie.image.mask, offset)  # le nombre de pixels de collision entre la haie et le personnage
                         if num_pix_col and num_pix_col > 15:  # si le personnage touche la haie de plus de 15 pixels (car bon, toucher la haie de 1 pixel...)
                             haie.tombe()
-                            char.speed -= 0.35 * char.speed  # se prendre une haie réduit la vitesse de 35%
+                            char.speed -= (coregame.CoreGame.current_core.level_obj.hitpenality/100) * char.speed
                     delta_pix = (haie.distance - distance) * 25  # nombre de pixel avant la haie par rapport au personnage
                     pos_x_haie = char.absx - delta_pix
                     haie.image.x = pos_x_haie
@@ -132,8 +132,8 @@ class _400mHaie:
                 nb_passed += 1
         return 100000000 / coregame.CoreGame.current_core.time + nb_passed*100
 
-    def isrecord(self, gm_score):
-        return gm_score < userstatistics.UserStatistics.stats.best_gm_score["400m haie"]
+    def isrecord(self, level, gm_score):
+        return gm_score < userstatistics.UserStatistics.stats.best_gm_score[level]["400m haie"]
 
     def unreferance(self):
         for haie in list(Haie.getHaies()):

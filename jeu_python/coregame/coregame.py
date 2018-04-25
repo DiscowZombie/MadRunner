@@ -9,6 +9,7 @@ import statemanager
 
 import coregame.spritesheet as sprit
 import coregame.gameobjects.key as key
+import coregame.difficulty as difficulty
 
 import coregame.mapscripts.jeuxolympiques as jo
 import coregame.mapscripts.foret as foret
@@ -61,7 +62,7 @@ class Character:
     def jump(self):
         if not self.jumping and self.energy > 10:
             self.energy -= 10
-            self.speed -= 0.1 * self.speed  # Sauter reduit sa vitesse de 10%
+            self.speed -= 0.3  # Sauter reduit sa vitesse de 0.3 m/s (1.08 km/h)
             self.jumping = True
             self.running = False
             userstatistics.UserStatistics.stats.increment("nb_sauts", 1)
@@ -300,6 +301,13 @@ class CoreGame:
         elif modejeu == "Course infinie":
             self.gamemodeclass = courseinfinie.CourseInfinie
 
+        if level == "Facile":
+            self.level_obj = difficulty.Facile()
+        elif level == "Moyen":
+            self.level_obj = difficulty.Moyen()
+        elif level == "Difficile":
+            self.level_obj = difficulty.Difficile()
+
         self.map_obj = self.mapclass()
         self.gamemode_obj = self.gamemodeclass()
         self.dist_to_travel = self.gamemodeclass.dist_to_travel
@@ -392,7 +400,7 @@ class CoreGame:
 
             # TODO: Créé un crash en course infini:
             if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():
-                key.Key(self.surface_boutons, 10)  # timeout qui dépend de la difficulté
+                key.Key(self.surface_boutons, self.level_obj.keytimeout)  # timeout qui dépend de la difficulté
 
             for decors in self.map_obj.getDecors():
                 for surfaceobj in decors:
@@ -416,6 +424,7 @@ class CoreGame:
                     z = (1 / 2) * 9.81 * t ** 2 - 8 * t  # physique
                     y = z * 25
                     if y > 0:
+                        y = 0
                         new_state = "run"
                         character.run()
                     else:
@@ -439,6 +448,10 @@ class CoreGame:
         # Mis à jour de l'arrière plan de la carte
         self.map_obj.refresh()
 
+        # Mis à jour de la grille (si elle existe)
+        if self.level_obj.grille:
+            self.level_obj.grille.updatecontent()
+
     def end(self, completed):
         self.finished = True
 
@@ -446,6 +459,7 @@ class CoreGame:
             k.unreferance()
 
         self.game_mode_disp.unreferance()
+        self.gamemode_obj.unreferance()
 
         new_score_record = False
         new_gm_record = False
@@ -457,19 +471,19 @@ class CoreGame:
 
             # Comparer au meilleur score (local)
             userstatistics.UserStatistics.stats.increment("score_total", num_score)
-            if userstatistics.UserStatistics.stats.best_score[self.modejeu]:
-                if num_score > userstatistics.UserStatistics.stats.best_score[self.modejeu]:
+            if userstatistics.UserStatistics.stats.best_score[self.level][self.modejeu]:
+                if num_score > userstatistics.UserStatistics.stats.best_score[self.level][self.modejeu]:
                     new_score_record = True
-                    userstatistics.UserStatistics.stats.set("best_score", num_score, self.modejeu)
+                    userstatistics.UserStatistics.stats.set("best_score", num_score, self.level, self.modejeu)
             else:
-                userstatistics.UserStatistics.stats.set("best_score", num_score, self.modejeu)
+                userstatistics.UserStatistics.stats.set("best_score", num_score, self.level, self.modejeu)
 
-            if userstatistics.UserStatistics.stats.best_gm_score[self.modejeu]:
-                if self.gamemode_obj.isrecord(num_gm_score):
+            if userstatistics.UserStatistics.stats.best_gm_score[self.level][self.modejeu]:
+                if self.gamemode_obj.isrecord(self.level, num_gm_score):
                     new_gm_record = True
-                    userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.modejeu)
+                    userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.level, self.modejeu)
             else:
-                userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.modejeu)
+                userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.level, self.modejeu)
         else:
             self.score = "N/A"
             self.gamemode_score = "N/A"
@@ -858,7 +872,6 @@ class CoreGame:
     def unreferance(self):  # TODO: bien tout reset et bien retourner au menu (pas encore le cas)
 
         self.map_obj.unreferance()
-        self.gamemode_obj.unreferance()
 
         for character in list(Character.getCharacters()):
             character.unreferance()

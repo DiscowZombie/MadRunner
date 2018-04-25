@@ -11,14 +11,38 @@ class UserStatistics:
 
     def __init__(self):
         self.best_score = {
-            "400m": None,
-            "400m haie": None,
-            "Course infinie": None
+            "Facile": {
+                "400m": None,
+                "400m haie": None,
+                "Course infinie": None
+            },
+            "Moyen": {
+                "400m": None,
+                "400m haie": None,
+                "Course infinie": None
+            },
+            "Difficile": {
+                "400m": None,
+                "400m haie": None,
+                "Course infinie": None
+            }
         }
         self.best_gm_score = {
-            "400m": None,
-            "400m haie": None,
-            "Course infinie": None
+            "Facile": {
+                "400m": None,
+                "400m haie": None,
+                "Course infinie": None
+            },
+            "Moyen": {
+                "400m": None,
+                "400m haie": None,
+                "Course infinie": None
+            },
+            "Difficile": {
+                "400m": None,
+                "400m haie": None,
+                "Course infinie": None
+            }
         }
         self.score_total = 0
         self.nb_courses = 0
@@ -49,9 +73,9 @@ class UserStatistics:
         UserStatistics.data.close()
         UserStatistics.data = shelve.open(SAVE_PATH)
 
-    def set(self, statname, value, statname2=None):
-        if statname2:
-            self.__getattribute__(statname)[statname2] = value
+    def set(self, statname, value, statname2=None, statname3=None):
+        if statname2 and statname3:
+            self.__getattribute__(statname)[statname2][statname3] = value
         else:
             self.__setattr__(statname, value)
 

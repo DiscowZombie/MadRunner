@@ -1,6 +1,7 @@
 import view
 import constantes
 import statemanager
+import uielement
 import userstatistics
 import functions as f
 
@@ -27,6 +28,28 @@ class Model:
         Model.pygame = pygame
 
     def updatemodel(cls, passed):
+
+        UIelements = uielement.UIelement.getUIelements()
+
+        for classname in UIelements:  # on met à jour les position absolues des éléments graphiques en premier...
+            for obj in UIelements[classname]:
+                if obj.tweendata:  # tout d'abord, on calcule la nouvelle valeur des attributs qui sont transitionnés
+                    obj.updatetween()
+                    obj.tweendata["passed"] += passed / 1000
+                    if obj.tweendata["passed"] >= obj.tweendata["duration"]:
+                        obj.tweendata["passed"] = obj.tweendata["duration"]
+                        obj.updatetween()
+                        previous_tween_data = obj.tweendata
+                        if obj.tweendata["endfunction"]:
+                            obj.tweendata["endfunction"]()
+                        if obj.tweendata == previous_tween_data:
+                            obj.tweendata = None
+                parentsurface = obj.parentsurface
+                obj.absx = int(parentsurface.absx + parentsurface.abswidth * obj.scalex + obj.x)
+                obj.absy = int(parentsurface.absy + parentsurface.absheight * obj.scaley + obj.y)
+                obj.abswidth = int(parentsurface.abswidth * obj.scalew + obj.width)
+                obj.absheight = int(parentsurface.absheight * obj.scaleh + obj.height)
+
         userstatistics.UserStatistics.stats.increment("temps_jeu", passed)
         currentstate, statetime = statemanager.StateManager.getstate(), statemanager.StateManager.getstatetime()
         if currentstate == statemanager.StateEnum.INITIALISATION:
