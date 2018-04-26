@@ -10,6 +10,7 @@ from uielements import surface as surface
 from uielements import button as button
 from uielements import image as image
 from uielements import checkbox as checkbox
+from uielements import tab as tab
 
 from coregame import coregame as coregame
 
@@ -76,6 +77,9 @@ class Model:
                                   checkboxe.absy + int(checkboxe.height / 2 - checkboxe.boxsize / 2), checkboxe.boxsize,
                                   checkboxe.boxsize):  # si on est en train de cliquer dessus
                 checkboxe.check()
+        for tabb in tab.Tab.getTabs():
+            if f.checkmousebouton(position, tabb.absx, tabb.absy, tabb.abswidth, tabb.absheight):
+                tabb.select()
 
     def mousebutton1up(cls, position):
         print("plus en train de click")

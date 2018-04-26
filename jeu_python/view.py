@@ -61,17 +61,23 @@ class View:
                             obj.parentsurface.referance.blit(textobj.referance, (
                             int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
                             int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
-                        elif classname == "Checkbox":  # ... et les checkbox aussi
+                        elif classname == "Checkbox":  # ... et les checkbox aussi...
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
                             int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x + obj.boxsize),
                             int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
-
                             if obj.checked:
                                 obj.parentsurface.referance.blit(obj.checkreferance, (
                                 int(obj.parentsurface.abswidth * obj.scalex + obj.x + obj.x),
                                 int(obj.parentsurface.absheight * obj.scaley + obj.y) + int(
                                     obj.height / 2 - obj.boxsize / 2)))
+                        elif classname == "Tab": # ... et les tabs aussi...
+                            textobj = obj.textobj
+                            obj.parentsurface.referance.blit(textobj.referance, (
+                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
+                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
+                            if obj.imagereferance:
+                                obj.parentsurface.referance.blit(obj.imagereferance, (obj.x + 10, obj.y + 5))
                         elif classname == "Text":
                             if obj.alone:
                                 obj.parentsurface.referance.blit(obj.referance, (

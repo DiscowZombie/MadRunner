@@ -6,7 +6,7 @@ import view
 class Surface(uielement.UIelement):
     surfaces = []
 
-    def __init__(self, alpha = None, convert_alpha = False, *UIargs):
+    def __init__(self, alpha=None, convert_alpha=False, *UIargs):
         uielement.UIelement.__init__(self, *UIargs, "Surface", alpha)
 
         self.convertalpha = convert_alpha

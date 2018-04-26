@@ -11,6 +11,8 @@ class StateEnum(Enum):
     PLAYERNUM = "num_player"
     MAP_AND_DIFF = "map_diff"
     STATS_MENU = "stats_menu"
+    BEST_SCORE = "best_score"
+    AUTRE_STATS = "autre_stats"
     SETTINGS_MENU = "settings_menu"
     PLAYING = "playing"
 

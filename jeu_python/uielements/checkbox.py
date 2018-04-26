@@ -76,7 +76,6 @@ class Checkbox(uielement.UIelement):
 
     def unreferance(self):
         self.linkedcheckboxes.clear()
-        #self.checkreferance.unreferance()
         Checkbox.checkboxes.remove(self)
         self.remove()
 

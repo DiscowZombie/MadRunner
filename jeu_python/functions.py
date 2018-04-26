@@ -4,8 +4,11 @@ import uielements.text as text
 import uielements.surface as surface
 import uielements.button as button
 import uielements.checkbox as checkbox
+import uielements.tab as tab
 
+import constantes
 import userstatistics
+import view
 
 import sys
 import os
@@ -46,8 +49,8 @@ def getrunner():  # retourne le personnage avec lequel le joueur va jouer à par
     return "gros"
 
 
-def computetime(num_value):
-    temps_ms = coregame.CoreGame.current_core.time
+def computetime(num_value, customtime=None):
+    temps_ms = customtime or coregame.CoreGame.current_core.time
 
     if num_value:
         return temps_ms
@@ -65,8 +68,28 @@ def computetime(num_value):
     return str(temps_min) + ":" + aff_s + "." + aff_ms
 
 
-def computedistance(num_value):
-    distance = coregame.CoreGame.current_core.distance
+def computeplaytime(temps_ms):
+    temps_s = temps_ms / 1000
+    aff_s = str(int(temps_s % 60)) + " s "
+    temps_min = temps_s / 60
+    aff_m = str(int(temps_min % 60)) + " m "
+    temps_h = temps_min / 60
+    aff_h = str(int(temps_h % 24)) + " h "
+    temps_jour = temps_h / 24
+    aff_j = str(int(temps_jour % 365.25)) + " j "
+
+    if temps_jour >= 1:
+        return aff_j + aff_h + aff_m + aff_s
+    elif temps_h >= 1:
+        return aff_h + aff_m + aff_s
+    elif temps_min >= 1:
+        return aff_m + aff_s
+    elif temps_s >= 1:
+        return aff_s
+
+
+def computedistance(num_value, customdistance=None):
+    distance = customdistance or coregame.CoreGame.current_core.distance
 
     if num_value:
         return distance
@@ -83,6 +106,169 @@ def delete_menu_obj():
         txt.unreferance()
     for check in list(checkbox.Checkbox.getCheckboxes()):
         check.unreferance()
+    for tabb in list(tab.Tab.getTabs()):
+        tabb.unreferance()
+
+
+stats_cache = []
+
+
+def displaybestscore(stype, level):
+
+    for txt in list(text.Text.getTexts()):
+        if txt.absy > 110:  # ATTENTION: MANIERE EXTREMEMNT HACKY DE DETERMINER CE QU'IL FAUT EFFACER !!
+            txt.unreferance()
+
+    SCALE_X = 0.3
+    SCALE_Y = 0
+    LARGEUR = 200
+    HAUTEUR = 50
+    POSITION_X = -int(LARGEUR / 2)
+    POSITION_Y = 130
+    SCALE_WIDTH = 0
+    SCALE_HEIGHT = 0
+    COULEUR = constantes.BLACK
+    ANTIALIAS = False
+    COULEUR_TEXTE = constantes.BLACK
+    FONT = "Arial"
+    TAILLE_FONT = 24
+    CENTRE_X = False
+    CENTRE_Y = True
+    ARRIERE_PLAN = None
+    ECART = 0
+    BORDURE = 0  # rempli
+    SEUL = True
+
+    text.Text("Score :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    if stype == "Local":
+        stats_obj = userstatistics.UserStatistics.stats
+        suffix400 = stats_obj.best_score[level]["400m"] or "N/A"
+        suffix400h = stats_obj.best_score[level]["400m haie"] or "N/A"
+        suffixci = stats_obj.best_score[level]["Course infinie"] or "N/A"
+        if type(suffix400) == float:
+            suffix400 = int(suffix400)
+        if type(suffix400h) == float:
+            suffix400h = int(suffix400h)
+        if type(suffixci) == float:
+            suffixci = int(suffixci)
+
+        suffix400gm = stats_obj.best_gm_score[level]["400m"] or "N/A"
+        suffix400hgm = stats_obj.best_gm_score[level]["400m haie"] or "N/A"
+        suffixcigm = stats_obj.best_gm_score[level]["Course infinie"] or "N/A"
+        if type(suffix400gm) == int:
+            suffix400gm = computetime(False, suffix400gm)
+        if type(suffix400hgm) == int:
+            suffix400hgm = computetime(False, suffix400hgm)
+        if type(suffixcigm) == float or type(suffixcigm) == int:
+            suffixcigm = computedistance(False, suffixcigm)
+    elif stype == "En ligne":
+        # TODO: prendre le score de la base de donnéees
+        suffix400 = "N/A"
+        suffix400h = "N/A"
+        suffixci = "N/A"
+
+        suffix400gm = "N/A"
+        suffix400hgm = "N/A"
+        suffixcigm = "N/A"
+
+    SCALE_X = 0.3
+    SCALE_Y = 0
+    LARGEUR = 200
+    HAUTEUR = 50
+    POSITION_X = -int(LARGEUR / 2)
+    POSITION_Y = 185
+    SCALE_WIDTH = 0
+    SCALE_HEIGHT = 0
+    COULEUR = constantes.BLACK
+    ANTIALIAS = False
+    COULEUR_TEXTE = constantes.BLACK
+    FONT = "Arial"
+    TAILLE_FONT = 20
+    CENTRE_X = False
+    CENTRE_Y = True
+    ARRIERE_PLAN = None
+    ECART = 0
+    BORDURE = 0  # rempli
+    SEUL = True
+
+    text.Text("400m: " + str(suffix400), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    POSITION_Y += 55
+
+    text.Text("400m haie: " + str(suffix400h), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    POSITION_Y += 55
+
+    text.Text("Course infinie: " + str(suffixci), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    SCALE_X = 0.7
+    SCALE_Y = 0
+    LARGEUR = 200
+    HAUTEUR = 50
+    POSITION_X = -int(LARGEUR / 2)
+    POSITION_Y = 130
+    SCALE_WIDTH = 0
+    SCALE_HEIGHT = 0
+    COULEUR = constantes.BLACK
+    ANTIALIAS = False
+    COULEUR_TEXTE = constantes.BLACK
+    FONT = "Arial"
+    TAILLE_FONT = 24
+    CENTRE_X = False
+    CENTRE_Y = True
+    ARRIERE_PLAN = None
+    ECART = 0
+    BORDURE = 0  # rempli
+    SEUL = True
+
+    text.Text("Temps/Distance :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    SCALE_X = 0.7
+    SCALE_Y = 0
+    LARGEUR = 200
+    HAUTEUR = 50
+    POSITION_X = -int(LARGEUR / 2)
+    POSITION_Y = 185
+    SCALE_WIDTH = 0
+    SCALE_HEIGHT = 0
+    COULEUR = constantes.BLACK
+    ANTIALIAS = False
+    COULEUR_TEXTE = constantes.BLACK
+    FONT = "Arial"
+    TAILLE_FONT = 20
+    CENTRE_X = False
+    CENTRE_Y = True
+    ARRIERE_PLAN = None
+    ECART = 0
+    BORDURE = 0  # rempli
+    SEUL = True
+
+    text.Text(suffix400gm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    POSITION_Y += 55
+
+    text.Text(suffix400hgm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    POSITION_Y += 55
+
+    text.Text(suffixcigm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
 def isvalidint(supposedint):
