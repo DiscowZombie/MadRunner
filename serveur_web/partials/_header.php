@@ -11,8 +11,20 @@
                 <li><a href="https://github.com/DiscowZombie/MadRunner" target="_blank">Github</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="login"><i class="fas fa-user"></i> Connexion</a></li>
-                <li><a href="register"><i class="fas fa-sign-in-alt"></i> Inscription</a></li>
+                <?php if(!empty($_SESSION["user_id"])) { ?>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> <?= $_SESSION["username"] ?> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Mon profil</a></li>
+                            <li><a href="#">Mes classements</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="logout"><i class="fas fa-sign-in-alt"></i> Déconnexion</a></li>
+                <?php } else { ?>
+                    <li><a href="login"><i class="fas fa-user"></i> Connexion</a></li>
+                    <li><a href="register"><i class="fas fa-sign-in-alt"></i> Inscription</a></li>
+                <?php } ?>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

@@ -52,6 +52,17 @@ if(!function_exists('get_username')){
 	}
 }
 
+if(!function_exists('get_id')){
+    function get_id($pdo, $pseudo){
+        $q = $pdo->prepare("SELECT id FROM  `user` WHERE pseudo = ?");
+        $q->execute([$pseudo]);
+        $row = $q->fetch(PDO::FETCH_OBJ);
+        $q->closeCursor();
+
+        return $row->id;
+    }
+}
+
 if(!function_exists('get_coursename')){
 	function get_coursename($pdo, $enum){
 		$name = "";
@@ -94,4 +105,16 @@ if(!function_exists('register_user')){
 		]);
 		$q->closeCursor();
 	}
+}
+
+if(!function_exists('login_user')){
+    function login_user($pdo, $pseudo, $clair_password){
+        $q = $pdo->prepare("SELECT id, `password` FROM `user` WHERE pseudo = ?");
+        $q->execute([$pseudo]);
+        $row = $q->fetch(PDO::FETCH_OBJ);
+
+        $password = password_hash(htmlspecialchars($clair_password), PASSWORD_BCRYPT);
+
+        return strcmp($row->password, $password) == 0 ? True : False;
+    }
 }

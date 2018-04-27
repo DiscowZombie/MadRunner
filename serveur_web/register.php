@@ -2,6 +2,7 @@
 
 // On importe ce que l'on as besoin
 session_start();
+include('filters/guest_filter.php'); # Il faut être non connecté pour accéder à cette page
 require("includes/constants.php");
 require_once("includes/databases.php");
 require_once("includes/functions.php");
@@ -20,7 +21,7 @@ if(!empty($_POST["pseudo"]) && !empty($_POST["password1"]) && !empty($_POST["pas
     $_SESSION['infobar']['message'] = "Le nom d'utilisateur doit contenir entre 3 et 16 caractères.";
   } else {
       // On sauvegarde son nom d'utilisateur en session pour qu'il n'ait pas besoin de le réecrire
-      $_SESSION["pseudo"] = $pseudo;
+      $_SESSION["cache"]["pseudo"] = $pseudo;
 
       //Les deux mot de passe sont-il identique ? Si 0, ils sont identiques
       if (strcmp($password1, $password2) != 0) {
@@ -29,7 +30,7 @@ if(!empty($_POST["pseudo"]) && !empty($_POST["password1"]) && !empty($_POST["pas
           if (strlen($password1) < 3 || strlen($password1) > 32) {
               $_SESSION['infobar']['message'] = "Le mot de passe doit contenir entre 3 et 32 caractères.";
           } else {
-              $_SESSION["pseudo"] = [];
+              $_SESSION["cache"]["pseudo"] = [];
               if (!is_name_unique($pdo, $pseudo)) {
                   $_SESSION['infobar']['message'] = "Ce pseudonyme est déjà utilisé. Veuillez en choisir un autre.";
               } else {
