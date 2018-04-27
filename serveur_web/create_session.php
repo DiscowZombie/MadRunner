@@ -30,6 +30,7 @@ if(!empty($_POST["pseudo"]) && !empty($_POST["password"])){
 
     // On prépare le Json
   	$jsontxt = array();
+    $jsontxt["id"] = $id;
     $jsontxt["key"] = $key;
 
     # On retourne les infos comme un fichier json

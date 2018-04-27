@@ -3,7 +3,6 @@ import pygame
 import uielement
 import functions
 import constantes
-import userstatistics
 
 from uielements import text as text
 from uielements import image as image

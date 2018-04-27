@@ -8,8 +8,10 @@ import uielements.tab as tab
 
 import constantes
 import userstatistics
+import settings
 import view
 
+import json
 import sys
 import os
 
@@ -114,7 +116,6 @@ stats_cache = []
 
 
 def displaybestscore(stype, level):
-
     for txt in list(text.Text.getTexts()):
         if txt.absy > 110:  # ATTENTION: MANIERE EXTREMEMNT HACKY DE DETERMINER CE QU'IL FAUT EFFACER !!
             txt.unreferance()
@@ -140,8 +141,8 @@ def displaybestscore(stype, level):
     SEUL = True
 
     text.Text("Score :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     if stype == "Local":
         stats_obj = userstatistics.UserStatistics.stats
@@ -165,14 +166,29 @@ def displaybestscore(stype, level):
         if type(suffixcigm) == float or type(suffixcigm) == int:
             suffixcigm = computedistance(False, suffixcigm)
     elif stype == "En ligne":
-        # TODO: prendre le score de la base de donnéees
-        suffix400 = "N/A"
-        suffix400h = "N/A"
-        suffixci = "N/A"
+        # Convertir le score recuperer de la DB en fichier json valide
+        decoded = json.loads(settings.data)
+        lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
 
-        suffix400gm = "N/A"
-        suffix400hgm = "N/A"
-        suffixcigm = "N/A"
+        suffix400 = decoded[lvl]["Q"]["score"] or "N/A"
+        suffix400h = decoded[lvl]["QH"]["score"] or "N/A"
+        suffixci = decoded[lvl]["I"]["score"] or "N/A"
+        if type(suffix400) == float:
+            suffix400 = int(suffix400)
+        if type(suffix400h) == float:
+            suffix400h = int(suffix400h)
+        if type(suffixci) == float:
+            suffixci = int(suffixci)
+
+        suffix400gm = decoded[lvl]["Q"]["time"] or "N/A"
+        suffix400hgm = decoded[lvl]["QH"]["time"] or "N/A"
+        suffixcigm = decoded[lvl]["I"]["time"] or "N/A"
+        if type(suffix400gm) == int:
+            suffix400gm = computetime(False, suffix400gm)
+        if type(suffix400hgm) == int:
+            suffix400hgm = computetime(False, suffix400hgm)
+        if type(suffixcigm) == float or type(suffixcigm) == int:
+            suffixcigm = computedistance(False, suffixcigm)
 
     SCALE_X = 0.3
     SCALE_Y = 0
@@ -195,20 +211,20 @@ def displaybestscore(stype, level):
     SEUL = True
 
     text.Text("400m: " + str(suffix400), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 55
 
     text.Text("400m haie: " + str(suffix400h), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 55
 
     text.Text("Course infinie: " + str(suffixci), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     SCALE_X = 0.7
     SCALE_Y = 0
@@ -231,8 +247,8 @@ def displaybestscore(stype, level):
     SEUL = True
 
     text.Text("Temps/Distance :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     SCALE_X = 0.7
     SCALE_Y = 0
@@ -255,20 +271,52 @@ def displaybestscore(stype, level):
     SEUL = True
 
     text.Text(suffix400gm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 55
 
     text.Text(suffix400hgm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 55
 
     text.Text(suffixcigm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+              ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+              LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+    if stype == "En ligne":
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 580
+        HAUTEUR = 80
+        POSITION_X = 30
+        POSITION_Y = 380
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.BLACK
+        ANTIALIAS = False
+        COULEUR_TEXTE = constantes.RED if settings.response_json is None else constantes.DARKGREEN
+        FONT = "Arial"
+        TAILLE_FONT = 20
+        CENTRE_X = True
+        CENTRE_Y = False
+        ARRIERE_PLAN = None
+        ECART = 1
+        BORDURE = 0  # rempli
+        SEUL = True
+
+        # TODO: Ajouter le support du \n à cette classe
+        text_to_dislay = \
+            "Vos statistiques en ligne ne peuvent être récupérées car vous n'êtes connecté à aucun compte. Vous pouvez créér un compte sur " + constantes.WEBSITE_URI + "register et vous connectez à ce dèrnier depuis l'onglet Paramètres." \
+                if settings.response_json is None \
+                else "Connecté en tant que " + settings.StatsManager.getusername() + "."
+        text.Text(
+            text_to_dislay,
+            ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
 def isvalidint(supposedint):

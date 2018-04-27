@@ -20,9 +20,12 @@ import coregame.gamemodes._400mhaie as _400mhaie
 import coregame.gamemodes.courseinfinie as courseinfinie
 
 import constantes
+import settings
+import pycurl
 import view as v
 import model
 import userstatistics
+import json
 
 import random
 
@@ -398,7 +401,6 @@ class CoreGame:
 
             key_chance = self.gamemodeclass.computekeychance()  # la probabilité d'avoir une touche qui s'affiche
 
-            # TODO: Créé un crash en course infini:
             if random.randint(1, key_chance) == 1 and key.Key.canCreateKey():
                 key.Key(self.surface_boutons, self.level_obj.keytimeout)  # timeout qui dépend de la difficulté
 
@@ -856,18 +858,19 @@ class CoreGame:
 
     def sendscore(self):
         # Clé associé avec la session
-        """
-        TODO [BUG]: Pour le moment, elle est sur None
-        key = settings.StatsManager.session_key
+        key = json.loads(settings.response_json)["key"]
+        lvl = str("F" if self.level == "Facile" else ("M" if self.level == "Moyen" else "D"))
+        gamemode = "Q" if self.modejeu == "400m" else ("QH" if self.modejeu == "400m haie" else "I")
 
         if key is None:
             return
+
+        content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.time, lvl)
+
         try:
-            settings.CurlManager(constantes.WEBSITE_URI + "send_data.php?key=" + key + "&score=" +
-                                 self.score + "&coursetype=" + self.gamemodeclass.coursetype)
+            settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content)
         except pycurl.error:
-            self.error = "An error happened when trying to send statistics to the web server !"
-        """
+            self.error = "Impossible de contacter le serveur web !"
 
     def unreferance(self):  # TODO: bien tout reset et bien retourner au menu (pas encore le cas)
 

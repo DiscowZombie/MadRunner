@@ -9,6 +9,12 @@ DEBUG = False
 PATH = os.getenv('APPDATA') + "/MadRunner"
 FILE_PATH = PATH + "/settings.json"
 
+# TODO: On les sorts temporairement, après on passera plutot par un Singleton de la class StatsManager
+# Cette variable correspond à une representation json du retour de create_session. Soit un id ["id"] et une clé de session ["key"]
+response_json = None
+# Cette variable contient les infos de course du joueur (meilleurs temps et temps dans chaque mode de jeu)
+data = None
+
 
 # Lire facilement les fichiers JSON \ Classe "privé"
 class JsonManager:
@@ -67,7 +73,6 @@ class SettingsManager:
 class StatsManager:
     username = None
     password = None
-    session_key = None
 
     def __init__(self):
         self.username = SettingsManager().readjson()["account_settings"]["username"]
@@ -84,15 +89,18 @@ class StatsManager:
             return
 
         try:
-            response = CurlManager(c.WEBSITE_URI + "create_session.php", True,
-                                   "pseudo=" + self.username + "&password=" + self.password).readjson()
-            if response is not None:
-                self.session_key = response
+            json_response = CurlManager(c.WEBSITE_URI + "create_session.php", True,
+                                        "pseudo=" + self.username + "&password=" + self.password).readjson()
+            if json_response is not None:
                 if DEBUG:
                     print("[DEBUG] (settings.py > l.92) Succesfully loaded a new key for user " + self.username + ".")
-                return
+                return json_response
         except pycurl.error:
             pass
 
         if DEBUG:
             print("[DEBUG] (settings.py > l.98) Can't load a key for user " + self.username + ".")
+
+    @staticmethod
+    def getusername():
+        return SettingsManager().readjson()["account_settings"]["username"]

@@ -4,12 +4,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema discowzoirmybb
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `discowzoirmybb` DEFAULT CHARACTER SET utf8 ;
 USE `discowzoirmybb` ;
@@ -32,9 +29,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `discowzoirmybb`.`score` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL,
-  `score` INT UNSIGNED NOT NULL,
-  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `course_type` ENUM('Q', 'QH', 'I') NOT NULL,
+  `difficulty` ENUM('F', 'M', 'D') NOT NULL,
+  `score` INT UNSIGNED NOT NULL,
+  `time` VARCHAR(255) NOT NULL,
+  `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_score_user_idx` (`user_id` ASC),
@@ -52,8 +51,9 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `discowzoirmybb`.`session` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL,
+  `uuid` VARCHAR(255) NOT NULL,
+  `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ip` VARCHAR(255) NULL,
-  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_session_user1_idx` (`user_id` ASC),
