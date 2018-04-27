@@ -9,42 +9,40 @@ require_once("includes/functions.php");
 // On définit les variables propres à notre page
 $page_title = "S'inscrire";
 
-// On affiche la page
-include("views/register.view.php");
-
 // On vérifie si l'utilisateur a rempli le formulaire
-if(!empty($_POST["pseudo"]) && !empty($_POST["password"]) && !empty($_POST["password2"])) {
+if(!empty($_POST["pseudo"]) && !empty($_POST["password1"]) && !empty($_POST["password2"])) {
   extract($_POST);
 
+  $_SESSION['infobar']['level'] = "danger";
+  $_SESSION['infobar']['title'] = "Erreur:";
+
   if(strlen($pseudo) < 3 || strlen($pseudo) > 16){
-    echo "Le nom d'utilisateur doit contenir entre 3 et 16 caractères.";
-    return;
+    $_SESSION['infobar']['message'] = "Le nom d'utilisateur doit contenir entre 3 et 16 caractères.";
+  } else {
+      // On sauvegarde son nom d'utilisateur en session pour qu'il n'ait pas besoin de le réecrire
+      $_SESSION["pseudo"] = $pseudo;
+
+      //Les deux mot de passe sont-il identique ? Si 0, ils sont identiques
+      if (strcmp($password1, $password2) != 0) {
+          $_SESSION['infobar']['message'] = "Les deux mots de passe ne sont pas identiques.";
+      } else {
+          if (strlen($password1) < 3 || strlen($password1) > 32) {
+              $_SESSION['infobar']['message'] = "Le mot de passe doit contenir entre 3 et 32 caractères.";
+          } else {
+              $_SESSION["pseudo"] = [];
+              if (!is_name_unique($pdo, $pseudo)) {
+                  $_SESSION['infobar']['message'] = "Ce pseudonyme est déjà utilisé. Veuillez en choisir un autre.";
+              } else {
+                  $_SESSION['infobar']['level'] = "success";
+                  $_SESSION['infobar']['title'] = "Félicitation !";
+                  $_SESSION['infobar']['message'] = "Inscription realisée avez succès ! Vous pouvez maintenant utilisez ces identifiants dans le jeu !";
+
+                  register_user($pdo, $pseudo, $password1);
+              }
+          }
+      }
   }
-
-  // On sauvegarde son nom d'utilisateur en session pour qu'il n'ait pas besoin de le réecrire
-  $_SESSION["pseudo"] = $pseudo;
-
-  //Les deux mot de passe sont-il identique ? Si 0, ils sont identiques
-  if(strcmp($password, $password2) != 0){
-    echo "Les deux mots de passe ne sont pas identiques.";
-    return;
-  }
-
-  if(strlen($password) < 3 || strlen($password) > 32){
-    echo "Le mot de passe doit contenir entre 3 et 32 caractères.";
-    return;
-  }
-
-  if(!is_name_unique($pdo, $pseudo)){
-    echo "Ce pseudonyme est déjà utilisé. Veuillez en choisir un autre.";
-    // Le pseudo est déjà utilisé, on ne va pas lui reproposer !
-    $_SESSION["pseudo"] = [];
-    session_destroy();
-    return;
-  }
-
-  register_user($pdo, $pseudo, $password);
-  echo "Inscription realisée avez succès ! Vous pouvez maintenant utilisez ces identifiants dans le jeu !";
 }
 
-?>
+// On affiche la page (après verif pour que les messages s'affichent bien)
+include("views/register.view.php");

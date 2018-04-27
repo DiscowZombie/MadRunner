@@ -1,3 +1,13 @@
+header, footer {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#alerts, #main {
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
 header {
   color: red;
 }
