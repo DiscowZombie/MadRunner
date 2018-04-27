@@ -166,13 +166,16 @@ def displaybestscore(stype, level):
         if type(suffixcigm) == float or type(suffixcigm) == int:
             suffixcigm = computedistance(False, suffixcigm)
     elif stype == "En ligne":
-        # Convertir le score recuperer de la DB en fichier json valide
-        decoded = json.loads(settings.data)
+        # Convertir le score récuperer de la DB en fichier json valide
+        decoded = None
+        if settings.data is not None:
+            decoded = json.loads(settings.data)
         lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
 
-        suffix400 = decoded[lvl]["Q"]["score"] or "N/A"
-        suffix400h = decoded[lvl]["QH"]["score"] or "N/A"
-        suffixci = decoded[lvl]["I"]["score"] or "N/A"
+        # TODO: Ne marche pas entièrement, faire une fonction pour recup ça avec un "NeverNone"
+        suffix400 = "N/A" if decoded is None else decoded[lvl]["Q"]["score"]
+        suffix400h = "N/A" if decoded is None else decoded[lvl]["QH"]["score"]
+        suffixci = "N/A" if decoded is None else decoded[lvl]["I"]["score"]
         if type(suffix400) == float:
             suffix400 = int(suffix400)
         if type(suffix400h) == float:
@@ -180,9 +183,9 @@ def displaybestscore(stype, level):
         if type(suffixci) == float:
             suffixci = int(suffixci)
 
-        suffix400gm = decoded[lvl]["Q"]["time"] or "N/A"
-        suffix400hgm = decoded[lvl]["QH"]["time"] or "N/A"
-        suffixcigm = decoded[lvl]["I"]["time"] or "N/A"
+        suffix400gm = "N/A" if decoded is None else decoded[lvl]["Q"]["time"]
+        suffix400hgm = "N/A" if decoded is None else decoded[lvl]["QH"]["time"]
+        suffixcigm = "N/A" if decoded is None else decoded[lvl]["I"]["time"]
         if type(suffix400gm) == int:
             suffix400gm = computetime(False, suffix400gm)
         if type(suffix400hgm) == int:
@@ -290,8 +293,8 @@ def displaybestscore(stype, level):
         SCALE_X = 0
         SCALE_Y = 0
         LARGEUR = 580
-        HAUTEUR = 80
-        POSITION_X = 30
+        HAUTEUR = 10
+        POSITION_X = 5
         POSITION_Y = 380
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
@@ -307,9 +310,8 @@ def displaybestscore(stype, level):
         BORDURE = 0  # rempli
         SEUL = True
 
-        # TODO: Ajouter le support du \n à cette classe
         text_to_dislay = \
-            "Vos statistiques en ligne ne peuvent être récupérées car vous n'êtes connecté à aucun compte. Vous pouvez créér un compte sur " + constantes.WEBSITE_URI + "register et vous connectez à ce dèrnier depuis l'onglet Paramètres." \
+            "Vos statistiques en ligne ne peuvent être récupérées car vous" \
                 if settings.response_json is None \
                 else "Connecté en tant que " + settings.StatsManager.getusername() + "."
         text.Text(
@@ -317,6 +319,32 @@ def displaybestscore(stype, level):
             ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
             ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        # TODO: Temporaire en attendant d'avoir le /n dans Text()
+        if settings.response_json is None:
+            POSITION_Y += 20
+
+            text.Text(
+                "n'êtes connecté à aucun compte. Vous pouvez créér un compte sur",
+                ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+            POSITION_Y += 20
+
+            text.Text(
+                constantes.WEBSITE_URI + "register et vous connectez",
+                ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+            POSITION_Y += 20
+
+            text.Text(
+                "à ce dèrnier depuis l'onglet Paramètres.",
+                ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
 def isvalidint(supposedint):
