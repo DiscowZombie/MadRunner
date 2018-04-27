@@ -468,7 +468,7 @@ class CoreGame:
         if completed:
             num_score = self.gamemode_obj.computescore()
             self.score = "%.0f" % round(num_score, 0)  # Enlever les décimales du score
-            self.gamemode_score, num_gm_score = self.disp_function(False), self.disp_function(True)
+            self.gamemode_score, self.num_gm_score = self.disp_function(False), self.disp_function(True)
             self.sendscore()
 
             # Comparer au meilleur score (local)
@@ -481,11 +481,11 @@ class CoreGame:
                 userstatistics.UserStatistics.stats.set("best_score", num_score, self.level, self.modejeu)
 
             if userstatistics.UserStatistics.stats.best_gm_score[self.level][self.modejeu]:
-                if self.gamemode_obj.isrecord(self.level, num_gm_score):
+                if self.gamemode_obj.isrecord(self.level, self.num_gm_score):
                     new_gm_record = True
-                    userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.level, self.modejeu)
+                    userstatistics.UserStatistics.stats.set("best_gm_score", self.num_gm_score, self.level, self.modejeu)
             else:
-                userstatistics.UserStatistics.stats.set("best_gm_score", num_gm_score, self.level, self.modejeu)
+                userstatistics.UserStatistics.stats.set("best_gm_score", self.num_gm_score, self.level, self.modejeu)
         else:
             self.score = "N/A"
             self.gamemode_score = "N/A"
@@ -859,20 +859,20 @@ class CoreGame:
     def sendscore(self):
         # Clé associé avec la session
         key = json.loads(settings.response_json)["key"]
-        lvl = str("F" if self.level == "Facile" else ("M" if self.level == "Moyen" else "D"))
-        gamemode = "Q" if self.modejeu == "400m" else ("QH" if self.modejeu == "400m haie" else "I")
+        lvl = self.level_obj.identifier
+        gamemode = self.gamemodeclass.coursetype
 
         if key is None:
             return
 
-        content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.time, lvl)
+        content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.num_gm_score, lvl)
 
         try:
             settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content)
         except pycurl.error:
             self.error = "Impossible de contacter le serveur web !"
 
-    def unreferance(self):  # TODO: bien tout reset et bien retourner au menu (pas encore le cas)
+    def unreferance(self):
 
         self.map_obj.unreferance()
 
