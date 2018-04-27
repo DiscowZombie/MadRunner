@@ -112,9 +112,6 @@ def delete_menu_obj():
         tabb.unreferance()
 
 
-stats_cache = []
-
-
 def displaybestscore(stype, level):
     for txt in list(text.Text.getTexts()):
         if txt.absy > 110:  # ATTENTION: MANIERE EXTREMEMNT HACKY DE DETERMINER CE QU'IL FAUT EFFACER !!

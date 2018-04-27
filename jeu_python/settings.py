@@ -71,8 +71,6 @@ class SettingsManager:
 
 # Permet de récuprer les stats du joueur (nb de courses, etc...)
 class StatsManager:
-    username = None
-    password = None
 
     def __init__(self):
         self.username = SettingsManager().readjson()["account_settings"]["username"]

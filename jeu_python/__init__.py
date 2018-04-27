@@ -11,14 +11,11 @@ import view
 # Gère les contrôles
 import controller
 
-# l'état du jeu
 import statemanager
-
 import utils
-
 import settings
-
 import userstatistics
+import constantes
 
 # Initialisation du module
 pygame.init()
@@ -47,7 +44,11 @@ if settings.DEBUG:
     print("[DEBUG] Debug mode is enabled.")
     print("[DEBUG] (__init__ > l.46) FPS: " + str(fps))
 
-userstatistics.UserStatistics().load()  # chargement des statistiques
+userstatistics.UserStatistics().load()  # chargement des statistiques (local)
+
+# Charger les statistiques de l'utilisateur et son compte en ligne
+settings.response_json = settings.StatsManager().loadkey()
+settings.data = settings.CurlManager(constantes.WEBSITE_URI + "statistiques.php?id=1").readjson()
 
 passed = 0
 
