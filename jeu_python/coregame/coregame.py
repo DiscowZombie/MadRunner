@@ -894,6 +894,8 @@ class CoreGame:
             if event.key == pygame.K_SPACE:
                 Character.getCharacters()[0].jump()  # Ici, le joueur 1 saute
             else:
-                key.Key.keypressed(event.dict["unicode"].capitalize())
+                cap = event.dict["unicode"].capitalize()
+                if cap in constantes.ALPHABET:
+                    key.Key.keypressed(cap)
 
     keypressed = classmethod(keypressed)

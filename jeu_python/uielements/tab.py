@@ -28,7 +28,6 @@ class Tab(uielement.UIelement):
         self.backgroundunselectcolor = backgroundunselectcolor
         self.textoffset = offset
         self.image = image
-        self.clicking = False
         self.selected = False
         self.linkedtabs = []  # ceci est une liste des tabs qui sont "liés" à celui-ci, c'est à dire, si ce tab est sélectionné mais qu'un des tab lié est sélectionné, l'autre ce tab va être désélectionné.
         self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy,

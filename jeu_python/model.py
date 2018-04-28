@@ -11,6 +11,7 @@ from uielements import button as button
 from uielements import image as image
 from uielements import checkbox as checkbox
 from uielements import tab as tab
+from uielements import textbox as textbox
 
 from coregame import coregame as coregame
 
@@ -19,6 +20,7 @@ import settings
 
 class Model:
     pygame = None
+    last_passed = 0
 
     introplaying = False
     introfinished = False
@@ -29,6 +31,8 @@ class Model:
         Model.pygame = pygame
 
     def updatemodel(cls, passed):
+
+        Model.last_passed = passed
 
         UIelements = uielement.UIelement.getUIelements()
 
@@ -80,9 +84,24 @@ class Model:
         for tabb in tab.Tab.getTabs():
             if f.checkmousebouton(position, tabb.absx, tabb.absy, tabb.abswidth, tabb.absheight):
                 tabb.select()
+        for textboxe in list(textbox.Textbox.getTextboxes()):
+            if f.checkmousebouton(position, textboxe.absx, textboxe.absy, textboxe.abswidth, textboxe.absheight):
+                textboxe.focus()
+            else:
+                textboxe.unfocus()
 
     def mousebutton1up(cls, position):
         print("plus en train de click")
+
+    def keydown(cls, event):
+        if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:
+            coregame.CoreGame.keypressed(Model.pygame, event)
+        else:
+            char = event.dict["unicode"]
+            if char != "":
+                for textboxe in list(textbox.Textbox.getTextboxes()):
+                    if textboxe.focused:
+                        textboxe.addchar(char)
 
     def startintro(cls):
         statemanager.StateManager.setstate(statemanager.StateEnum.INTRO)
@@ -100,7 +119,7 @@ class Model:
         SCALE_HEIGHT = 0
         COULEUR = constantes.WHITE
         BORDURE = 0  # rempli
-        ALPHA = 0  # transarence
+        ALPHA = 0  # transparence
         CONVERT_ALPHA = False
 
         surface_intro = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
@@ -287,6 +306,7 @@ class Model:
     updatemodel = classmethod(updatemodel)
     mousebutton1down = classmethod(mousebutton1down)
     mousebutton1up = classmethod(mousebutton1up)
+    keydown = classmethod(keydown)
     startintro = classmethod(startintro)
     introsurfacetweening = classmethod(introsurfacetweening)
     middleintro = classmethod(middleintro)

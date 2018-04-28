@@ -46,6 +46,8 @@ if settings.DEBUG:
 
 userstatistics.UserStatistics().load()  # chargement des statistiques (local)
 
+# TODO: faire en sorte de savoir si l'utilisateur est connecté pour afficher correctment ce qu'il faut dans le menu paramètres
+
 # Charger les statistiques de l'utilisateur et son compte en ligne
 settings.response_json = settings.StatsManager().loadkey()
 settings.data = settings.CurlManager(constantes.WEBSITE_URI + "statistiques.php?id=1").readjson()
@@ -59,7 +61,7 @@ while running:
 
     if running:
         model.Model.updatemodel(passed)  # Mis à jour des infos du model
-        view.View.updatescreen(passed)  # Affichage de tout
+        view.View.updatescreen()  # Affichage de tout
 
         statemanager.StateManager.setstatetime(passed)
 

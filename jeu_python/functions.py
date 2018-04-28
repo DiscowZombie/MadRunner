@@ -5,6 +5,7 @@ import uielements.surface as surface
 import uielements.button as button
 import uielements.checkbox as checkbox
 import uielements.tab as tab
+import uielements.textbox as textbox
 
 import constantes
 import userstatistics
@@ -110,11 +111,13 @@ def delete_menu_obj():
         check.unreferance()
     for tabb in list(tab.Tab.getTabs()):
         tabb.unreferance()
+    for textboxe in list(textbox.Textbox.getTextboxes()):
+        textboxe.unreferance()
 
 
 def displaybestscore(stype, level):
     for txt in list(text.Text.getTexts()):
-        if txt.absy > 110:  # ATTENTION: MANIERE EXTREMEMNT HACKY DE DETERMINER CE QU'IL FAUT EFFACER !!
+        if txt.absy > 110:  # ATTENTION: MANIERE EXTREMEMENT HACKY DE DETERMINER CE QU'IL FAUT EFFACER !!
             txt.unreferance()
 
     SCALE_X = 0.3
@@ -314,6 +317,149 @@ def displaybestscore(stype, level):
             ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
             ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+
+def login(bouton_connection):
+    textbox_nom = textbox.Textbox.getTextboxes()[0]
+    textbox_mdp = textbox.Textbox.getTextboxes()[1]
+    error = None
+
+    if len(textbox_nom.text) >= 3:
+        if len(textbox_mdp.text) >= 3:
+
+            bouton_connection.visible = False
+
+            ANTIALIAS = True
+            COULEUR = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 22
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 300
+            HAUTEUR = 50
+            POSITION_X = 100
+            POSITION_Y = 100
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            text.Text("Connexion en cours...", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      COULEUR_ARRIERE, BORDURE)
+
+            success = True  # TODO faire la requête HTTP: nom d'utilisateur: textbox_nom.text, mot de passe: textbox_mdp.text
+
+            if success:
+                connected = True  # TODO: bien mettre sur connected à l'endoit où il sera stoqué (probablement dans settings, ou dans model)
+                button.BConnexion.button1down(None)
+            else:
+                bouton_connection.visible = True
+                error = "Blablablabla"  # mettre l'erreur qui convient !
+        else:
+            textbox_mdp.boxbordercolor = constantes.RED
+            error = "Mot de passe invalide"
+    else:
+        textbox_nom.boxbordercolor = constantes.RED
+        error = "Nom d'utilisateur invalide"
+
+    if error:
+        if bouton_connection.errorobj:
+            bouton_connection.errorobj.text = error
+            return bouton_connection.errorobj
+        else:
+            ANTIALIAS = True
+            COULEUR = constantes.RED
+            FONT = "Arial"
+            TAILLE_FONT = 22
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 300
+            HAUTEUR = 45
+            POSITION_X = 100
+            POSITION_Y = 155
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            return text.Text(error, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      COULEUR_ARRIERE, BORDURE)
+
+
+def logout(bouton_connection):
+
+    bouton_connection.visible = False
+    error = None
+
+    ANTIALIAS = True
+    COULEUR = constantes.BLACK
+    FONT = "Arial"
+    TAILLE_FONT = 22
+    CENTRE_X = True
+    CENTRE_Y = True
+    ARRIERE_PLAN = None
+    ECART = 0
+    SEUL = True
+    LARGEUR = 300
+    HAUTEUR = 50
+    POSITION_X = 100
+    POSITION_Y = 100
+    SCALE_X = 0
+    SCALE_Y = 0
+    SCALE_WIDTH = 0
+    SCALE_HEIGHT = 0
+    COULEUR_ARRIERE = constantes.WHITE
+    BORDURE = 0
+
+    text.Text("Déconnexion en cours...", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+              SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+              COULEUR_ARRIERE, BORDURE)
+
+    success = True  # TODO faire la requête HTTP pour la déconnxion, obtenir le nomn d'utilsateur + mot de passe
+
+    if success:
+        connected = False  # TODO: bien mettre sur connected à l'endoit où il sera stoqué (probablement dans settings, ou dans model)
+        button.BConnexion.button1down(None)
+    else:
+        bouton_connection.visible = True
+        error = "Blablablabla"  # mettre l'erreur qui convient !
+
+    if error:
+        ANTIALIAS = True
+        COULEUR = constantes.RED
+        FONT = "Arial"
+        TAILLE_FONT = 22
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = None
+        ECART = 0
+        SEUL = True
+        LARGEUR = 300
+        HAUTEUR = 45
+        POSITION_X = 100
+        POSITION_Y = 155
+        SCALE_X = 0
+        SCALE_Y = 0
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR_ARRIERE = constantes.WHITE
+        BORDURE = 0
+
+        text.Text(error, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                  SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                  COULEUR_ARRIERE, BORDURE)
 
 
 def isvalidint(supposedint):
