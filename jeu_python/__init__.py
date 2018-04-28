@@ -46,12 +46,6 @@ if settings.DEBUG:
 
 userstatistics.UserStatistics().load()  # chargement des statistiques (local)
 
-# TODO: faire en sorte de savoir si l'utilisateur est connecté pour afficher correctment ce qu'il faut dans le menu paramètres
-
-# Charger les statistiques de l'utilisateur et son compte en ligne
-settings.response_json = settings.StatsManager().loadkey()
-settings.data = settings.CurlManager(constantes.WEBSITE_URI + "statistiques.php?id=1").readjson()
-
 passed = 0
 
 while running:
