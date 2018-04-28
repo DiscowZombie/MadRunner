@@ -51,8 +51,8 @@ userstatistics.UserStatistics().load()
 # Chargement du compte de l'utilisateur en ligne (Statistiques distants)
 occlass = onlineconnector.OnlineConnector(None, None, False)
 try:
-    occlass.connect()
-    occlass.loadstatistiques()
+    if occlass.connect():
+        occlass.loadstatistiques()
 except pycurl.error as e:
     print(e)
 except BaseException as e:
