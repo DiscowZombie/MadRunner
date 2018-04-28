@@ -55,7 +55,7 @@ while running:
 
     if running:
         model.Model.updatemodel(passed)  # Mis à jour des infos du model
-        view.View.updatescreen(passed)  # Affichage de tout
+        view.View.updatescreen()  # Affichage de tout
 
         statemanager.StateManager.setstatetime(passed)
 

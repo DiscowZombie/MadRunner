@@ -41,7 +41,6 @@ class Checkbox(uielement.UIelement):
         self.textoffset = boxsize + offset
         self.imagepath = f.resource_path("assets/img/coche.png")
         self.checked = False
-        self.clicking = False
         self.linkedcheckboxes = []  # ceci est une liste des checkbox qui sont "liés" à celui-ci, c'est à dire, si ce checkbox est coché mais qu'un des checkbox lié est coché, l'autre ce checkbox va être décoché.
         self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset, False, *UIargs)
         self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)

@@ -40,8 +40,7 @@ class Controller:
                 if button_number == 1:  # clic gauche
                     model.Model.mousebutton1up(event.pos)
             elif event.type == pygame.KEYDOWN:
-                if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:  # le clavier n'est utile uniquement pendant qu'on joue !
-                    coregame.CoreGame.keypressed(pygame, event)
+                model.Model.keydown(event)
         return True
 
     def getpressingbuttons(cls):

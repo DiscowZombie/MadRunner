@@ -1,3 +1,5 @@
+import pygame
+
 import uielement
 import model
 import view
@@ -11,6 +13,7 @@ from uielements import surface
 from uielements import text
 from uielements import checkbox
 from uielements import tab
+from uielements import textbox
 
 import constantes
 import functions
@@ -48,7 +51,7 @@ class Button(uielement.UIelement):
         self.textcenteredy = centeredy
         self.backgroundcolor = backgroundcolor
         self.textoffset = offset
-        self.clicking = False
+        self.clicking = False  # va servir plus tard
         self.ismousein = False
         self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy,
                                  backgroundtextcolor, offset, False, *UIargs)
@@ -71,8 +74,8 @@ class Button(uielement.UIelement):
     def create(self):  # pour créer l'élément graphique
         parentsurface = self.parentsurface
         if self.visible:
-            rectangle = view.View.pygame.draw.rect(
-                self.parentsurface.referance,
+            rectangle = pygame.draw.rect(
+                parentsurface.referance,
                 self.color,
                 [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
                  parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height],
@@ -80,7 +83,7 @@ class Button(uielement.UIelement):
             )
         else:
             rectangle = None
-        self.textobj.create()
+        self.textobj.referance = self.textobj.create()
         return rectangle
 
     def draw(self):
@@ -187,6 +190,48 @@ class BParam(Button):
         statemanager.StateManager.setstate(statemanager.StateEnum.SETTINGS_MENU)
         functions.delete_menu_obj()
 
+        SCALE_X = 0.5
+        SCALE_Y = 0.5
+        LARGEUR = 400
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        POSITION_X = - int(LARGEUR / 2)
+        POSITION_Y = - int(HAUTEUR / 2)
+        COULEUR = constantes.WHITE
+        BORDURE = 0  # rempli
+        ALPHA = 255  # opaque
+        CONVERT_ALPHA = True
+
+        surface_boutons = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                          SCALE_Y, LARGEUR,
+                                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 400
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BConnexion("Connexion", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ARRIERE_PLAN,
+                ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
         POSITION_X = 0
         POSITION_Y = 0
         SCALE_X = 0
@@ -211,6 +256,223 @@ class BParam(Button):
                 ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+
+class BConnexion(Button):
+
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self):
+        statemanager.StateManager.setstate(statemanager.StateEnum.CONNEXION_MENU)
+        functions.delete_menu_obj()
+
+        LARGEUR = 500
+        HAUTEUR = 200
+        POSITION_X = -int(LARGEUR / 2)
+        POSITION_Y = -int(HAUTEUR / 2)
+        SCALE_X = 0.5
+        SCALE_Y = 0.5
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.WHITE
+        BORDURE = 0
+        ALPHA = 255
+        CONVERT_ALPHA = True
+
+        surface_box = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                        SCALE_Y, LARGEUR,
+                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                        BORDURE)  # creation de la l'objet surface où on va mettre les textbox et autres
+
+        connected = False  # TODO: savoir si l'utilisateur est connecté ou pas !
+
+        if connected:
+            TEXTE_BOUTON = "Se déconnecter"
+
+            ANTIALIAS = True
+            COULEUR = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 22
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 500
+            HAUTEUR = 30
+            POSITION_X = 0
+            POSITION_Y = 0
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            text.Text("Connecté en tant que :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      COULEUR_ARRIERE, BORDURE)
+
+            NAME = "testetsts"  # TODO: obtenir le nom d'utilisateur
+            ANTIALIAS = True
+            COULEUR = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 26
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 500
+            HAUTEUR = 50
+            POSITION_X = 0
+            POSITION_Y = 50
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            text.Text(NAME, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      COULEUR_ARRIERE, BORDURE)
+        else:
+            TEXTE_BOUTON = "Se connecter"
+
+            ANTIALIAS = True
+            COULEUR = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 22
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 175
+            HAUTEUR = 30
+            POSITION_X = 0
+            POSITION_Y = 0
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            text.Text("Nom d'utilisateur :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      COULEUR_ARRIERE, BORDURE)
+
+            POSITION_Y += 50
+
+            text.Text("Mot de passe :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      COULEUR_ARRIERE, BORDURE)
+
+            POSITION_X = 185
+            POSITION_Y = 0
+            SCALE_X = 0
+            SCALE_Y = 0
+            LARGEUR = 315
+            HAUTEUR = 30
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR = constantes.WHITE
+            ANTIALIAS = True
+            COULEUR_TEXTE = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 22
+            CENTRE_X = False
+            CENTRE_Y = True
+            ARRIERE_PLAN = COULEUR
+            ECART = 3
+            BOX_BORDER_SIZE = 2
+            COULEUR_BORDURE = constantes.BLACK
+            MAX_CHAR = 16
+            MDP = False
+            BORDURE = 0  # rempli
+
+            textbox.Textbox(ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
+                            surface_box, POSITION_X, POSITION_Y, SCALE_X,SCALE_Y, LARGEUR, HAUTEUR,
+                            SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+            POSITION_Y += 50
+            MAX_CHAR = 32
+            MDP = True
+
+            textbox.Textbox(ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                            ARRIERE_PLAN, ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
+                            surface_box, POSITION_X, POSITION_Y, SCALE_X,SCALE_Y, LARGEUR, HAUTEUR,
+                            SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        POSITION_X = 100
+        POSITION_Y = 100
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 300
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BSeConnecter(TEXTE_BOUTON, ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ARRIERE_PLAN,
+                ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = COULEUR
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ARRIERE_PLAN = COULEUR
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ARRIERE_PLAN,
+                ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+
+class BSeConnecter(Button):  # enfait, il permet aussi de se déconnecter si on déjà connecté
+
+    def __init__(self, *arguments):
+        Button.__init__(self, *arguments)
+        self.errorobj = None
+
+    def button1down(self):
+
+        connected = False  # TODO: savoir si l'utilisateur est connecté ou pas !
+
+        if connected:
+            self.errorobj = functions.logout(self)
+        else:
+            self.errorobj = functions.login(self)
 
 
 class BStats(Button):
@@ -974,6 +1236,8 @@ class BRetour(Button):
             BJouer.button1down(None)  # C'est comme si on avait cliqué sur jouer
         elif game_state == statemanager.StateEnum.BEST_SCORE or game_state == statemanager.StateEnum.AUTRE_STATS:
             BStats.button1down(None)  # C'est comme si on avait cliqué sur statistiques
+        elif game_state == statemanager.StateEnum.CONNEXION_MENU:
+            BParam.button1down(None)  # C'est comme si on avait cliqué sur paramètres
 
 
 class BPause(Button):

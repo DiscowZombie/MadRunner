@@ -37,7 +37,7 @@ class View:
                 if obj.parentsurface == old_screen_obj:  # tous les objets qui ont pour référence l'ancien objet écran sont mis à jour
                     screen.addchild(obj)
 
-    def updatescreen(cls, passed):
+    def updatescreen(cls):
         a = View.pygame.Surface(View.screensize)  # une surface pour reset l'écran
         a.fill((255, 255, 255))
         View.screen.referance.blit(a, (0, 0))
@@ -71,13 +71,18 @@ class View:
                                 int(obj.parentsurface.abswidth * obj.scalex + obj.x + obj.x),
                                 int(obj.parentsurface.absheight * obj.scaley + obj.y) + int(
                                     obj.height / 2 - obj.boxsize / 2)))
-                        elif classname == "Tab": # ... et les tabs aussi...
+                        elif classname == "Tab":  # ... et les tabs aussi...
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
                             int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
                             int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
                             if obj.imagereferance:
                                 obj.parentsurface.referance.blit(obj.imagereferance, (obj.x + 10, obj.y + 5))
+                        elif classname == "Textbox":  # ... et les textbox aussi
+                            textobj = obj.textobj
+                            obj.parentsurface.referance.blit(textobj.referance, (
+                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
+                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
                         elif classname == "Text":
                             if obj.alone:
                                 obj.parentsurface.referance.blit(obj.referance, (
