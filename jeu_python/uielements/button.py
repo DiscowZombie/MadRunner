@@ -17,6 +17,8 @@ from uielements import textbox
 
 import constantes
 import functions
+import onlineconnector
+import settings
 
 
 class Button(uielement.UIelement):
@@ -78,7 +80,8 @@ class Button(uielement.UIelement):
                 parentsurface.referance,
                 self.color,
                 [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
-                 parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height],
+                 parentsurface.abswidth * self.scalew + self.width,
+                 parentsurface.absheight * self.scaleh + self.height],
                 self.bordersize
             )
         else:
@@ -103,7 +106,8 @@ class BJouer(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):  # Défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
+    def button1down(
+            self):  # Défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYERNUM)
         functions.delete_menu_obj()
 
@@ -228,9 +232,9 @@ class BParam(Button):
         BORDURE = 0  # rempli
 
         BConnexion("Connexion", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
-                ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                   ARRIERE_PLAN,
+                   ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -281,11 +285,11 @@ class BConnexion(Button):
         CONVERT_ALPHA = True
 
         surface_box = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
-                                        SCALE_Y, LARGEUR,
-                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                        BORDURE)  # creation de la l'objet surface où on va mettre les textbox et autres
+                                      SCALE_Y, LARGEUR,
+                                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                      BORDURE)  # creation de la l'objet surface où on va mettre les textbox et autres
 
-        connected = False  # TODO: savoir si l'utilisateur est connecté ou pas !
+        connected = onlineconnector.connected
 
         if connected:
             TEXTE_BOUTON = "Se déconnecter"
@@ -310,11 +314,13 @@ class BConnexion(Button):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text("Connecté en tant que :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+            text.Text("Connecté en tant que :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
+                      SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
-            NAME = "testetsts"  # TODO: obtenir le nom d'utilisateur
+            NAME = onlineconnector.user_name
             ANTIALIAS = True
             COULEUR = constantes.BLACK
             FONT = "Arial"
@@ -336,7 +342,8 @@ class BConnexion(Button):
             BORDURE = 0
 
             text.Text(NAME, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
+                      SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
         else:
             TEXTE_BOUTON = "Se connecter"
@@ -361,14 +368,17 @@ class BConnexion(Button):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text("Nom d'utilisateur :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+            text.Text("Nom d'utilisateur :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
+                      SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
             POSITION_Y += 50
 
             text.Text("Mot de passe :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
+                      SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
             POSITION_X = 185
@@ -396,7 +406,7 @@ class BConnexion(Button):
 
             textbox.Textbox(ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                             ARRIERE_PLAN, ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
-                            surface_box, POSITION_X, POSITION_Y, SCALE_X,SCALE_Y, LARGEUR, HAUTEUR,
+                            surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                             SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
             POSITION_Y += 50
@@ -405,7 +415,7 @@ class BConnexion(Button):
 
             textbox.Textbox(ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                             ARRIERE_PLAN, ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
-                            surface_box, POSITION_X, POSITION_Y, SCALE_X,SCALE_Y, LARGEUR, HAUTEUR,
+                            surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                             SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 100
@@ -429,9 +439,9 @@ class BConnexion(Button):
         BORDURE = 0  # rempli
 
         BSeConnecter(TEXTE_BOUTON, ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
-                ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                     ARRIERE_PLAN,
+                     ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -466,8 +476,7 @@ class BSeConnecter(Button):  # enfait, il permet aussi de se déconnecter si on 
         self.errorobj = None
 
     def button1down(self):
-
-        connected = False  # TODO: savoir si l'utilisateur est connecté ou pas !
+        connected = onlineconnector.connected
 
         if connected:
             self.errorobj = functions.logout(self)
@@ -521,17 +530,18 @@ class BStats(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BMeilleurScore("Meilleur score", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
-                ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        BMeilleurScore("Meilleur score", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                       CENTRE_Y,
+                       ARRIERE_PLAN,
+                       ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 75
 
         BAutreStats("Autre", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
-                ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                    ARRIERE_PLAN,
+                    ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -947,8 +957,8 @@ class BMeilleurScore(Button):
         CONVERT_ALPHA = True
 
         surface_population = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
-                                          SCALE_Y, LARGEUR,
-                                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                             SCALE_Y, LARGEUR,
+                                             HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 5
@@ -972,18 +982,22 @@ class BMeilleurScore(Button):
         IMAGE = "assets/img/local.png"
         BORDURE = 0  # rempli
 
-        tab_local = tab.TMeilleurScoreLocal("Local", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
-                ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        tab_local = tab.TMeilleurScoreLocal("Local", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                                            CENTRE_X, CENTRE_Y,
+                                            ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
+                                            ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                                            LARGEUR,
+                                            HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X += LARGEUR
         IMAGE = "assets/img/en ligne.png"
 
-        tab_ligne = tab.TMeilleurScoreEnLigne("En ligne", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
-                ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        tab_ligne = tab.TMeilleurScoreEnLigne("En ligne", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT,
+                                              TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                                              ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
+                                              ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X,
+                                              SCALE_Y, LARGEUR,
+                                              HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         tab.Tab.linktabs(tab_local, tab_ligne)
         tab_local.select(True)
@@ -1003,8 +1017,8 @@ class BMeilleurScore(Button):
         CONVERT_ALPHA = True
 
         surface_diff = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
-                                          SCALE_Y, LARGEUR,
-                                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                                       SCALE_Y, LARGEUR,
+                                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 5
@@ -1028,24 +1042,27 @@ class BMeilleurScore(Button):
         IMAGE = None
         BORDURE = 0  # rempli
 
-        tab_facile = tab.TFacile("Facile", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
-                ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        tab_facile = tab.TFacile("Facile", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                                 CENTRE_Y,
+                                 ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
+                                 ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X += LARGEUR
 
-        tab_moyen = tab.TMoyen("Moyen", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
-                ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        tab_moyen = tab.TMoyen("Moyen", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                               CENTRE_Y,
+                               ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
+                               ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                               HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X += LARGEUR
 
-        tab_difficile = tab.TDifficile("Difficile", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
-                ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        tab_difficile = tab.TDifficile("Difficile", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                                       CENTRE_X, CENTRE_Y,
+                                       ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
+                                       ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         tab.Tab.linktabs(tab_facile, tab_moyen, tab_difficile)
         tab_moyen.select()
@@ -1105,89 +1122,103 @@ class BAutreStats(Button):
         BORDURE = 0  # rempli
         SEUL = True
 
-        text.Text("Score total: " + str(int(stats_obj.score_total)), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Score total: " + str(int(stats_obj.score_total)), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Nombre de courses: " + str(stats_obj.nb_courses), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Nombre de courses: " + str(stats_obj.nb_courses), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X += 35
         POSITION_Y += 30
 
-        text.Text("Dont échouées: " + str(stats_obj.nb_courses_echouees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Dont échouées: " + str(stats_obj.nb_courses_echouees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X -= 35
         POSITION_Y += 35
 
-        text.Text("Nombre de sauts: " + str(stats_obj.nb_sauts), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Nombre de sauts: " + str(stats_obj.nb_sauts), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                  CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Distance parcourue: " + str(int(stats_obj.total_dist)) + " m", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Distance parcourue: " + str(int(stats_obj.total_dist)) + " m", ANTIALIAS, COULEUR_TEXTE, FONT,
+                  TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Nombre de lettres: " + str(stats_obj.correct_letters + stats_obj.wrong_letters + stats_obj.missed_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text(
+            "Nombre de lettres: " + str(stats_obj.correct_letters + stats_obj.wrong_letters + stats_obj.missed_letters),
+            ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X += 35
         POSITION_Y += 30
 
-        text.Text("Dont correctes: " + str(stats_obj.correct_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Dont correctes: " + str(stats_obj.correct_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 30
 
-        text.Text("Dont incorrectes: " + str(stats_obj.wrong_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Dont incorrectes: " + str(stats_obj.wrong_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 30
 
-        text.Text("Dont manquées: " + str(stats_obj.missed_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Dont manquées: " + str(stats_obj.missed_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 30
 
         precision = 100
         if stats_obj.wrong_letters + stats_obj.correct_letters > 0:
-            precision = int((stats_obj.correct_letters/(stats_obj.wrong_letters + stats_obj.correct_letters))*100)
+            precision = int((stats_obj.correct_letters / (stats_obj.wrong_letters + stats_obj.correct_letters)) * 100)
 
-        text.Text("Précision: " + str(precision) + " %", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Précision: " + str(precision) + " %", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                  CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X -= 35
         POSITION_Y += 35
 
-        text.Text("Haie traversées: " + str(stats_obj.haies_traversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Haie traversées: " + str(stats_obj.haies_traversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Haie renversées: " + str(stats_obj.haies_renversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Haie renversées: " + str(stats_obj.haies_renversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+                  CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Temps de jeu: " + functions.computeplaytime(stats_obj.temps_jeu), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text("Temps de jeu: " + functions.computeplaytime(stats_obj.temps_jeu), ANTIALIAS, COULEUR_TEXTE, FONT,
+                  TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -1249,6 +1280,7 @@ class BPause(Button):
         self.on = not self.on
         coregame.CoreGame.current_core.pause = self.on
         coregame.CoreGame.current_core.surface_boutons.visible = not self.on
+
 
 """
 Un bouon de retour au menu après la fin du jeu

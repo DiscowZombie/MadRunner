@@ -1,5 +1,4 @@
 # Les imports extérieurs
-
 import pygame
 
 # Gère les informations du jeu
@@ -15,7 +14,8 @@ import statemanager
 import utils
 import settings
 import userstatistics
-import constantes
+import onlineconnector
+import pycurl
 
 # Initialisation du module
 pygame.init()
@@ -38,13 +38,25 @@ running = True
 fps = utils.GameSettings().setfps()
 
 # On charge le mode DEBUG pour les développeurs
-settings.DEBUG = True if settings.SettingsManager().readjson()["debug"] is not None and settings.SettingsManager().readjson()["debug"] is True else False
+settings.DEBUG = True if settings.SettingsManager().readjson()["debug"] is not None and \
+                         settings.SettingsManager().readjson()["debug"] is True else False
 
 if settings.DEBUG:
     print("[DEBUG] Debug mode is enabled.")
     print("[DEBUG] (__init__ > l.46) FPS: " + str(fps))
 
-userstatistics.UserStatistics().load()  # chargement des statistiques (local)
+# Chargement des statistiques (local)
+userstatistics.UserStatistics().load()
+
+# Chargement du compte de l'utilisateur en ligne (Statistiques distants)
+occlass = onlineconnector.OnlineConnector(None, None, False)
+try:
+    occlass.connect()
+    occlass.loadstatistiques()
+except pycurl.error as e:
+    print(e)
+except BaseException as e:
+    print(e)
 
 passed = 0
 

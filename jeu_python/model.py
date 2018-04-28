@@ -210,12 +210,6 @@ class Model:
             ]
         )
 
-        # Charger les statistiques de l'utilisateur et son compte en ligne
-        settings.response_json = settings.StatsManager().loadkey()
-        if settings.response_json is not None:
-            user_id = json.loads(settings.response_json)['id']
-            settings.data = settings.CurlManager(constantes.WEBSITE_URI + "statistiques.php?id=" + user_id).readjson()
-            
     def introsurfacetweening(cls):
         return surface.Surface.getSurfaces()[0].tweendata
 

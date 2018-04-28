@@ -11,6 +11,8 @@ import constantes
 import userstatistics
 import settings
 import view
+import pycurl
+import onlineconnector
 
 import json
 import sys
@@ -168,8 +170,8 @@ def displaybestscore(stype, level):
     elif stype == "En ligne":
         # Convertir le score récuperer de la DB en fichier json valide
         decoded = None
-        if settings.data is not None:
-            decoded = json.loads(settings.data)
+        if onlineconnector.statistiquesjson is not None:
+            decoded = json.loads(onlineconnector.statistiquesjson)
         lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
 
         # TODO: Ne marche pas entièrement, faire une fonction pour recup ça avec un "NeverNone"
@@ -300,7 +302,7 @@ def displaybestscore(stype, level):
         SCALE_HEIGHT = 0
         COULEUR = constantes.BLACK
         ANTIALIAS = False
-        COULEUR_TEXTE = constantes.RED if settings.response_json is None else constantes.DARKGREEN
+        COULEUR_TEXTE = constantes.RED if onlineconnector.statistiquesjson is None else constantes.DARKGREEN
         FONT = "Arial"
         TAILLE_FONT = 20
         CENTRE_X = True
@@ -312,8 +314,8 @@ def displaybestscore(stype, level):
 
         text_to_dislay = \
             "Vos statistiques en ligne ne peuvent être récupérées car vous" \
-                if settings.response_json is None \
-                else "Connecté en tant que " + settings.StatsManager.getusername() + "."
+                if onlineconnector.statistiquesjson is None \
+                else "Connecté en tant que " + onlineconnector.user_name + "."
         text.Text(
             text_to_dislay,
             ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
@@ -321,7 +323,7 @@ def displaybestscore(stype, level):
             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # TODO: Temporaire en attendant d'avoir le /n dans Text()
-        if settings.response_json is None:
+        if onlineconnector.statistiquesjson is None:
             POSITION_Y += 20
 
             text.Text(
@@ -377,18 +379,26 @@ def login(bouton_connection):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text("Connexion en cours...", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                      SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+            text.Text("Connexion en cours...", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART,
+                      SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
+                      SCALE_WIDTH, SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
-            success = True  # TODO faire la requête HTTP: nom d'utilisateur: textbox_nom.text, mot de passe: textbox_mdp.text
-
-            if success:
-                connected = True  # TODO: bien mettre sur connected à l'endoit où il sera stoqué (probablement dans settings, ou dans model)
+            # Par précaution, on se déconnecte d'abord :
+            onlineconnector.OnlineConnector.disconnect()
+            # On essaye de se connecter
+            try:
+                occlass = onlineconnector.OnlineConnector(textbox_nom.text, textbox_mdp.text, True)
+                occlass.connect()
+                occlass.loadstatistiques()
                 button.BConnexion.button1down(None)
-            else:
+                # TODO: L'utilisateur est connecté avec succès, faire quelque chose ?
+            except pycurl.error as e:
                 bouton_connection.visible = True
-                error = "Blablablabla"  # mettre l'erreur qui convient !
+                error = str(e)
+            except BaseException as e:
+                error = str(e)
         else:
             textbox_mdp.boxbordercolor = constantes.RED
             error = "Mot de passe invalide"
@@ -422,12 +432,12 @@ def login(bouton_connection):
             BORDURE = 0
 
             return text.Text(error, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                      SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
-                      COULEUR_ARRIERE, BORDURE)
+                             SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                             HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                             COULEUR_ARRIERE, BORDURE)
 
 
 def logout(bouton_connection):
-
     bouton_connection.visible = False
     error = None
 
@@ -452,42 +462,13 @@ def logout(bouton_connection):
     BORDURE = 0
 
     text.Text("Déconnexion en cours...", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-              SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+              SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
+              SCALE_WIDTH, SCALE_HEIGHT,
               COULEUR_ARRIERE, BORDURE)
 
-    success = True  # TODO faire la requête HTTP pour la déconnxion, obtenir le nomn d'utilsateur + mot de passe
-
-    if success:
-        connected = False  # TODO: bien mettre sur connected à l'endoit où il sera stoqué (probablement dans settings, ou dans model)
-        button.BConnexion.button1down(None)
-    else:
-        bouton_connection.visible = True
-        error = "Blablablabla"  # mettre l'erreur qui convient !
-
-    if error:
-        ANTIALIAS = True
-        COULEUR = constantes.RED
-        FONT = "Arial"
-        TAILLE_FONT = 22
-        CENTRE_X = True
-        CENTRE_Y = True
-        ARRIERE_PLAN = None
-        ECART = 0
-        SEUL = True
-        LARGEUR = 300
-        HAUTEUR = 45
-        POSITION_X = 100
-        POSITION_Y = 155
-        SCALE_X = 0
-        SCALE_Y = 0
-        SCALE_WIDTH = 0
-        SCALE_HEIGHT = 0
-        COULEUR_ARRIERE = constantes.WHITE
-        BORDURE = 0
-
-        text.Text(error, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                  SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
-                  COULEUR_ARRIERE, BORDURE)
+    # On le déconnecte
+    onlineconnector.OnlineConnector.disconnect(True)
+    button.BConnexion.button1down(None)
 
 
 def isvalidint(supposedint):

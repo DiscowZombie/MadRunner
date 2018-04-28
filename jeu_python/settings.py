@@ -1,19 +1,13 @@
 import json
-import constantes as c
 import pycurl
 import os
 from io import BytesIO
+import settings
 
 DEBUG = False
 
 PATH = os.getenv('APPDATA') + "/MadRunner"
 FILE_PATH = PATH + "/settings.json"
-
-# TODO: On les sorts temporairement, après on passera plutot par un Singleton de la class StatsManager
-# Cette variable correspond à une representation json du retour de create_session. Soit un id ["id"] et une clé de session ["key"]
-response_json = None
-# Cette variable contient les infos de course du joueur (meilleurs temps et temps dans chaque mode de jeu)
-data = None
 
 
 # Lire facilement les fichiers JSON \ Classe "privé"
@@ -39,8 +33,8 @@ class CurlManager:
         if post:
             cu.setopt(cu.POST, True)
             cu.setopt(cu.POSTFIELDS, postfields)
-        # TODO: Debug
-        cu.setopt(cu.VERBOSE, True)
+        if settings.DEBUG:  # Afficher pleins d'infos utiles pour debug
+            cu.setopt(cu.VERBOSE, True)
         cu.perform()
         cu.close()
         self.jsonresp = buffer.getvalue().decode('iso-8859-1')
@@ -70,6 +64,7 @@ class SettingsManager:
 
 
 # Permet de récuprer les stats du joueur (nb de courses, etc...)
+"""
 class StatsManager:
 
     def __init__(self):
@@ -102,3 +97,4 @@ class StatsManager:
     @staticmethod
     def getusername():
         return SettingsManager().readjson()["account_settings"]["username"]
+"""
