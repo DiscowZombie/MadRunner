@@ -28,38 +28,43 @@
     <div id="main">
 
         <!-- Tableau de score -->
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <?php
-                // Le ternaire HORRIBLE ARRGGHH
-                //echo !empty($_REQUEST['sort']) ? "<a href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score_ASC'>&darr;</a>";
-                ?>
-                <!-- Cette partie peut-encore être amméliorer dans le futur. Utilisez le classement Bootstrap 3 avec le JS ? -->
-                <th>Pseudonyme <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=user_id/ASC'>&darr;</a>"; ?></th>
-                <th>Type de course <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=course_type/ASC'>&darr;</a>"; ?></th>
-                <th>Difficulté <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=difficulty/ASC'>&darr;</a>"; ?></th>
-                <th>Score <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score/ASC'>&darr;</a>"; ?></th>
-                <th>Temps realisé</th>
-                <th>Date de réalisation</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            foreach ($scoreboard as $item) {
-                echo "<tr>";
-                echo "<td>" . get_username($pdo, $item["user_id"]) . "</td>";
-                echo "<td>" . get_coursename($item["course_type"]) . "</td>";
-                echo "<td>" . get_difficulty($item["difficulty"]) . "</td>";
-                echo "<td>" . $item["score"] . "</td>";
-                echo "<td>" . $item["time"] . "</td>";
-                echo "<td>" . date_format(date_create($item["date"]), 'd M Y - H:i') . "</td>";
-                echo "</tr>";
-            }
-            ?>
-            </tbody>
-        </table>
-
+        <div class="row">
+            <div class="col-12 col-sm-12 col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                        <tr>
+                            <?php
+                            // Le ternaire HORRIBLE ARRGGHH
+                            //echo !empty($_REQUEST['sort']) ? "<a href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score_ASC'>&darr;</a>";
+                            ?>
+                            <!-- Cette partie peut-encore être amméliorer dans le futur. Utilisez le classement Bootstrap 3 avec le JS ? -->
+                            <th>Pseudonyme <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=user_id/ASC'>&darr;</a>"; ?></th>
+                            <th>Type de course <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=course_type/ASC'>&darr;</a>"; ?></th>
+                            <th>Difficulté <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=difficulty/ASC'>&darr;</a>"; ?></th>
+                            <th>Score <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score/ASC'>&darr;</a>"; ?></th>
+                            <th>Temps realisé</th>
+                            <th>Date de réalisation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($scoreboard as $item) {
+                            echo "<tr>";
+                            echo "<td>" . get_username($pdo, $item["user_id"]) . "</td>";
+                            echo "<td>" . get_coursename($item["course_type"]) . "</td>";
+                            echo "<td>" . get_difficulty($item["difficulty"]) . "</td>";
+                            echo "<td>" . $item["score"] . "</td>";
+                            echo "<td>" . $item["time"] . "</td>";
+                            echo "<td>" . date_format(date_create($item["date"]), 'd M Y - H:i') . "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
 
