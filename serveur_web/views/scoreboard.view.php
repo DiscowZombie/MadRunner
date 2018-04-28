@@ -25,50 +25,46 @@
     <!-- Head de la page -->
     <?php include("partials/_header.php"); ?>
 
+    <div id="main">
+
+        <!-- Tableau de score -->
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <?php
+                // Le ternaire HORRIBLE ARRGGHH
+                //echo !empty($_REQUEST['sort']) ? "<a href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score_ASC'>&darr;</a>";
+                ?>
+                <!-- Cette partie peut-encore être amméliorer dans le futur. Utilisez le classement Bootstrap 3 avec le JS ? -->
+                <th>Pseudonyme <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=user_id/ASC'>&darr;</a>"; ?></th>
+                <th>Type de course <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=course_type/ASC'>&darr;</a>"; ?></th>
+                <th>Difficulté <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=difficulty/ASC'>&darr;</a>"; ?></th>
+                <th>Score <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score/ASC'>&darr;</a>"; ?></th>
+                <th>Temps realisé</th>
+                <th>Date de réalisation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ($scoreboard as $item) {
+                echo "<tr>";
+                echo "<td>" . get_username($pdo, $item["user_id"]) . "</td>";
+                echo "<td>" . get_coursename($item["course_type"]) . "</td>";
+                echo "<td>" . get_difficulty($item["difficulty"]) . "</td>";
+                echo "<td>" . $item["score"] . "</td>";
+                echo "<td>" . $item["time"] . "</td>";
+                echo "<td>" . date_format(date_create($item["date"]), 'd M Y - H:i') . "</td>";
+                echo "</tr>";
+            }
+            ?>
+            </tbody>
+        </table>
+
+    </div>
+
+
     <!-- Bas de la page -->
     <?php include("partials/_footer.php"); ?>
-
-    <?php if(isset($scoreboard[1])){ ?>
-      <table>
-       <tr>
-           <td></td>
-           <td style="text-align: center;">
-             <b><?= $scoreboard[1]["pseudo"] ?></b>
-             <br/><?= $scoreboard[1]["coursename"] ?>
-             <br/>
-             <?= $scoreboard[1]["score"] ?> points
-             <br/>
-             <?= date_format(date_create($scoreboard[1]["date"]), 'd M Y - H:i') ?>
-           </td>
-           <td></td>
-       </tr>
-       <tr>
-          <?php if(isset($scoreboard[2])){ ?>
-             <td style="text-align: center;">
-               <b><?= $scoreboard[2]["pseudo"] ?></b>
-               <br/><?= $scoreboard[2]["coursename"] ?>
-               <br/>
-               <?= $scoreboard[2]["score"] ?> points
-               <br/>
-               <?= date_format(date_create($scoreboard[2]["date"]), 'd M Y - H:i') ?>
-             </td>
-           <?php } ?>
-           <?php if(isset($scoreboard[3])){ ?>
-             <td></td>
-             <td style="text-align: center;">
-               <b><?= $scoreboard[3]["pseudo"] ?></b>
-               <br/><?= $scoreboard[3]["coursename"] ?>
-               <br/>
-               <?= $scoreboard[3]["score"] ?> points
-               <br/>
-               <?= date_format(date_create($scoreboard[3]["date"]), 'd M Y - H:i') ?>
-             </td>
-          <?php } ?>
-       </tr>
-      </table>
-    <?php }else{ ?>
-      <p>Aucun résulat trouvé !</p>
-    <?php } ?>
 
   </body>
 </html>

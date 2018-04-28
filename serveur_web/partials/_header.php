@@ -15,8 +15,8 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> <?= $_SESSION["username"] ?> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Mon profil</a></li>
-                            <li><a href="#">Mes classements</a></li>
+                            <li class="<?= $page_title == "Mon profil" ? "active" : "" ?>"><a href="myprofil">Mon profil</a></li>
+                            <li class="<?= $page_title == "Tableau de score" ? "active" : "" ?>"><a href="scoreboard?id=<?= $_SESSION["user_id"] ?>">Mes classements</a></li>
                         </ul>
                     </li>
 

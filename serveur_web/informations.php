@@ -5,7 +5,7 @@ session_start();
 require("includes/constants.php");
 
 // On définit les variables propres à notre page
-$page_title = "Accueil";
+$page_title = "Informations";
 
 // On affiche la page
-include("views/index.view.php");
+include("views/informations.view.php");

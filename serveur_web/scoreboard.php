@@ -1,45 +1,50 @@
 <?php
 
 // On importe ce que l'on as besoin
+session_start();
 require("includes/constants.php");
 require("includes/databases.php");
 require("includes/functions.php");
 
-$uid = 0;
+// On définit les variables propres à notre page
+$page_title = "Tableau de score";
 
-if(isset($_GET["id"]) and !empty($_GET["id"])){
-  $uid = htmlspecialchars($_GET["id"]);
-  print($uid);
+# Id de l'utilisateur
+$uid = 0;
+if(!empty($_GET["id"])) {
+    $uid = $_GET["id"];
+}
+
+# Classé les résulats
+$sort_param = " ORDER BY score DESC";
+if(!empty($_GET["sort"])) {
+    $sort_param = " ORDER BY " . str_replace("/", " ", $_GET["sort"]);
 }
 
 /** == DEBUT PARTIE SQL == **/
 
 // On recupère les meilleures scores
-$q = $pdo->prepare("SELECT user_id, score, coursetype, date FROM score" . ($uid > 0 ? " WHERE user_id = ?" : "") . " ORDER BY score DESC LIMIT 3");
+$q = $pdo->prepare("SELECT * FROM score" . ($uid > 0 ? " WHERE user_id = ?" : "") . $sort_param);
 $q->execute( ($uid > 0 ? [$uid] : []) );
 
 $scoreboard = array();
 
-$i = 1;
-
-// Remplacer par une boucle for avec 3 composantes ?
 while($row = $q->fetch(PDO::FETCH_OBJ)){
-  $scoreboard[$i]["pseudo"] = get_username($pdo, $row->user_id);
-  $scoreboard[$i]["coursename"] = get_coursename($pdo, $row->coursetype);
-  $scoreboard[$i]["user_id"] = $row->user_id;
-  $scoreboard[$i]["score"] = $row->score;
-  $scoreboard[$i]["date"] = $row->date;
-  $scoreboard[$i]["coursetype"] = $row->coursetype;
-  $i++;
+    $scoreboard[$row->id]["difficulty"] = $row->difficulty;
+    $scoreboard[$row->id]["course_type"] = $row->course_type;
+    $scoreboard[$row->id]["user_id"] = $row->user_id;
+    $scoreboard[$row->id]["score"] = $row->score;
+    $scoreboard[$row->id]["time"] = $row->time;
+    $scoreboard[$row->id]["date"] = $row->date;
 }
 
 $q->closeCursor();
 
+# TODO: Mettre la variable en cache
+# var_dump($scoreboard);
+
 /** == FIN PARTIE SQL == **/
 
-
-// On définit les variables propres à notre page
-$page_title = "Tableau de bord";
 
 // On affiche la page
 include("views/scoreboard.view.php");

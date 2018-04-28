@@ -1,7 +1,7 @@
 <?php
 
 // On importe ce que l'on as besoin
-session_abort();
+session_start();
 include('filters/guest_filter.php');
 require("includes/constants.php");
 require_once("includes/databases.php");

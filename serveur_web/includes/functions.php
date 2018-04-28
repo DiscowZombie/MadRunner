@@ -64,7 +64,7 @@ if(!function_exists('get_id')){
 }
 
 if(!function_exists('get_coursename')){
-	function get_coursename($pdo, $enum){
+	function get_coursename($enum){
 		$name = "";
 
 		switch ($enum) {
@@ -85,6 +85,28 @@ if(!function_exists('get_coursename')){
 	}
 }
 
+if(!function_exists('get_difficulty')){
+    function get_difficulty($enum){
+        $name = "";
+
+        switch ($enum) {
+            case 'F':
+                $name = "Facile";
+                break;
+            case 'M':
+                $name= "Moyen";
+                break;
+            case "D":
+                $name = "Difficile";
+                break;
+            default:
+                break;
+        }
+
+        return $name;
+    }
+}
+
 if(!function_exists('is_name_unique')){
 	function is_name_unique($pdo, $pseudo){
 		$q = $pdo->prepare("SELECT id FROM user WHERE pseudo = ?");
@@ -96,12 +118,14 @@ if(!function_exists('is_name_unique')){
 	}
 }
 
+# Fonctionne: 28.04 9h54
 if(!function_exists('register_user')){
 	function register_user($pdo, $pseudo, $password){
 		$q = $pdo->prepare("INSERT INTO user(pseudo, `password`) VALUES(:pseudo, :password)");
+		$hashed = sha1($password);
 		$q->execute([
 			"pseudo" => $pseudo,
-			"password" => password_hash(htmlspecialchars($password), PASSWORD_BCRYPT)
+			"password" => $hashed
 		]);
 		$q->closeCursor();
 	}
@@ -113,7 +137,11 @@ if(!function_exists('login_user')){
         $q->execute([$pseudo]);
         $row = $q->fetch(PDO::FETCH_OBJ);
 
-        $password = password_hash(htmlspecialchars($clair_password), PASSWORD_BCRYPT);
+        $password = sha1($clair_password);
+
+        echo "Clair Pass: " . $clair_password;
+        echo "BDD Pass: " . $row->password;
+        echo "User Pass: " . $password;
 
         return strcmp($row->password, $password) == 0 ? True : False;
     }

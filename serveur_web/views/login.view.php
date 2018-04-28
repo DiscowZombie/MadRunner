@@ -58,7 +58,7 @@
             <div class="col-sm-6">
                 <strong>La connexion, à quoi ça sert ?</strong>
                 <br /> <br />
-                <p>La connexion vous permet d'acceder à un espace personnel contenant des informations sur votre personnage. Vous pourrez également y trouvez vos classments et les confronter à ceux de vos amis.</p>
+                <p>La connexion vous permet d'acceder à un espace personnel contenant des informations sur votre personnage. Vous pourrez également y trouvez vos classements et les confronter à ceux de vos amis.</p>
             </div>
 
         </div>
