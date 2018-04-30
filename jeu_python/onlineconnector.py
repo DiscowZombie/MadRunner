@@ -72,10 +72,10 @@ class OnlineConnector:
                     if settings.DEBUG:
                         print("[DEBUG] (onlineconnector > l.63) An error as append (bad username or password ?)")
                     raise BaseException("Json response seems null: Bad username or password ?")
-            except pycurl.error as e:
-                if settings.DEBUG:
-                    print("[DEBUG] (onlineconnector > l.67) An error as append !")
-                raise e
+        except pycurl.error as e:
+            if settings.DEBUG:
+                print("[DEBUG] (onlineconnector > l.67) An error as append !")
+            raise e
 
     """
     Retourne True si les stats se sont bien chargés, sinon une Exception()
