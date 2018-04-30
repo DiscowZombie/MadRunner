@@ -69,9 +69,9 @@ class OnlineConnector:
                 user_name = self.username
                 return True
             else:
-                    if settings.DEBUG:
-                        print("[DEBUG] (onlineconnector > l.63) An error as append (bad username or password ?)")
-                    raise BaseException("Json response seems null: Bad username or password ?")
+                if settings.DEBUG:
+                    print("[DEBUG] (onlineconnector > l.63) An error as append (bad username or password ?)")
+                raise BaseException("Json response seems null: Bad username or password ?")
         except pycurl.error as e:
             if settings.DEBUG:
                 print("[DEBUG] (onlineconnector > l.67) An error as append !")
@@ -96,12 +96,13 @@ class OnlineConnector:
 
         data = settings.CurlManager(c.WEBSITE_URI + "statistiques.php?id=" + user_id).readjson()
 
-        if data is None:
+        if data is None or data == "":
             if settings.DEBUG:
                 print("[DEBUG] (onlineconnector > l.92) Server web reponse is null")
             raise BaseException("Server web response is null")
 
-        self.statistiquesjson = data
+        global statistiquesjson
+        statistiquesjson = data
         return True
 
     """
@@ -111,6 +112,8 @@ class OnlineConnector:
 
     def disconnect(self, clearidentifiants=False):
         self.connected = False
+        self.current_connection = None
+
         if clearidentifiants:
             json_rep = settings.SettingsManager().readjson()
             json_rep["account_settings"][

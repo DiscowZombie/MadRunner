@@ -390,7 +390,6 @@ def login(bouton_connection):
             # Par précaution, on se déconnecte d'abord :
             onlineconnector.OnlineConnector.current_connection.disconnect()
             # On essaye de se connecter
-
             try:
                 occlass = onlineconnector.OnlineConnector(textbox_nom.text, hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)
                 occlass.connect()
