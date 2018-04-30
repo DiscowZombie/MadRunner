@@ -53,10 +53,10 @@ occlass = onlineconnector.OnlineConnector(None, None, False)
 try:
     occlass.connect()
     occlass.loadstatistiques()
-except pycurl.error as e:
-    print(e)
-except BaseException as e:
-    print(e)
+except pycurl.error:
+    pass
+except BaseException:
+    pass
 
 passed = 0
 

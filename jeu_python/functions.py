@@ -9,7 +9,6 @@ import uielements.textbox as textbox
 
 import constantes
 import userstatistics
-import settings
 import view
 import pycurl
 import onlineconnector
@@ -17,6 +16,7 @@ import onlineconnector
 import json
 import sys
 import os
+import hashlib
 
 
 # Permet de récupérer le chemmin complet aux images
@@ -388,17 +388,18 @@ def login(bouton_connection):
             # Par précaution, on se déconnecte d'abord :
             onlineconnector.OnlineConnector.disconnect()
             # On essaye de se connecter
+
             try:
-                occlass = onlineconnector.OnlineConnector(textbox_nom.text, textbox_mdp.text, True)
+                occlass = onlineconnector.OnlineConnector(textbox_nom.text, hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)
                 occlass.connect()
                 occlass.loadstatistiques()
-                button.BConnexion.button1down(None)
-                # TODO: L'utilisateur est connecté avec succès, faire quelque chose ?
-            except pycurl.error as e:
+                button.BConnexion.button1down(None)   # La connexion a eu lieu avec succès
+            except pycurl.error:
                 bouton_connection.visible = True
-                error = str(e)
-            except BaseException as e:
-                error = str(e)
+                error = "Une erreur est survenue lors de la connexion avec le serveur web"
+            except BaseException:
+                bouton_connection.visible = True
+                error = "Les identifiants semblent invalides !"
         else:
             textbox_mdp.boxbordercolor = constantes.RED
             error = "Mot de passe invalide"

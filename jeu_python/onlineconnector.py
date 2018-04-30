@@ -30,11 +30,7 @@ class OnlineConnector:
         if password is None:
             password = settings.SettingsManager().readjson()["account_settings"]["password"]
 
-        # S'ils sont encore nulles, on s'arrete ici
-        if username is None or password is None:
-            if settings.DEBUG:
-                print("[DEBUG] (onlineconnector > l.33) Username or password is still None, aborted.")
-            return
+        print("PASSW: " + "NULL" if self.password is None else self.password)
 
         self.username = username
         self.password = password
@@ -46,10 +42,16 @@ class OnlineConnector:
     """
 
     def connect(self):
+        # S'ils sont encore nulles, on s'arrete ici
+        if self.username is None or self.password is None:
+            if settings.DEBUG:
+                print("[DEBUG] (onlineconnector > l.33) Username or password is still None, aborted.")
+            return
+
         try:
             json_response = settings.CurlManager(c.WEBSITE_URI + "create_session.php", True,
                                                  "pseudo=" + self.username + "&password=" + self.password).readjson()
-            if json_response is not None:
+            if json_response is not None and json_response != "":
                 self.responsejson = json_response
                 if self.save:  # On sauvegarde les identifiants en config
                     json_rep = settings.SettingsManager().readjson()
