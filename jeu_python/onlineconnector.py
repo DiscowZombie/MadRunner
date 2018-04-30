@@ -77,19 +77,7 @@ class OnlineConnector:
     """
 
     def loadstatistiques(self):
-        if not self.connected or self.responsejson is None:
-            if settings.DEBUG:
-                print("[DEBUG] (onlineconnector > l.78) Can't load statistics of anonymous !")
-            raise BaseException("Can't load statistics of anonymous")
-
-        user_id = json.loads(self.responsejson)['id']
-
-        if user_id is None or user_id == 0:
-            if settings.DEBUG:
-                print("[DEBUG] (onlineconnector > l.85) user_id seems null or zero !")
-            raise BaseException("user_id seems null or zero")
-
-        data = settings.CurlManager(c.WEBSITE_URI + "statistiques.php?id=" + user_id).readjson()
+        data = settings.CurlManager(c.WEBSITE_URI + "statistiques.php").readjson()
 
         if data is None or data == "":
             if settings.DEBUG:

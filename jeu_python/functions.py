@@ -146,8 +146,8 @@ def displaybestscore(stype, level):
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
+    stats_obj = userstatistics.UserStatistics.stats
     if stype == "Personnel":
-        stats_obj = userstatistics.UserStatistics.stats
         suffix400 = stats_obj.best_score[level]["400m"] or "N/A"
         suffix400h = stats_obj.best_score[level]["400m haie"] or "N/A"
         suffixci = stats_obj.best_score[level]["Course infinie"] or "N/A"
@@ -173,12 +173,12 @@ def displaybestscore(stype, level):
         connection = onlineconnector.OnlineConnector.current_connection
         if connection.connected and connection.data:
             decoded = json.loads(connection.data)
-        lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
 
-        # TODO: Ne marche pas entièrement, faire une fonction pour recup ça avec un "NeverNone"
+        lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
         suffix400 = suffix400h = suffixci = suffix400gm = suffix400hgm = suffixcigm = "N/A"
+
         if lvl in decoded:
-            if "Q" in  decoded[lvl]:
+            if "Q" in decoded[lvl]:
                 suffix400 = int(float(decoded[lvl]["Q"]["score"]))
                 suffix400gm = computetime(False, float(decoded[lvl]["Q"]["time"]))
             if "QH" in decoded[lvl]:
@@ -387,11 +387,12 @@ def login(bouton_connection):
             # Par précaution, on se déconnecte d'abord :
             onlineconnector.OnlineConnector.current_connection.disconnect(True)
             # On essaye de se connecter
-            occlass = onlineconnector.OnlineConnector(textbox_nom.text, hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)
+            occlass = onlineconnector.OnlineConnector(textbox_nom.text,
+                                                      hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)
             try:
                 occlass.connect()
                 occlass.loadstatistiques()
-                button.BConnexion.button1down(None)   # La connexion a eu lieu avec succès
+                button.BConnexion.button1down(None)  # La connexion a eu lieu avec succès
             except pycurl.error:
                 bouton_connection.visible = True
                 error = "Une erreur est survenue lors de la connexion avec le serveur web"
