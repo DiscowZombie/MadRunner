@@ -1,5 +1,6 @@
 import json
 import pycurl
+import socket
 import os
 from io import BytesIO
 import settings
@@ -23,9 +24,15 @@ class JsonManager:
 
 # Faire facilement des requetes web
 class CurlManager:
-    jsonresp = None
 
     def __init__(self, uri, post=False, postfields=None):
+        self.hasinternet = True
+        try:
+            socket.create_connection(("www.google.com", 80))
+        except:
+            self.hasinternet = False
+            return  # pas de connection internet
+
         buffer = BytesIO()
         cu = pycurl.Curl()
         cu.setopt(cu.URL, uri)
@@ -40,7 +47,10 @@ class CurlManager:
         self.jsonresp = buffer.getvalue().decode('iso-8859-1')
 
     def readjson(self):
-        return self.jsonresp
+        if self.hasinternet:
+            return self.jsonresp
+        else:
+            return False
 
 
 # Permet de récupérer les options du joueur (nombre de fps, etc...)

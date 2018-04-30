@@ -387,8 +387,8 @@ def login(bouton_connection):
             # Par précaution, on se déconnecte d'abord :
             onlineconnector.OnlineConnector.current_connection.disconnect(True)
             # On essaye de se connecter
+            occlass = onlineconnector.OnlineConnector(textbox_nom.text, hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)
             try:
-                occlass = onlineconnector.OnlineConnector(textbox_nom.text, hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)
                 occlass.connect()
                 occlass.loadstatistiques()
                 button.BConnexion.button1down(None)   # La connexion a eu lieu avec succès
@@ -397,7 +397,10 @@ def login(bouton_connection):
                 error = "Une erreur est survenue lors de la connexion avec le serveur web"
             except BaseException:
                 bouton_connection.visible = True
-                error = "Les identifiants semblent invalides !"
+                if occlass.internet:
+                    error = "Les identifiants semblent invalides !"
+                else:
+                    error = "Vous n'êtes pas connecté à internet !"
         else:
             textbox_mdp.boxbordercolor = constantes.RED
             error = "Mot de passe invalide"

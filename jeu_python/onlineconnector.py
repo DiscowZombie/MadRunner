@@ -17,6 +17,7 @@ class OnlineConnector:
 
     def __init__(self, username=None, password=None, save=False):
         self.connected = False
+        self.internet = True
         self.responsejson = None  # Contient la réponse du serveur web (contient ["id"] et ["key"]. On admet que la connexion a été opéré sans soucis si elle est "not None"
         self.data = None  # Les stats du joueur
         if username is None:
@@ -47,7 +48,7 @@ class OnlineConnector:
         try:
             json_response = settings.CurlManager(c.WEBSITE_URI + "create_session.php", True,
                                                  "pseudo=" + self.username + "&password=" + self.password).readjson()
-            if json_response is not None and json_response != "":
+            if json_response is not None and json_response is not False and json_response != "":
                 self.responsejson = json_response
                 if self.save:  # On sauvegarde les identifiants en config
                     json_rep = settings.SettingsManager().readjson()
@@ -60,6 +61,8 @@ class OnlineConnector:
                     f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"'))
                     f.close()
                 self.connected = True
+            elif json_response is False:
+                self.internet = False
             else:
                 if settings.DEBUG:
                     print("[DEBUG] (onlineconnector > l.63) An error as append (bad username or password ?)")
