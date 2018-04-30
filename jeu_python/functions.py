@@ -171,7 +171,7 @@ def displaybestscore(stype, level):
         # Convertir le score récuperer de la DB en fichier json valide
         decoded = None
         connection = onlineconnector.OnlineConnector.current_connection
-        if connection.connected and connection.data:
+        if connection.data:
             decoded = json.loads(connection.data)
 
         lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
@@ -285,11 +285,11 @@ def displaybestscore(stype, level):
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     if stype == "Global":
-        SCALE_X = 0
+        SCALE_X = 0.5
         SCALE_Y = 0
         LARGEUR = 580
         HAUTEUR = 10
-        POSITION_X = 5
+        POSITION_X = - int(LARGEUR / 2)
         POSITION_Y = 380
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
@@ -306,7 +306,7 @@ def displaybestscore(stype, level):
         SEUL = True
 
         text_to_dislay = \
-            "Vos statistiques en ligne ne peuvent être récupérées car vous" \
+            "Vos statistiques ne peuvent être envoyées car vous" \
                 if not connection.connected \
                 else "Connecté en tant que " + connection.username + "."
         text.Text(
