@@ -1001,7 +1001,7 @@ class BMeilleurScore(Button):
         statemanager.StateManager.setstate(statemanager.StateEnum.BEST_SCORE)
         functions.delete_menu_obj()
 
-        # La surface où se trouvent les boutons "local" et "en ligne"
+        # La surface où se trouvent les boutons "Personnel" et "Global"
         SCALE_X = 0.5
         SCALE_Y = 0
         LARGEUR = 400
@@ -1041,7 +1041,7 @@ class BMeilleurScore(Button):
         IMAGE = "assets/img/local.png"
         BORDURE = 0  # rempli
 
-        tab_local = tab.TMeilleurScoreLocal("Local", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+        tab_local = tab.TMeilleurScoreLocal("Personnel", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
                                             CENTRE_X, CENTRE_Y,
                                             ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
                                             ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
@@ -1051,7 +1051,7 @@ class BMeilleurScore(Button):
         POSITION_X += LARGEUR
         IMAGE = "assets/img/en ligne.png"
 
-        tab_ligne = tab.TMeilleurScoreEnLigne("En ligne", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT,
+        tab_ligne = tab.TMeilleurScoreEnLigne("Global", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT,
                                               TAILLE_FONT, CENTRE_X, CENTRE_Y,
                                               ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
                                               ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X,

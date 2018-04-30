@@ -3,17 +3,11 @@ import settings
 import pycurl
 import json
 
-# Les stats du joueur
-statistiquesjson = None
-
 
 class OnlineConnector:
     # Never None, sauf si on y accede "directement" sans instance de class
 
     current_connection = None
-
-    # Contient la réponse du serveur web (contient ["id"] et ["key"]. On admet que la connexion a été opéré sans soucis si elle est "not None"
-    responsejson = None
 
     """
     Préparer l'ouverture d'une connexion pour l'utilisateur
@@ -23,6 +17,8 @@ class OnlineConnector:
 
     def __init__(self, username=None, password=None, save=False):
         self.connected = False
+        self.responsejson = None  # Contient la réponse du serveur web (contient ["id"] et ["key"]. On admet que la connexion a été opéré sans soucis si elle est "not None"
+        self.data = None  # Les stats du joueur
         if username is None:
             username = settings.SettingsManager().readjson()["account_settings"]["username"]
         if password is None:
@@ -63,11 +59,7 @@ class OnlineConnector:
                     f = open(settings.FILE_PATH, "w")
                     f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"'))
                     f.close()
-                global connected
-                connected = True
-                global user_name
-                user_name = self.username
-                return True
+                self.connected = True
             else:
                 if settings.DEBUG:
                     print("[DEBUG] (onlineconnector > l.63) An error as append (bad username or password ?)")
@@ -82,7 +74,7 @@ class OnlineConnector:
     """
 
     def loadstatistiques(self):
-        if self.responsejson is None:
+        if not self.connected or self.responsejson is None:
             if settings.DEBUG:
                 print("[DEBUG] (onlineconnector > l.78) Can't load statistics of anonymous !")
             raise BaseException("Can't load statistics of anonymous")
@@ -101,9 +93,7 @@ class OnlineConnector:
                 print("[DEBUG] (onlineconnector > l.92) Server web reponse is null")
             raise BaseException("Server web response is null")
 
-        global statistiquesjson
-        statistiquesjson = data
-        return True
+        self.data = data
 
     """
     Si clearidentifiants vaut True, on met à null ses identifiants en config
@@ -125,7 +115,3 @@ class OnlineConnector:
             f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('"null"',
                                                                                                               'null'))
             f.close()
-        return True
-
-    def isconnected(self):
-        return self.responsejson is not None

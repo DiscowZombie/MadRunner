@@ -146,7 +146,7 @@ def displaybestscore(stype, level):
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-    if stype == "Local":
+    if stype == "Personnel":
         stats_obj = userstatistics.UserStatistics.stats
         suffix400 = stats_obj.best_score[level]["400m"] or "N/A"
         suffix400h = stats_obj.best_score[level]["400m haie"] or "N/A"
@@ -167,33 +167,26 @@ def displaybestscore(stype, level):
             suffix400hgm = computetime(False, suffix400hgm)
         if type(suffixcigm) == float or type(suffixcigm) == int:
             suffixcigm = computedistance(False, suffixcigm)
-    elif stype == "En ligne":
+    elif stype == "Global":
         # Convertir le score récuperer de la DB en fichier json valide
         decoded = None
-        if onlineconnector.statistiquesjson is not None:
-            decoded = json.loads(onlineconnector.statistiquesjson)
+        connection = onlineconnector.OnlineConnector.current_connection
+        if connection.connected and connection.data:
+            decoded = json.loads(connection.data)
         lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
 
         # TODO: Ne marche pas entièrement, faire une fonction pour recup ça avec un "NeverNone"
-        suffix400 = "N/A" if decoded is None else decoded[lvl]["Q"]["score"]
-        suffix400h = "N/A" if decoded is None else decoded[lvl]["QH"]["score"]
-        suffixci = "N/A" if decoded is None else decoded[lvl]["I"]["score"]
-        if type(suffix400) == float:
-            suffix400 = int(suffix400)
-        if type(suffix400h) == float:
-            suffix400h = int(suffix400h)
-        if type(suffixci) == float:
-            suffixci = int(suffixci)
-
-        suffix400gm = "N/A" if decoded is None else decoded[lvl]["Q"]["time"]
-        suffix400hgm = "N/A" if decoded is None else decoded[lvl]["QH"]["time"]
-        suffixcigm = "N/A" if decoded is None else decoded[lvl]["I"]["time"]
-        if type(suffix400gm) == int:
-            suffix400gm = computetime(False, suffix400gm)
-        if type(suffix400hgm) == int:
-            suffix400hgm = computetime(False, suffix400hgm)
-        if type(suffixcigm) == float or type(suffixcigm) == int:
-            suffixcigm = computedistance(False, suffixcigm)
+        suffix400 = suffix400h = suffixci = suffix400gm = suffix400hgm = suffixcigm = "N/A"
+        if lvl in decoded:
+            if "Q" in  decoded[lvl]:
+                suffix400 = int(float(decoded[lvl]["Q"]["score"]))
+                suffix400gm = computetime(False, float(decoded[lvl]["Q"]["time"]))
+            if "QH" in decoded[lvl]:
+                suffix400h = int(float(decoded[lvl]["QH"]["score"]))
+                suffix400hgm = computetime(False, float(decoded[lvl]["QH"]["time"]))
+            if "I" in decoded[lvl]:
+                suffixci = int(float(decoded[lvl]["I"]["score"]))
+                suffixcigm = computedistance(False, float(decoded[lvl]["I"]["time"]))
 
     SCALE_X = 0.3
     SCALE_Y = 0
@@ -291,7 +284,7 @@ def displaybestscore(stype, level):
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-    if stype == "En ligne":
+    if stype == "Global":
         SCALE_X = 0
         SCALE_Y = 0
         LARGEUR = 580
@@ -302,7 +295,7 @@ def displaybestscore(stype, level):
         SCALE_HEIGHT = 0
         COULEUR = constantes.BLACK
         ANTIALIAS = False
-        COULEUR_TEXTE = constantes.RED if onlineconnector.statistiquesjson is None else constantes.DARKGREEN
+        COULEUR_TEXTE = constantes.RED if connection.connected is False else constantes.BLACK
         FONT = "Arial"
         TAILLE_FONT = 20
         CENTRE_X = True
@@ -314,8 +307,8 @@ def displaybestscore(stype, level):
 
         text_to_dislay = \
             "Vos statistiques en ligne ne peuvent être récupérées car vous" \
-                if onlineconnector.statistiquesjson is None \
-                else "Connecté en tant que " + onlineconnector.user_name + "."
+                if not connection.connected \
+                else "Connecté en tant que " + connection.username + "."
         text.Text(
             text_to_dislay,
             ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
@@ -323,7 +316,7 @@ def displaybestscore(stype, level):
             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         # TODO: Temporaire en attendant d'avoir le /n dans Text()
-        if onlineconnector.statistiquesjson is None:
+        if not connection.connected:
             POSITION_Y += 20
 
             text.Text(
@@ -335,7 +328,7 @@ def displaybestscore(stype, level):
             POSITION_Y += 20
 
             text.Text(
-                constantes.WEBSITE_URI + "register et vous connectez",
+                constantes.WEBSITE_URI + "register et vous connecter",
                 ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                 LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -343,7 +336,7 @@ def displaybestscore(stype, level):
             POSITION_Y += 20
 
             text.Text(
-                "à ce dèrnier depuis l'onglet Paramètres.",
+                "à ce dèrnier depuis le menu Paramètres.",
                 ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                 LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -352,6 +345,10 @@ def displaybestscore(stype, level):
 def login(bouton_connection):
     textbox_nom = textbox.Textbox.getTextboxes()[0]
     textbox_mdp = textbox.Textbox.getTextboxes()[1]
+
+    textbox_nom.boxbordercolor = constantes.BLACK
+    textbox_mdp.boxbordercolor = constantes.BLACK
+
     error = None
 
     if len(textbox_nom.text) >= 3:
@@ -388,7 +385,7 @@ def login(bouton_connection):
             view.View.updatescreen()  # oui !
 
             # Par précaution, on se déconnecte d'abord :
-            onlineconnector.OnlineConnector.current_connection.disconnect()
+            onlineconnector.OnlineConnector.current_connection.disconnect(True)
             # On essaye de se connecter
             try:
                 occlass = onlineconnector.OnlineConnector(textbox_nom.text, hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)

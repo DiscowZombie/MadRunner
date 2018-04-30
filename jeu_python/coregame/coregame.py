@@ -25,6 +25,7 @@ import pycurl
 import view as v
 import model
 import userstatistics
+import onlineconnector
 import json
 
 import random
@@ -857,20 +858,22 @@ class CoreGame:
         )
 
     def sendscore(self):
-        # Clé associé avec la session
-        key = json.loads(settings.response_json)["key"]
-        lvl = self.level_obj.identifier
-        gamemode = self.gamemodeclass.coursetype
+        connection = onlineconnector.OnlineConnector.current_connection
+        if connection.connected:
+            # Clé associé avec la session
+            key = json.loads(connection.responsejson)["key"]
+            lvl = self.level_obj.identifier
+            gamemode = self.gamemodeclass.coursetype
 
-        if key is None:
-            return
+            if key is None:
+                return
 
-        content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.num_gm_score, lvl)
+            content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.num_gm_score, lvl)
 
-        try:
-            settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content)
-        except pycurl.error:
-            self.error = "Impossible de contacter le serveur web !"
+            try:
+                settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content)
+            except pycurl.error:
+                self.error = "Impossible de contacter le serveur web !"
 
     def unreferance(self):
 

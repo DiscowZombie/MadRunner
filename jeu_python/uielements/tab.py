@@ -123,7 +123,7 @@ class TMeilleurScoreLocal(Tab):
 
     def button1down(self):
         level = self.getOtherSelectedTabs()[0].text
-        functions.displaybestscore("Local", level)
+        functions.displaybestscore("Personnel", level)
 
 
 class TMeilleurScoreEnLigne(Tab):
@@ -132,7 +132,7 @@ class TMeilleurScoreEnLigne(Tab):
 
     def button1down(self):
         level = self.getOtherSelectedTabs()[0].text
-        functions.displaybestscore("En ligne", level)
+        functions.displaybestscore("Global", level)
 
 
 class TFacile(Tab):
