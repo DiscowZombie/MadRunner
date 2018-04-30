@@ -18,27 +18,20 @@
  */
 
 require_once("includes/databases.php");
+require_once("includes/functions.php");
 
-// Si il y a un Id dans l'url
-if(isset($_GET["id"]) AND !empty($_GET["id"])){
-	$id = $_GET["id"];
+$jsontxt = array();
 
-	// On prépare le Json
-	$jsontxt = array();
+foreach (array("F", "M", "D") as $diff) {
+    foreach (array("Q", "QH", "I") as $ct) {
+        $q = $pdo->prepare("SELECT * FROM score WHERE difficulty = ? AND course_type = ? LIMIT 1");
+        $q->execute([$diff, $ct]);
+        $row = $q->fetch(PDO::FETCH_ASSOC);
 
-	// On prépare la requête
-	$q = $pdo->prepare("SELECT * FROM score WHERE user_id = ? ORDER BY difficulty, course_type, score ASC");
-	$q->execute([$id]);
-
-	while($row = $q->fetch(PDO::FETCH_OBJ)){
-		$jsontxt[$row->difficulty][$row->course_type]["score"] = $row->score;
-		$jsontxt[$row->difficulty][$row->course_type]["time"] = $row->time;
-	}
-
-	$q->closeCursor();
-
-	# On retourne les infos comme un fichier json
-	header('Content-type: application/json');
-	echo json_encode($jsontxt);
-
+        $jsontxt[$row["difficulty"]][$row["course_type"]]["score"] = $row["score"];
+        $jsontxt[$row["difficulty"]][$row["course_type"]]["time"] = $row["time"];
+    }
 }
+
+header('Content-type: application/json');
+echo json_encode($jsontxt);
