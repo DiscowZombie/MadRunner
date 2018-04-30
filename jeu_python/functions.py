@@ -385,8 +385,10 @@ def login(bouton_connection):
                       SCALE_WIDTH, SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
+            view.View.updatescreen()  # oui !
+
             # Par précaution, on se déconnecte d'abord :
-            onlineconnector.OnlineConnector.disconnect()
+            onlineconnector.OnlineConnector.current_connection.disconnect()
             # On essaye de se connecter
 
             try:
@@ -422,9 +424,9 @@ def login(bouton_connection):
             ECART = 0
             SEUL = True
             LARGEUR = 300
-            HAUTEUR = 45
+            HAUTEUR = 30
             POSITION_X = 100
-            POSITION_Y = 155
+            POSITION_Y = 150
             SCALE_X = 0
             SCALE_Y = 0
             SCALE_WIDTH = 0
@@ -440,7 +442,6 @@ def login(bouton_connection):
 
 def logout(bouton_connection):
     bouton_connection.visible = False
-    error = None
 
     ANTIALIAS = True
     COULEUR = constantes.BLACK
@@ -468,7 +469,7 @@ def logout(bouton_connection):
               COULEUR_ARRIERE, BORDURE)
 
     # On le déconnecte
-    onlineconnector.OnlineConnector.disconnect(True)
+    onlineconnector.OnlineConnector.current_connection.disconnect(True)
     button.BConnexion.button1down(None)
 
 

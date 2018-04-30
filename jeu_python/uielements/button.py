@@ -1,4 +1,5 @@
 import pygame
+import webbrowser
 
 import uielement
 import model
@@ -75,7 +76,7 @@ class Button(uielement.UIelement):
 
     def create(self):  # pour créer l'élément graphique
         parentsurface = self.parentsurface
-        if self.visible:
+        if self.visible and self.color:
             rectangle = pygame.draw.rect(
                 parentsurface.referance,
                 self.color,
@@ -272,7 +273,7 @@ class BConnexion(Button):
         functions.delete_menu_obj()
 
         LARGEUR = 500
-        HAUTEUR = 200
+        HAUTEUR = 225
         POSITION_X = -int(LARGEUR / 2)
         POSITION_Y = -int(HAUTEUR / 2)
         SCALE_X = 0.5
@@ -289,7 +290,7 @@ class BConnexion(Button):
                                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
                                       BORDURE)  # creation de la l'objet surface où on va mettre les textbox et autres
 
-        connected = onlineconnector.connected
+        connected = onlineconnector.OnlineConnector.current_connection.connected
 
         if connected:
             TEXTE_BOUTON = "Se déconnecter"
@@ -320,7 +321,7 @@ class BConnexion(Button):
                       SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
-            NAME = onlineconnector.user_name
+            NAME = onlineconnector.OnlineConnector.current_connection.username
             ANTIALIAS = True
             COULEUR = constantes.BLACK
             FONT = "Arial"
@@ -418,6 +419,56 @@ class BConnexion(Button):
                             surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                             SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
+            ANTIALIAS = True
+            COULEUR = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 20
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 400
+            HAUTEUR = 20
+            POSITION_X = 0
+            POSITION_Y = 200
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            debut_texte = text.Text("Vous n'avez pas de compte ? Inscrivez vous ", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
+                      SCALE_HEIGHT,
+                      COULEUR_ARRIERE, BORDURE)
+
+            POSITION_X = debut_texte.x + debut_texte.textreferance.size(debut_texte.text)[0]
+            POSITION_Y = 200
+            SCALE_X = 0
+            SCALE_Y = 0
+            LARGEUR = 15
+            HAUTEUR = 20
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR = None
+            ANTIALIAS = True
+            COULEUR_TEXTE = constantes.LIGHT_BLUE
+            ARRIERE_PLAN_TEXTE = None
+            FONT = "Arial"
+            TAILLE_FONT = 20
+            CENTRE_X = False
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            BORDURE = 0  # rempli
+
+            BSinscrire("ici", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                    ARRIERE_PLAN,
+                    ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
         POSITION_X = 100
         POSITION_Y = 100
         SCALE_X = 0
@@ -476,12 +527,20 @@ class BSeConnecter(Button):  # enfait, il permet aussi de se déconnecter si on 
         self.errorobj = None
 
     def button1down(self):
-        connected = onlineconnector.connected
+        connected = onlineconnector.OnlineConnector.current_connection.connected
 
         if connected:
             self.errorobj = functions.logout(self)
         else:
             self.errorobj = functions.login(self)
+
+
+class BSinscrire(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1down(self):
+        webbrowser.open(constantes.WEBSITE_URI + "register")
 
 
 class BStats(Button):

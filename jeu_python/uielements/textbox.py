@@ -94,7 +94,7 @@ class Textbox(uielement.UIelement):
 
             if draw_line:
                 parentsurface = self.parentsurface
-                text_size = self.textobj.textreferance.size(self.text)
+                text_size = self.textobj.textreferance.size(self.textobj.text)
                 pygame.draw.line(
                     parentsurface.referance,
                     constantes.BLACK,
