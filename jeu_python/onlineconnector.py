@@ -28,11 +28,6 @@ class OnlineConnector:
         if password is None:
             password = settings.SettingsManager().readjson()["account_settings"]["password"]
 
-        # S'ils sont encore nulles, on s'arrete ici
-        if username is None or password is None:
-            if settings.DEBUG:
-                print("[DEBUG] (onlineconnector > l.33) Username or password is still None, aborted.")
-
         self.username = username
         self.password = password
         self.save = save
@@ -47,26 +42,33 @@ class OnlineConnector:
     """
 
     def connect(self):
-        if self.username and self.password:
-            try:
-                json_response = settings.CurlManager(c.WEBSITE_URI + "create_session.php", True,
-                                                     "pseudo=" + self.username + "&password=" + self.password).readjson()
-                if json_response is not None:
-                    self.responsejson = json_response
-                    if self.save:  # On sauvegarde les identifiants en config
-                        json_rep = settings.SettingsManager().readjson()
-                        json_rep["account_settings"][
-                            "username"] = "null" if self.username is None else self.username
-                        json_rep["account_settings"][
-                            "password"] = "null" if self.password is None else self.password
+        # S'ils sont encore nulles, on s'arrete ici
+        if self.username is None or self.password is None:
+            if settings.DEBUG:
+                print("[DEBUG] (onlineconnector > l.33) Username or password is still None, aborted.")
+            return
 
-                        f = open(settings.FILE_PATH, "w")
-                        f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"'))
-                        f.close()
-                    self.connected = True
-                    OnlineConnector.current_connection = self
-                    return True
-                else:
+        try:
+            json_response = settings.CurlManager(c.WEBSITE_URI + "create_session.php", True,
+                                                 "pseudo=" + self.username + "&password=" + self.password).readjson()
+            if json_response is not None and json_response != "":
+                self.responsejson = json_response
+                if self.save:  # On sauvegarde les identifiants en config
+                    json_rep = settings.SettingsManager().readjson()
+                    json_rep["account_settings"][
+                        "username"] = "null" if self.username is None else self.username
+                    json_rep["account_settings"][
+                        "password"] = "null" if self.password is None else self.password
+
+                    f = open(settings.FILE_PATH, "w")
+                    f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"'))
+                    f.close()
+                global connected
+                connected = True
+                global user_name
+                user_name = self.username
+                return True
+            else:
                     if settings.DEBUG:
                         print("[DEBUG] (onlineconnector > l.63) An error as append (bad username or password ?)")
                     raise BaseException("Json response seems null: Bad username or password ?")
