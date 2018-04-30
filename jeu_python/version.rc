@@ -7,8 +7,8 @@ VSVersionInfo(
     # filevers and prodvers should be always a tuple with four items: (1, 2, 3, 4)
     # Set not needed items to zero 0.
 	# 0: pre-release, 1: release | 0: beta, 1: stable | version information
-    filevers=(0, 0, 0, 1),
-    prodvers=(0, 0, 0, 1),
+    filevers=(1, 0, 0, 2),
+    prodvers=(1, 0, 0, 2),
     # Contains a bitmask that specifies the valid bits 'flags'r
     mask=0x3f,
     # Contains a bitmask that specifies the Boolean attributes of the file.
@@ -31,12 +31,12 @@ VSVersionInfo(
       StringTable(
         u'000004b0',
         [StringStruct(u'FileDescription', u'Mad Runner - Projet ISN'),
-        StringStruct(u'FileVersion', u'0.1b'),
-        StringStruct(u'InternalName', u'Mad Runner 0.1b'),
+        StringStruct(u'FileVersion', u'0.2b'),
+        StringStruct(u'InternalName', u'Mad Runner 0.2b'),
         StringStruct(u'LegalCopyright', u'Licenced under the GNU GPL version 3. Copyright (C) 2018  Ahmet ADAM, Mathéo CIMBARO'),
-        StringStruct(u'OriginalFilename', u'Mad Runner 0.1b'),
+        StringStruct(u'OriginalFilename', u'Mad Runner 0.2b'),
         StringStruct(u'ProductName', u'Mad Runner'),
-        StringStruct(u'ProductVersion', u'0.1b')])
+        StringStruct(u'ProductVersion', u'0.2b')])
       ]), 
     VarFileInfo([VarStruct(u'Translation', [0, 1200])])
   ]
