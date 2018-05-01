@@ -24,7 +24,7 @@ $jsontxt = array();
 
 foreach (array("F", "M", "D") as $diff) {
     foreach (array("Q", "QH", "I") as $ct) {
-        $q = $pdo->prepare("SELECT * FROM score WHERE difficulty = ? AND course_type = ? LIMIT 1");
+        $q = $pdo->prepare("SELECT * FROM score WHERE difficulty = ? AND course_type = ? ORDER BY score ASC LIMIT 1");
         $q->execute([$diff, $ct]);
         $row = $q->fetch(PDO::FETCH_ASSOC);
 
