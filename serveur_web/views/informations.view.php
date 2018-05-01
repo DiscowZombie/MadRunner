@@ -47,23 +47,18 @@
         Dans Bootstrap, l'écran est découpé en 12 zones verticales. Ici on dit que l'on prends juste 6 zones, ce qui correspond à la moitié de
         l'écran, partie gauche. Le "sm" permet que cette partie s'adapte à tous les écrans (téléphones).
         -->
-        <div class="col-sm-6">
-            <!-- Ici, c'est la partie gaiche de l'écran -->
-            <!-- Par exemple, si j'ajoute "class="img-circle"" mon image sera automatiquement arrondie sans modification sur le fichier en lui même, merci Bootstrap -->
-            <img src="../fausse image" class="img-circle"/>
+        <div class="col-sm-12">
 
-            <!-- On peut aussi créé des boutons super facilement -->
-            <!-- Ici, sa class va le rendre bleu, les bouton "info" étant bleau dans Bootstrap -->
-            <button type="button" class="btn btn-info">Je suis un bouton</button>
+            <p>
+                Mad Runner est un jeu de course gratuit et open-source développé par ADAM Ahmet et CIMBARO Mathéo, réalisé pour un projet en cours d'Informatique et Sciences du Numérique (ISN). Le but du projet en question était de créer un jeu drôle et divertissant. Le jeu a été créé avec le language de programmation <a href="https://www.python.org/">Python</a> et en utilisant le module <a href="https://www.pygame.org/">Pygame</a>, permettant la création de jeux.
+            </p>
+
+            <h3>Histoire</h3>
+            <p>
+                Le développement du jeu a commencé le 1er janvier 2018, et la première version officielle est sortie le ... 2018.
+            </p>
 
             <!-- Bon on peut faire pleins d'autres trucs mais la doc les listes mieux que moi !  https://www.w3schools.com/bootstrap -->
-        </div>
-
-        <!--
-        De même, on reprends les 6 zones qu'il reste pour la partie droite de l'écran
-        -->
-        <div class="col-sm-6">
-            <p>Partie droite de l'écran</p>
         </div>
 
 
