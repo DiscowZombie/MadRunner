@@ -231,12 +231,10 @@ class CoreGame:
         TAILLE_FONT = 30
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = constantes.WHITE
         ECART = 0
         BORDURE = 3
 
         button.BPause("| |", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                      ARRIERE_PLAN,
                       ECART, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -383,6 +381,11 @@ class CoreGame:
 
             # Vérifie qu'il y a assez d'énergie pour continuer. Si son énergie est nulle, il tombe est c'est fini
             if char.energy <= 0:
+                self.end(False)
+                return
+
+            # De même, si la vitesse devient négatif, le jeu s'arrête !
+            if char.speed <= 0:
                 self.end(False)
                 return
 
@@ -670,18 +673,16 @@ class CoreGame:
             COULEUR = constantes.GRAY
             ANTIALIAS = True
             COULEUR_TEXTE = constantes.BLACK
-            ARRIERE_PLAN_TEXTE = COULEUR
+            ARRIERE_PLAN_TEXTE = None
             FONT = "Arial"
             TAILLE_FONT = 24
             CENTRE_X = True
             CENTRE_Y = True
-            ARRIERE_PLAN = COULEUR
             ECART = 0
             BORDURE = 0  # rempli
 
             bouton_menu = button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                               CENTRE_Y,
-                               ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
+                               CENTRE_Y, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
                                SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             bouton_menu.visible = self.personnage == new_runner
 
@@ -870,10 +871,10 @@ class CoreGame:
 
             content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.num_gm_score, lvl)
 
-            try:
-                settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content)
-            except pycurl.error:
-                self.error = "Impossible de contacter le serveur web !"
+            def response(response_obj):
+                pass
+
+            settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content, response)
 
     def unreferance(self):
 

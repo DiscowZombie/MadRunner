@@ -9,7 +9,7 @@ class Facile:
         self.grille = key.EasyGrid()
         self.maxkey = 20
         self.keytimeout = 10
-        self.courseurspeed = 1  # moins vite
+        self.courseurspeed = -0.5  # moins vite
         self.hitpenality = 15  # perd 15% de sa vitesse en heurtant une haie
         self.identifier = Facile.identifier
 
@@ -35,6 +35,6 @@ class Difficile:
         self.grille = None
         self.maxkey = 15
         self.keytimeout = 3
-        self.courseurspeed = -1  # plus vite
+        self.courseurspeed = 0.5  # plus vite
         self.hitpenality = 50
         self.identifier = Difficile.identifier

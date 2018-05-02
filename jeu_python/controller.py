@@ -1,7 +1,5 @@
 import model
 import view
-import statemanager
-from coregame import coregame as coregame
 
 
 class Controller:
@@ -39,6 +37,8 @@ class Controller:
                 Controller.pressing_buttons["Mouse" + str(button_number)] = False
                 if button_number == 1:  # clic gauche
                     model.Model.mousebutton1up(event.pos)
+            elif event.type == pygame.MOUSEMOTION:
+                model.Model.mousebutton1move(event.pos)
             elif event.type == pygame.KEYDOWN:
                 model.Model.keydown(event)
         return True

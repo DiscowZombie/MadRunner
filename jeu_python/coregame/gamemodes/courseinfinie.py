@@ -140,7 +140,7 @@ class CourseInfinie:
             self.farthest = self.next_obstacle
             self.next_obstacle = self.farthest + 35*random.randint(5, 15)/10
 
-        self.courseur.speed = distance/distance**(0.73 + coregame.CoreGame.current_core.level_obj.courseurspeed/100)
+        self.courseur.speed = distance**(0.275 + coregame.CoreGame.current_core.level_obj.courseurspeed/100)
 
     def computescore(self):  # le score dépend de la distance parcourue et du nombre d'obstacles non renversées
         dist = coregame.CoreGame.current_core.distance

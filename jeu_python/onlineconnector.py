@@ -18,6 +18,7 @@ class OnlineConnector:
     def __init__(self, username=None, password=None, save=False):
         self.connected = False
         self.internet = True
+        self.errortype = None
         self.responsejson = None  # Contient la réponse du serveur web (contient ["id"] et ["key"]. On admet que la connexion a été opéré sans soucis si elle est "not None"
         self.data = None  # Les stats du joueur
         if username is None:
@@ -45,9 +46,8 @@ class OnlineConnector:
                 print("[DEBUG] (onlineconnector > l.33) Username or password is still None, aborted.")
             return
 
-        try:
-            json_response = settings.CurlManager(c.WEBSITE_URI + "create_session.php", True,
-                                                 "pseudo=" + self.username + "&password=" + self.password).readjson()
+        def response(response_obj):
+            json_response = response_obj.readjson()
             if json_response is not None and json_response is not False and json_response != "":
                 self.responsejson = json_response
                 if self.save:  # On sauvegarde les identifiants en config
@@ -66,25 +66,28 @@ class OnlineConnector:
             else:
                 if settings.DEBUG:
                     print("[DEBUG] (onlineconnector > l.63) An error as append (bad username or password ?)")
+                self.errortype = BaseException
                 raise BaseException("Json response seems null: Bad username or password ?")
-        except pycurl.error as e:
-            if settings.DEBUG:
-                print("[DEBUG] (onlineconnector > l.67) An error as append !")
-            raise e
+
+        return settings.CurlManager(c.WEBSITE_URI + "create_session.php", True,
+                             "pseudo=" + self.username + "&password=" + self.password, response)
 
     """
     Retourne True si les stats se sont bien chargés, sinon une Exception()
     """
 
     def loadstatistiques(self):
-        data = settings.CurlManager(c.WEBSITE_URI + "statistiques.php").readjson()
 
-        if data is None or data == "":
-            if settings.DEBUG:
-                print("[DEBUG] (onlineconnector > l.92) Server web reponse is null")
-            raise BaseException("Server web response is null")
+        def response(response_obj):
+            data = response_obj.readjson()
+            if data is None or data == "":
+                if settings.DEBUG:
+                    print("[DEBUG] (onlineconnector > l.92) Server web reponse is null")
+                raise BaseException("Server web response is null")
 
-        self.data = data
+            self.data = data
+
+        return settings.CurlManager(c.WEBSITE_URI + "statistiques.php", None, None, response)
 
     """
     Si clearidentifiants vaut True, on met à null ses identifiants en config
@@ -93,7 +96,6 @@ class OnlineConnector:
 
     def disconnect(self, clearidentifiants=False):
         self.connected = False
-        self.current_connection = None
 
         if clearidentifiants:
             json_rep = settings.SettingsManager().readjson()

@@ -177,7 +177,7 @@ def displaybestscore(stype, level):
         lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
         suffix400 = suffix400h = suffixci = suffix400gm = suffix400hgm = suffixcigm = "N/A"
 
-        if lvl in decoded:
+        if decoded and lvl in decoded:
             if "Q" in decoded[lvl]:
                 suffix400 = int(float(decoded[lvl]["Q"]["score"]))
                 suffix400gm = computetime(False, float(decoded[lvl]["Q"]["time"]))
@@ -212,13 +212,13 @@ def displaybestscore(stype, level):
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-    POSITION_Y += 55
+    POSITION_Y += 50
 
     text.Text("400m haie: " + str(suffix400h), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-    POSITION_Y += 55
+    POSITION_Y += 50
 
     text.Text("Course infinie: " + str(suffixci), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
@@ -272,19 +272,48 @@ def displaybestscore(stype, level):
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-    POSITION_Y += 55
+    POSITION_Y += 50
 
     text.Text(suffix400hgm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-    POSITION_Y += 55
+    POSITION_Y += 50
 
     text.Text(suffixcigm, ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     if stype == "Global":
+        exists = False
+        for bouton in list(button.Button.getButtons()):
+            if bouton.text == "Rafraîchir":
+                exists = True
+
+        if not exists:
+            SCALE_X = 0.5
+            SCALE_Y = 0
+            LARGEUR = 150
+            HAUTEUR = 40
+            POSITION_X = -int(LARGEUR / 2)
+            POSITION_Y = 330
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR = constantes.GRAY
+            ANTIALIAS = True
+            COULEUR_TEXTE = constantes.BLACK
+            ARRIERE_PLAN_TEXTE = None
+            FONT = "Arial"
+            TAILLE_FONT = 22
+            CENTRE_X = True
+            CENTRE_Y = True
+            ECART = 0
+            BORDURE = 0  # rempli
+
+            button.BRafraichir("Rafraîchir", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                     ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
         SCALE_X = 0.5
         SCALE_Y = 0
         LARGEUR = 580
@@ -340,6 +369,10 @@ def displaybestscore(stype, level):
                 ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                 LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+    else:
+        for bouton in list(button.Button.getButtons()):
+            if bouton.text == "Rafraîchir":
+                bouton.unreferance()
 
 
 def login(bouton_connection):
@@ -384,22 +417,23 @@ def login(bouton_connection):
 
             view.View.updatescreen()  # oui !
 
-            # Par précaution, on se déconnecte d'abord :
-            onlineconnector.OnlineConnector.current_connection.disconnect(True)
-            # On essaye de se connecter
+            # Essaye de se connecter
             occlass = onlineconnector.OnlineConnector(textbox_nom.text,
                                                       hashlib.sha1(textbox_mdp.text.encode('utf-8')).hexdigest(), True)
-            try:
-                occlass.connect()
-                occlass.loadstatistiques()
-                button.BConnexion.button1down(None)  # La connexion a eu lieu avec succès
-            except pycurl.error:
-                bouton_connection.visible = True
-                error = "Une erreur est survenue lors de la connexion avec le serveur web"
-            except BaseException:
+
+            connection_thread = occlass.connect()
+            connection_thread.join()
+            stats_thread = occlass.loadstatistiques()
+            stats_thread.join()
+            if occlass.connected:
+                button.BConnexion.button1click(None)  # La connexion a eu lieu avec succès
+            else:
                 bouton_connection.visible = True
                 if occlass.internet:
-                    error = "Les identifiants semblent invalides !"
+                    if occlass.errortype == BaseException:
+                        error = "Les identifiants semblent invalides !"
+                    else:
+                        error = "Une erreur est survenue lors de la connexion avec le serveur web"
                 else:
                     error = "Vous n'êtes pas connecté à internet !"
         else:
@@ -470,7 +504,7 @@ def logout(bouton_connection):
 
     # On le déconnecte
     onlineconnector.OnlineConnector.current_connection.disconnect(True)
-    button.BConnexion.button1down(None)
+    button.BConnexion.button1click(None)
 
 
 def isvalidint(supposedint):
