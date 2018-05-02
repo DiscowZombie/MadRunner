@@ -11,7 +11,7 @@ class Textbox(uielement.UIelement):
     textboxes = []
 
     def __init__(self, antialias, couleur_text, font, font_size, centeredx, centeredy,
-                 backgroundcolor, offset, boxbordersize, boxbordercolor, maxchar, mdp, *UIargs):
+                 offset, boxbordersize, boxbordercolor, maxchar, mdp, *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Textbox")
 
@@ -22,7 +22,6 @@ class Textbox(uielement.UIelement):
         self.fontsize = font_size
         self.textcenteredx = centeredx
         self.textcenteredy = centeredy
-        self.backgroundcolor = backgroundcolor
         self.textoffset = offset
         self.boxbordersize = boxbordersize
         self.boxbordercolor = boxbordercolor

@@ -77,6 +77,8 @@ class Model:
     def mousebutton1down(cls, position):  # click gauche
         for bouton in list(button.Button.getButtons()):
             bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.abswidth, bouton.absheight)
+            if bouton.mousein:
+                bouton.click()
         for checkboxe in checkbox.Checkbox.getCheckboxes():
             if f.checkmousebouton(position, checkboxe.absx,
                                   checkboxe.absy + int(checkboxe.height / 2 - checkboxe.boxsize / 2), checkboxe.boxsize,
@@ -92,7 +94,14 @@ class Model:
                 textboxe.unfocus()
 
     def mousebutton1up(cls, position):
-        print("plus en train de click")
+        for bouton in list(button.Button.getButtons()):
+            if bouton.mousein and bouton.clicking:
+                bouton.button1click()
+            bouton.clicking = False
+
+    def mousebutton1move(cls, position):
+        for bouton in list(button.Button.getButtons()):
+            bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.abswidth, bouton.absheight)
 
     def keydown(cls, event):
         if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:
@@ -282,31 +291,31 @@ class Model:
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         button.BJouer("Jouer", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                      ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                      ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                       SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         button.BStats("Statistiques", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                       CENTRE_Y,
-                      ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                      ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                       SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
         button.BParam("Paramètres", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                      ARRIERE_PLAN, ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
+                      ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                       SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     updatemodel = classmethod(updatemodel)
     mousebutton1down = classmethod(mousebutton1down)
     mousebutton1up = classmethod(mousebutton1up)
+    mousebutton1move = classmethod(mousebutton1move)
     keydown = classmethod(keydown)
     startintro = classmethod(startintro)
     introsurfacetweening = classmethod(introsurfacetweening)

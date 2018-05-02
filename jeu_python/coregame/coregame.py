@@ -231,12 +231,10 @@ class CoreGame:
         TAILLE_FONT = 30
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = constantes.WHITE
         ECART = 0
         BORDURE = 3
 
         button.BPause("| |", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                      ARRIERE_PLAN,
                       ECART, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -670,18 +668,16 @@ class CoreGame:
             COULEUR = constantes.GRAY
             ANTIALIAS = True
             COULEUR_TEXTE = constantes.BLACK
-            ARRIERE_PLAN_TEXTE = COULEUR
+            ARRIERE_PLAN_TEXTE = None
             FONT = "Arial"
             TAILLE_FONT = 24
             CENTRE_X = True
             CENTRE_Y = True
-            ARRIERE_PLAN = COULEUR
             ECART = 0
             BORDURE = 0  # rempli
 
             bouton_menu = button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                               CENTRE_Y,
-                               ARRIERE_PLAN, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
+                               CENTRE_Y, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
                                SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             bouton_menu.visible = self.personnage == new_runner
 

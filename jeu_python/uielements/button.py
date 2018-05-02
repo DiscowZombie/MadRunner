@@ -40,7 +40,7 @@ class Button(uielement.UIelement):
     """
 
     def __init__(self, textb, antialias, couleur_text, backgroundtextcolor, font, font_size, centeredx, centeredy,
-                 backgroundcolor, offset, *UIargs):
+                offset, *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Button")
 
@@ -52,7 +52,6 @@ class Button(uielement.UIelement):
         self.fontsize = font_size
         self.textcenteredx = centeredx
         self.textcenteredy = centeredy
-        self.backgroundcolor = backgroundcolor
         self.textoffset = offset
         self.clicking = False  # va servir plus tard
         self.ismousein = False
@@ -67,19 +66,36 @@ class Button(uielement.UIelement):
 
     def setmousein(self, isin):
         self.ismousein = isin
-        if isin:
-            # vérifie si on est en train de cliquer dessus
-            if controller.Controller.getpressingbuttons()["Mouse1"] and self.visible:
-                self.button1down()
+
+    def click(self):
+        self.clicking = True
 
     mousein = property(getmousein, setmousein)
 
     def create(self):  # pour créer l'élément graphique
         parentsurface = self.parentsurface
         if self.visible and self.color:
+            if self.mousein:
+                if self.clicking:
+                    rect_color = (self.color[0] + 20, self.color[1] + 20, self.color[2] + 20)
+                else:
+                    rect_color = (self.color[0] - 30, self.color[1] - 30, self.color[2] - 30)
+            else:
+                rect_color = self.color
+            rect_color = list(rect_color)
+
+            i = 0
+            for colour in rect_color:  # vérifie que les composants de la couleur n'excèdent pas 255 ou ne sont pas inférieurs à 0
+                if colour > 255:
+                    colour = 255
+                elif colour < 0:
+                    colour = 0
+                rect_color[i] = colour
+                i += 1
+
             rectangle = pygame.draw.rect(
                 parentsurface.referance,
-                self.color,
+                tuple(rect_color),
                 [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
                  parentsurface.abswidth * self.scalew + self.width,
                  parentsurface.absheight * self.scaleh + self.height],
@@ -107,7 +123,7 @@ class BJouer(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
+    def button1click(
             self):  # Défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.PLAYERNUM)
         functions.delete_menu_obj()
@@ -140,24 +156,21 @@ class BJouer(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         B1Joueur("1 joueur", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                 ARRIERE_PLAN,
                  ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
 
         """
         B2Joueurs("2 joueurs", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                  ARRIERE_PLAN,
                   ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
 
@@ -172,17 +185,15 @@ class BJouer(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -191,7 +202,7 @@ class BParam(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.SETTINGS_MENU)
         functions.delete_menu_obj()
 
@@ -223,17 +234,15 @@ class BParam(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BConnexion("Connexion", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                   ARRIERE_PLAN,
                    ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -248,17 +257,15 @@ class BParam(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -268,7 +275,7 @@ class BConnexion(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.CONNEXION_MENU)
         functions.delete_menu_obj()
 
@@ -397,7 +404,6 @@ class BConnexion(Button):
             TAILLE_FONT = 22
             CENTRE_X = False
             CENTRE_Y = True
-            ARRIERE_PLAN = COULEUR
             ECART = 3
             BOX_BORDER_SIZE = 2
             COULEUR_BORDURE = constantes.BLACK
@@ -406,7 +412,7 @@ class BConnexion(Button):
             BORDURE = 0  # rempli
 
             textbox.Textbox(ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
+                            ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
                             surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                             SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -415,7 +421,7 @@ class BConnexion(Button):
             MDP = True
 
             textbox.Textbox(ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                            ARRIERE_PLAN, ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
+                            ECART, BOX_BORDER_SIZE, COULEUR_BORDURE, MAX_CHAR, MDP,
                             surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                             SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -460,12 +466,10 @@ class BConnexion(Button):
             TAILLE_FONT = 20
             CENTRE_X = False
             CENTRE_Y = True
-            ARRIERE_PLAN = None
             ECART = 0
             BORDURE = 0  # rempli
 
             BSinscrire("ici", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                    ARRIERE_PLAN,
                     ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -480,17 +484,15 @@ class BConnexion(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BSeConnecter(TEXTE_BOUTON, ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                     ARRIERE_PLAN,
                      ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -505,17 +507,15 @@ class BConnexion(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -526,7 +526,7 @@ class BSeConnecter(Button):  # enfait, il permet aussi de se déconnecter si on 
         Button.__init__(self, *arguments)
         self.errorobj = None
 
-    def button1down(self):
+    def button1click(self):
         connected = onlineconnector.OnlineConnector.current_connection.connected
 
         if connected:
@@ -539,7 +539,7 @@ class BSinscrire(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         webbrowser.open(constantes.WEBSITE_URI + "register")
 
 
@@ -547,7 +547,7 @@ class BStats(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.STATS_MENU)
         functions.delete_menu_obj()
 
@@ -580,25 +580,22 @@ class BStats(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BMeilleurScore("Meilleur score", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                        CENTRE_Y,
-                       ARRIERE_PLAN,
                        ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 75
 
         BAutreStats("Autre", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                    ARRIERE_PLAN,
                     ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -613,17 +610,15 @@ class BStats(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -633,7 +628,7 @@ class B1Joueur(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
         functions.delete_menu_obj()
 
@@ -895,17 +890,15 @@ class B1Joueur(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BCommencer("Commencer", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                   ARRIERE_PLAN,
                    ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -920,17 +913,15 @@ class B1Joueur(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -941,7 +932,7 @@ class B2Joueurs(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(
+    def button1click(
             self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
         statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
         functions.delete_menu_obj()
@@ -957,17 +948,15 @@ class B2Joueurs(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
 
@@ -976,7 +965,7 @@ class BCommencer(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         carte = None
         modejeu = None
         level = None
@@ -997,7 +986,7 @@ class BMeilleurScore(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.BEST_SCORE)
         functions.delete_menu_obj()
 
@@ -1137,17 +1126,15 @@ class BMeilleurScore(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -1156,7 +1143,7 @@ class BAutreStats(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         statemanager.StateManager.setstate(statemanager.StateEnum.AUTRE_STATS)
         functions.delete_menu_obj()
         stats_obj = userstatistics.UserStatistics.stats
@@ -1290,17 +1277,15 @@ class BAutreStats(Button):
         COULEUR = constantes.GRAY
         ANTIALIAS = True
         COULEUR_TEXTE = constantes.BLACK
-        ARRIERE_PLAN_TEXTE = COULEUR
+        ARRIERE_PLAN_TEXTE = None
         FONT = "Arial"
         TAILLE_FONT = 24
         CENTRE_X = True
         CENTRE_Y = True
-        ARRIERE_PLAN = COULEUR
         ECART = 0
         BORDURE = 0  # rempli
 
         BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -1316,18 +1301,18 @@ class BRetour(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         functions.delete_menu_obj()
 
         game_state = statemanager.StateManager.getstate()
         if game_state in menu_states:
             model.Model.main_menu(True)
         elif game_state == statemanager.StateEnum.MAP_AND_DIFF:
-            BJouer.button1down(None)  # C'est comme si on avait cliqué sur jouer
+            BJouer.button1click(None)  # C'est comme si on avait cliqué sur jouer
         elif game_state == statemanager.StateEnum.BEST_SCORE or game_state == statemanager.StateEnum.AUTRE_STATS:
-            BStats.button1down(None)  # C'est comme si on avait cliqué sur statistiques
+            BStats.button1click(None)  # C'est comme si on avait cliqué sur statistiques
         elif game_state == statemanager.StateEnum.CONNEXION_MENU:
-            BParam.button1down(None)  # C'est comme si on avait cliqué sur paramètres
+            BParam.button1click(None)  # C'est comme si on avait cliqué sur paramètres
 
 
 class BPause(Button):
@@ -1335,7 +1320,7 @@ class BPause(Button):
         Button.__init__(self, *arguments)
         self.on = False  # est-ce en pause
 
-    def button1down(self):
+    def button1click(self):
         self.on = not self.on
         coregame.CoreGame.current_core.pause = self.on
         coregame.CoreGame.current_core.surface_boutons.visible = not self.on
@@ -1351,5 +1336,5 @@ class BRetourMenu(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1down(self):
+    def button1click(self):
         coregame.CoreGame.current_core.unreferance()  # "efface" la partie

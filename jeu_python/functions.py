@@ -177,7 +177,7 @@ def displaybestscore(stype, level):
         lvl = str("F" if level == "Facile" else ("M" if level == "Moyen" else "D"))
         suffix400 = suffix400h = suffixci = suffix400gm = suffix400hgm = suffixcigm = "N/A"
 
-        if lvl in decoded:
+        if decoded and lvl in decoded:
             if "Q" in decoded[lvl]:
                 suffix400 = int(float(decoded[lvl]["Q"]["score"]))
                 suffix400gm = computetime(False, float(decoded[lvl]["Q"]["time"]))
@@ -392,7 +392,7 @@ def login(bouton_connection):
             try:
                 occlass.connect()
                 occlass.loadstatistiques()
-                button.BConnexion.button1down(None)  # La connexion a eu lieu avec succès
+                button.BConnexion.button1click(None)  # La connexion a eu lieu avec succès
             except pycurl.error:
                 bouton_connection.visible = True
                 error = "Une erreur est survenue lors de la connexion avec le serveur web"
@@ -470,7 +470,7 @@ def logout(bouton_connection):
 
     # On le déconnecte
     onlineconnector.OnlineConnector.current_connection.disconnect(True)
-    button.BConnexion.button1down(None)
+    button.BConnexion.button1click(None)
 
 
 def isvalidint(supposedint):
