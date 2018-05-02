@@ -1290,6 +1290,20 @@ class BAutreStats(Button):
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
+class BRafraichir(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        try:
+            onlineconnector.OnlineConnector.current_connection.loadstatistiques().join()
+        except:
+            return
+        for tabb in tab.Tab.getTabs():
+            if tabb.selected and tabb.text != "Global":
+                functions.displaybestscore("Global", tabb.text)
+
+
 menu_states = [  # les états du jeu qui font retourner au menu principal lorsqu'on clique sur retour
     statemanager.StateEnum.PLAYERNUM,
     statemanager.StateEnum.STATS_MENU,

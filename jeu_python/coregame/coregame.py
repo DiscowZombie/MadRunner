@@ -384,6 +384,11 @@ class CoreGame:
                 self.end(False)
                 return
 
+            # De même, si la vitesse devient négatif, le jeu s'arrête !
+            if char.speed <= 0:
+                self.end(False)
+                return
+
             # Mise à jour de l'affichage de la vitesse
             # Affichage de la vitesse du personnage en km/h
             self.vitesseobj.text = str(int(charspeed * 3.6)) + " km/h"
@@ -866,10 +871,10 @@ class CoreGame:
 
             content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.num_gm_score, lvl)
 
-            try:
-                settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content)
-            except pycurl.error:
-                self.error = "Impossible de contacter le serveur web !"
+            def response(response_obj):
+                pass
+
+            settings.CurlManager(constantes.WEBSITE_URI + "send_data.php", True, content, response)
 
     def unreferance(self):
 

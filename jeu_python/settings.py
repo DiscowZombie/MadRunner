@@ -3,6 +3,7 @@ import pycurl
 import socket
 import os
 from io import BytesIO
+from threading import Thread
 import settings
 
 DEBUG = False
@@ -23,28 +24,41 @@ class JsonManager:
 
 
 # Faire facilement des requetes web
-class CurlManager:
+class CurlManager(Thread):
 
-    def __init__(self, uri, post=False, postfields=None):
+    def __init__(self, uri, post, postfields, endfunction):
+        Thread.__init__(self)
+
+        self.uri = uri
+        self.post = post
+        self.postfields = postfields
+        self.endfunction = endfunction
         self.hasinternet = True
+        self.jsonresp = None
+
+        self.start()
+
+    def run(self):
         try:
             socket.create_connection(("www.google.com", 80))
         except:
             self.hasinternet = False
+            self.endfunction(self)
             return  # pas de connection internet
 
         buffer = BytesIO()
         cu = pycurl.Curl()
-        cu.setopt(cu.URL, uri)
+        cu.setopt(cu.URL, self.uri)
         cu.setopt(cu.WRITEDATA, buffer)
-        if post:
+        if self.post:
             cu.setopt(cu.POST, True)
-            cu.setopt(cu.POSTFIELDS, postfields)
+            cu.setopt(cu.POSTFIELDS, self.postfields)
         if settings.DEBUG:  # Afficher pleins d'infos utiles pour debug
             cu.setopt(cu.VERBOSE, True)
         cu.perform()
         cu.close()
         self.jsonresp = buffer.getvalue().decode('iso-8859-1')
+        self.endfunction(self)
 
     def readjson(self):
         if self.hasinternet:
