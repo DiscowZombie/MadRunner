@@ -52,8 +52,14 @@
                             echo "<td>" . get_coursename($item["course_type"]) . "</td>";
                             echo "<td>" . get_difficulty($item["difficulty"]) . "</td>";
                             echo "<td>" . $item["score"] . "</td>";
-                            echo "<td>" . ($item["course_type"] == "I" ? round($item["time"]) . " m" : gmdate("H:i:s", $item["time"])) . "</td>";
+                            echo "<td>" . ($item["course_type"] == "I" ? round($item["time"]) . " m" : gmdate("H:i:s", ((int)$item["time"] / 1000))) . "</td>";
                             $french_dateF = date_format(date_create($item["date"]), 'd M Y - H:i');
+                            $french_dateF = str_replace("Feb", "Fev", $french_dateF);
+                            $french_dateF = str_replace("Apr", "Avr", $french_dateF);
+                            $french_dateF = str_replace("May", "Mai", $french_dateF);
+                            $french_dateF = str_replace("Jun", "Juin", $french_dateF);
+                            $french_dateF = str_replace("Jul", "Juil", $french_dateF);
+                            $french_dateF = str_replace("Aug", "Aoû", $french_dateF);
                             echo "<td>" . $french_dateF . "</td>";
                             echo "</tr>";
                         }
