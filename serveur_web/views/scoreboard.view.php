@@ -52,8 +52,9 @@
                             echo "<td>" . get_coursename($item["course_type"]) . "</td>";
                             echo "<td>" . get_difficulty($item["difficulty"]) . "</td>";
                             echo "<td>" . $item["score"] . "</td>";
-                            echo "<td>" . ($item["course_type"] == "I" ? $item["time"] . " m" : gmdate("H:i:s", $item["time"])) . "</td>";
-                            echo "<td>" . date_format(date_create($item["date"]), 'd M Y - H:i') . "</td>";
+                            echo "<td>" . ($item["course_type"] == "I" ? round($item["time"]) . " m" : gmdate("H:i:s", $item["time"])) . "</td>";
+                            $french_dateF = date_format(date_create($item["date"]), 'd M Y - H:i');
+                            echo "<td>" . $french_dateF . "</td>";
                             echo "</tr>";
                         }
                         ?>
@@ -61,15 +62,18 @@
                     </table>
                 </div>
 
-                <!-- Pour que le bouton soit bien à droite en bas -->
-                <div class="col-sm-10"> </div>
-                <div class="col-sm-2">
-                    <?php if(!empty($_REQUEST['id'])) { ?>
-                        <a type="button" class="btn btn-info btn-md" href="scoreboard">Voir le classement global</a>
-                    <?php } else { ?>
-                        <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>">Voir le classement personnel</a>
-                    <?php } ?>
-                </div>
+                <!-- Seulement s'il est connecté -->
+                <?php if(!empty($_SESSION["user_id"])) { ?>
+                    <!-- Pour que le bouton soit bien à droite en bas -->
+                    <div class="col-sm-10"> </div>
+                    <div class="col-sm-2">
+                        <?php if(!empty($_REQUEST['id'])) { ?>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard">Voir le classement global</a>
+                        <?php } else { ?>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>">Voir le classement personnel</a>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
 
             </div>
         </div>
