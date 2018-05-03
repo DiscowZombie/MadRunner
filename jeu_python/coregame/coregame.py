@@ -1,3 +1,5 @@
+import pygame
+
 import functions
 import uielement
 from uielements import button as button
@@ -491,6 +493,7 @@ class CoreGame:
             else:
                 userstatistics.UserStatistics.stats.set("best_gm_score", self.num_gm_score, self.level, self.modejeu)
         else:
+            pygame.mixer.Sound(functions.resource_path("assets\sounds\huements.ogg")).play()  # Boooooooo !
             self.score = "N/A"
             self.gamemode_score = "N/A"
             userstatistics.UserStatistics.stats.increment("nb_courses_echouees", 1)
@@ -685,6 +688,9 @@ class CoreGame:
                                CENTRE_Y, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
                                SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             bouton_menu.visible = self.personnage == new_runner
+
+            if new_score_record or new_gm_record or new_runner != self.personnage and completed: # bon, si jamais il débloque un personnage en ayant perdu, on ne va pas l'applaudir quand même !
+                pygame.mixer.Sound(functions.resource_path("assets/sounds/applaudissements.ogg")).play()  # Bravo !
 
             if self.personnage != new_runner:  # le personnage a-t-il évoluer ?
 
@@ -893,7 +899,7 @@ class CoreGame:
         statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
         model.Model.main_menu()
 
-    def keypressed(cls, pygame, event):
+    def keypressed(cls, event):
         if not CoreGame.current_core.pause and not CoreGame.current_core.finished:
             if event.key == pygame.K_SPACE:
                 Character.getCharacters()[0].jump()  # Ici, le joueur 1 saute

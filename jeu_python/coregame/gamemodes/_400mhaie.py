@@ -51,6 +51,7 @@ class Haie:
         self.image = None
 
     def tombe(self):  # faire tomber la haie
+        pygame.mixer.Sound(functions.resource_path("assets\sounds\haie_tombe.ogg")).play()
         self.touched = True
         self.image.tween(  # transition de la rotation de la haie pour voir qu'elle tombe
             0.2,

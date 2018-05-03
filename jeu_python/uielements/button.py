@@ -4,7 +4,6 @@ import webbrowser
 import uielement
 import model
 import view
-import controller
 import statemanager
 import userstatistics
 
@@ -19,7 +18,6 @@ from uielements import textbox
 import constantes
 import functions
 import onlineconnector
-import settings
 
 
 class Button(uielement.UIelement):
@@ -55,6 +53,10 @@ class Button(uielement.UIelement):
         self.textoffset = offset
         self.clicking = False  # va servir plus tard
         self.ismousein = False
+        self.hoversound = pygame.mixer.Sound(functions.resource_path("assets\sounds\hover.ogg"))
+        self.hoversound.set_volume(0.1)
+        self.clicksound = pygame.mixer.Sound(functions.resource_path("assets\sounds\click.ogg"))
+        self.clicksound.set_volume(0.4)
         self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy,
                                  backgroundtextcolor, offset, False, *UIargs)
         self.referance = self.create()  # ATTENTION: La référence est la surface sur laquelle le rectangle du bouton est dessiné
@@ -65,10 +67,17 @@ class Button(uielement.UIelement):
         return self.ismousein
 
     def setmousein(self, isin):
+        if isin and not self.ismousein:
+            self.hoversound.play()
         self.ismousein = isin
 
     def click(self):
         self.clicking = True
+
+    def unclick(self):
+        self.clicksound.play()
+        self.clicking = False
+        self.button1click()
 
     mousein = property(getmousein, setmousein)
 

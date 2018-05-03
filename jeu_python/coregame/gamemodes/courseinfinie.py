@@ -44,6 +44,7 @@ class Obstacle:
         self.image = image_obstacle
 
     def tombe(self):  # faire tomber l'obstacle
+        pygame.mixer.Sound(functions.resource_path("assets\sounds\haie_tombe.ogg")).play()
         self.touched = True
         self.image.tween(  # transition de la rotation de l'obstacle pour voir qu'il tombe
             0.2,
