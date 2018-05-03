@@ -55,7 +55,7 @@
 
             <h3>Histoire</h3>
             <p>
-                Le développement du jeu a commencé le 1er janvier 2018, et la première version officielle est sortie le ... 2018.
+                Le développement du jeu a commencé le 1er janvier 2018, et la première version beta est sortie le 5 mars. La dernière version officielle est sortie le 30 mars 2018 (beta 0.2).
             </p>
 
             <!-- Bon on peut faire pleins d'autres trucs mais la doc les listes mieux que moi !  https://www.w3schools.com/bootstrap -->

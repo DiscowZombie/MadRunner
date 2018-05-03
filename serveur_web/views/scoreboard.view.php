@@ -30,20 +30,17 @@
         <!-- Tableau de score -->
         <div class="row">
             <div class="col-12 col-sm-12 col-lg-12">
+                <!-- Le tableau de score -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>
-                            <?php
-                            // Le ternaire HORRIBLE ARRGGHH
-                            //echo !empty($_REQUEST['sort']) ? "<a href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score_ASC'>&darr;</a>";
-                            ?>
                             <!-- Cette partie peut-encore être amméliorer dans le futur. Utilisez le classement Bootstrap 3 avec le JS ? -->
                             <th>Pseudonyme <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=user_id/ASC'>&darr;</a>"; ?></th>
                             <th>Type de course <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=course_type/ASC'>&darr;</a>"; ?></th>
                             <th>Difficulté <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=difficulty/ASC'>&darr;</a>"; ?></th>
                             <th>Score <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score/ASC'>&darr;</a>"; ?></th>
-                            <th>Temps realisé</th>
+                            <th>Temps/Distance</th>
                             <th>Date de réalisation</th>
                         </tr>
                         </thead>
@@ -55,7 +52,7 @@
                             echo "<td>" . get_coursename($item["course_type"]) . "</td>";
                             echo "<td>" . get_difficulty($item["difficulty"]) . "</td>";
                             echo "<td>" . $item["score"] . "</td>";
-                            echo "<td>" . $item["time"] . "</td>";
+                            echo "<td>" . ($item["course_type"] == "I" ? $item["time"] . " m" : gmdate("H:i:s", $item["time"])) . "</td>";
                             echo "<td>" . date_format(date_create($item["date"]), 'd M Y - H:i') . "</td>";
                             echo "</tr>";
                         }
@@ -63,6 +60,17 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Pour que le bouton soit bien à droite en bas -->
+                <div class="col-sm-10"> </div>
+                <div class="col-sm-2">
+                    <?php if(!empty($_REQUEST['id'])) { ?>
+                        <a type="button" class="btn btn-info btn-md" href="scoreboard">Voir le classement global</a>
+                    <?php } else { ?>
+                        <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>">Voir le classement personnel</a>
+                    <?php } ?>
+                </div>
+
             </div>
         </div>
     </div>
