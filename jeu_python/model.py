@@ -96,8 +96,7 @@ class Model:
     def mousebutton1up(cls, position):
         for bouton in list(button.Button.getButtons()):
             if bouton.mousein and bouton.clicking:
-                bouton.button1click()
-            bouton.clicking = False
+                bouton.unclick()
 
     def mousebutton1move(cls, position):
         for bouton in list(button.Button.getButtons()):
@@ -105,7 +104,7 @@ class Model:
 
     def keydown(cls, event):
         if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:
-            coregame.CoreGame.keypressed(Model.pygame, event)
+            coregame.CoreGame.keypressed(event)
         else:
             char = event.dict["unicode"]
             if char != "":
