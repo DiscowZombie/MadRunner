@@ -253,8 +253,8 @@ class Countdown(image.Image):
             if self.displayed == 1:
                 self.displayed = 0
                 self.currentimg = 3
-                self.width = 400
-                self.height = 330
+                self.width = 500
+                self.height = 400
                 self.x = - int(self.width / 2)
                 self.y = - int(self.height / 2)
                 self.alpha = 0
@@ -262,10 +262,6 @@ class Countdown(image.Image):
                 self.tween(
                     0.3 - (state_time - 6000)/1000,
                     [
-                        {
-                            "name": "rotation",
-                            "value": 0,
-                        },
                         {
                             "name": "alpha",
                             "value": 255,
