@@ -23,7 +23,6 @@ import coregame.gamemodes.courseinfinie as courseinfinie
 
 import constantes
 import settings
-import pycurl
 import view as v
 import model
 import userstatistics
@@ -52,11 +51,11 @@ class Character:
         self.scaley = scaley
         self.absx = int(v.View.screen.abswidth * self.scalex + self.x)
         self.absy = int(v.View.screen.absheight * self.scaley + self.y)
-        self.state = "run"
-        self.running = True  # on va supposer pour l'instant que le gars cour tout de suite, mais plus tard, ce ne sera pas le cas (car on montrera un 3,2,1, go !)
+        self.state = "idle"
+        self.running = False  # on va supposer pour l'instant que le gars cour tout de suite, mais plus tard, ce ne sera pas le cas (car on montrera un 3,2,1, go !)
         self.jumping = False  # le personnage est-il en train de sauter ?
         self.energy = characterfeatures["initenergy"]
-        self.speed = characterfeatures["initspeed"]
+        self.speed = 0
         self.distance = initdist  # distance du personnage par rapport à la ligne de départ
 
         Character.characters.append(self)
@@ -97,6 +96,204 @@ class Character:
     getCharacters = classmethod(getCharacters)
 
 
+class Countdown(image.Image):
+
+    def __init__(self):
+
+        REPERTOIRE = "assets/img/countdown.png"
+        LARGEUR = 400
+        HAUTEUR = 330
+        POSITION_X = - int(LARGEUR / 2)
+        POSITION_Y = - int(HAUTEUR / 2)
+        SCALE_X = 0.5
+        SCALE_Y = 0.5
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.WHITE
+        BORDURE = 0
+
+        image.Image.__init__(self, REPERTOIRE, v.View.screen, POSITION_X,POSITION_Y, SCALE_X, SCALE_Y,
+                             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,BORDURE)
+
+        self.displayed = None
+        self.rotation = -150
+        self.alpha = 0
+        self.rects = [
+            (0, 0, 60, 79),  # 3
+            (62, 0, 77, 77),  # 2
+            (141, 0, 50, 75),  # 1
+            (193, 0, 196, 81)  # GO !
+        ]
+        self.split(self.rects)
+
+        soundstart = pygame.mixer.Sound(functions.resource_path("assets\sounds\depart.ogg"))
+        soundstart.set_volume(0.5)
+        soundstart.play()
+
+    def update(self):
+        state_time = statemanager.StateManager.getstatetime()
+        if state_time <= 3000:
+            pass
+        elif state_time <= 4000:  # 3
+            if self.displayed is None:
+                pygame.mixer.Sound(functions.resource_path("assets\sounds\countdown.ogg")).play()
+                self.displayed = 3
+                self.currentimg = 0
+                end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
+                self.tween(
+                    0.3 - (state_time - 3000)/1000,  # plus précis que de mettre juste 0.3
+                    [
+                        {
+                            "name": "rotation",
+                            "value": 0,
+                        },
+                        {
+                            "name": "alpha",
+                            "value": 255,
+                        },
+                        {
+                            "name": "width",
+                            "value": end_width,
+                        },
+                        {
+                            "name": "height",
+                            "value": end_height,
+                        },
+                        {
+                            "name": "x",
+                            "value": - int(end_width / 2),
+                        },
+                        {
+                            "name": "y",
+                            "value": - int(end_height / 2),
+                        },
+                    ]
+                )
+        elif state_time <= 5000:  # 2
+            if self.displayed == 3:
+                self.displayed = 2
+                self.currentimg = 1
+                self.rotation = -150
+                self.width = 400
+                self.height = 330
+                self.x = - int(self.width / 2)
+                self.y = - int(self.height / 2)
+                self.alpha = 0
+                end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
+                self.tween(
+                    0.3 - (state_time - 4000)/1000,
+                    [
+                        {
+                            "name": "rotation",
+                            "value": 0,
+                        },
+                        {
+                            "name": "alpha",
+                            "value": 255,
+                        },
+                        {
+                            "name": "width",
+                            "value": end_width,
+                        },
+                        {
+                            "name": "height",
+                            "value": end_height,
+                        },
+                        {
+                            "name": "x",
+                            "value": - int(end_width / 2),
+                        },
+                        {
+                            "name": "y",
+                            "value": - int(end_height / 2),
+                        },
+                    ]
+                )
+        elif state_time <= 6000:  # 1
+            if self.displayed == 2:
+                self.displayed = 1
+                self.currentimg = 2
+                self.rotation = -150
+                self.width = 400
+                self.height = 330
+                self.x = - int(self.width / 2)
+                self.y = - int(self.height / 2)
+                self.alpha = 0
+                end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
+                self.tween(
+                    0.3 - (state_time - 5000)/1000,
+                    [
+                        {
+                            "name": "rotation",
+                            "value": 0,
+                        },
+                        {
+                            "name": "alpha",
+                            "value": 255,
+                        },
+                        {
+                            "name": "width",
+                            "value": end_width,
+                        },
+                        {
+                            "name": "height",
+                            "value": end_height,
+                        },
+                        {
+                            "name": "x",
+                            "value": - int(end_width / 2),
+                        },
+                        {
+                            "name": "y",
+                            "value": - int(end_height / 2),
+                        },
+                    ]
+                )
+        elif state_time <= 7000:  # GO !
+            if self.displayed == 1:
+                self.displayed = 0
+                self.currentimg = 3
+                self.width = 400
+                self.height = 330
+                self.x = - int(self.width / 2)
+                self.y = - int(self.height / 2)
+                self.alpha = 0
+                end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
+                self.tween(
+                    0.3 - (state_time - 6000)/1000,
+                    [
+                        {
+                            "name": "rotation",
+                            "value": 0,
+                        },
+                        {
+                            "name": "alpha",
+                            "value": 255,
+                        },
+                        {
+                            "name": "width",
+                            "value": end_width,
+                        },
+                        {
+                            "name": "height",
+                            "value": end_height,
+                        },
+                        {
+                            "name": "x",
+                            "value": - int(end_width / 2),
+                        },
+                        {
+                            "name": "y",
+                            "value": - int(end_height / 2),
+                        },
+                    ]
+                )
+        elif state_time <= 8000:
+            if self.displayed == 0:
+                CoreGame.current_core.started = True
+                self.unreferance()
+
+
 class CoreGame:
     current_core = None  # l'objet core (la partie en gros)
 
@@ -118,6 +315,7 @@ class CoreGame:
         self.score = 0
         self.gamemode_score = 0
         self.pause = False
+        self.started = False
         self.finished = False
         self.carte = carte
         self.modejeu = modejeu
@@ -287,8 +485,28 @@ class CoreGame:
 
         self.personnage = functions.getrunner()  # le personnage avec lequel le joueur va jouer
 
-        Character(constantes.CharactersFeatures[self.personnage], constantes.Animations[self.personnage], POSITION_X, POSITION_Y,
-                  SCALE_X, SCALE_Y, INITDIST)  # plus tard dans le développement du jeu, il faudra  selectionner le sprite qui convient !
+        char = Character(constantes.CharactersFeatures[self.personnage], constantes.Animations[self.personnage], POSITION_X, POSITION_Y,
+                  SCALE_X, SCALE_Y, INITDIST)
+
+        # Dessine la ligne de départ
+        LARGEUR = 4
+        HAUTEUR = 175
+        POSITION_X = char.absx - 2
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0.35
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.WHITE
+        BORDURE = 0
+        ALPHA = 255  # opaque
+        CONVERT_ALPHA = False
+
+        self.lignedepartobj = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X,
+                                              POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
+                                              SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        self.countdownobj = Countdown()
 
         # Initialisation de la carte et du mode de jeu
         if carte == "Jeux Olympiques":
@@ -319,8 +537,8 @@ class CoreGame:
 
     def loop(self, passed=0):  # update l'arrière plan + chaque personnage
 
-        if not self.pause and not self.finished:
-            char = Character.getCharacters()[0]  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+        char = Character.getCharacters()[0]  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+        if not self.pause and not self.finished and self.started:
             # Calcul de la nouvelle distance parcouru
             charspeed = char.speed
 
@@ -336,8 +554,7 @@ class CoreGame:
             if self.dist_to_travel:
                 """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
                 # Calcul de la position x absolue du personnage
-                delta_pix_arrive = (
-                                           400 - new_distance) * 25  # nb de pixels avant la ligne d'arrivé (par rapport à la position du personnage)
+                delta_pix_arrive = (self.dist_to_travel - new_distance) * 25  # nb de pixels avant la ligne d'arrivé (par rapport à la position du personnage)
                 pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
                 if pos_x_ligne_arrive > -2:
@@ -371,6 +588,15 @@ class CoreGame:
                     self.end(True)
                     return
 
+            # Détermination de s'il faut dessiner la ligne de départ ou pas
+            if self.lignedepartobj:
+                pos_x_ligne_depart = char.absx + new_distance * 25
+                if pos_x_ligne_depart - (self.lignedepartobj.abswidth / 2) > v.View.screen.abswidth:
+                    self.lignedepartobj.unreferance()
+                    self.lignedepartobj = None
+                else:
+                    self.lignedepartobj.x = pos_x_ligne_depart
+
             # Mis à jour de la taille et la couleur de la barre d'énergie
             self.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
             if char.energy >= 70:
@@ -387,19 +613,12 @@ class CoreGame:
                 return
 
             # De même, si la vitesse devient négatif, le jeu s'arrête !
-            if char.speed <= 0:
+            if char.speed < 0:
                 self.end(False)
                 return
 
-            # Mise à jour de l'affichage de la vitesse
-            # Affichage de la vitesse du personnage en km/h
-            self.vitesseobj.text = str(int(charspeed * 3.6)) + " km/h"
-
             # Mise à jour des boutons à appuyer
             key.Key.updatekeys(passed)
-
-            # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haie, et distance pour course infinie)
-            self.game_mode_disp.text = self.disp_function(False)
 
             # Apparition aléatoire de touches sur lesquels appuyer (qui dépend du mode de jeu)
             if new_distance == 0:
@@ -414,6 +633,13 @@ class CoreGame:
                 for surfaceobj in decors:
                     surfaceobj.x += delta_pixel
 
+        # Mise à jour de l'affichage de la vitesse
+        self.vitesseobj.text = str(int(char.speed * 3.6)) + " km/h"
+
+        # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haie, et distance pour course infinie)
+        self.game_mode_disp.text = self.disp_function(False)
+
+        if not self.pause:
             # Mis à jour du state + conséquences de son changement
             for character in Character.getCharacters():
 
@@ -422,7 +648,7 @@ class CoreGame:
                     previous_dist = character.distance
                     new_dist = previous_dist + character.speed * (passed / 1000)
                     character.distance = new_dist
-                    character.x = (new_distance - character.distance) * 25
+                    character.x = (char.distance - character.distance) * 25
                 y = 0
                 if character.running:
                     new_state = "run"
@@ -441,7 +667,7 @@ class CoreGame:
                     new_state = "idle"  # fin et début de la course
 
                 if character.state != new_state:  # si le personnage change d'état...
-                    character.__getattribute__(character.state + "sprite").reset()  # on remet à 0 son animation
+                    character.__getattribute__(character.state + "sprite").reset()  # Remet à 0 son animation
 
                 character.changeState(new_state)
 
@@ -460,7 +686,18 @@ class CoreGame:
         if self.level_obj.grille:
             self.level_obj.grille.updatecontent()
 
+        # Mis à jour du décomptage si la course n'a toujours pas commencé
+        if not self.started:
+            self.countdownobj.update()
+            if self.started:
+                for char in Character.getCharacters():
+                    char.speed = char.characterfeatures["initspeed"]
+                    char.run()
+                self.countdownobj = None
+
     def end(self, completed):
+        if self.finished:  # cela arrive si jamais on se fait chopper après avoir predu toute sa vitesse par exemple
+            return
         self.finished = True
 
         for k in list(key.Key.getKeys()):
@@ -900,7 +1137,7 @@ class CoreGame:
         model.Model.main_menu()
 
     def keypressed(cls, event):
-        if not CoreGame.current_core.pause and not CoreGame.current_core.finished:
+        if not CoreGame.current_core.pause and not CoreGame.current_core.finished and CoreGame.current_core.started:
             if event.key == pygame.K_SPACE:
                 Character.getCharacters()[0].jump()  # Ici, le joueur 1 saute
             else:

@@ -1,5 +1,5 @@
+import pygame
 import uielement
-import uielements.rect as rect
 import view
 
 
@@ -16,10 +16,9 @@ class Surface(uielement.UIelement):
 
     def create(self):
         if self.convertalpha:
-            surface = view.View.pygame.Surface((self.abswidth, self.absheight), view.View.pygame.SRCALPHA, 32)
-            surface.convert_alpha(surface)
+            surface = pygame.Surface((self.abswidth, self.absheight), pygame.SRCALPHA, 32).convert_alpha()
         else:
-            surface = view.View.pygame.Surface((self.abswidth, self.absheight))
+            surface = pygame.Surface((self.abswidth, self.absheight)).convert()
             surface.fill(self.color)
             surface.set_alpha(self.alpha)
         return surface

@@ -37,6 +37,13 @@ Animations = {
             "nbimage": 13,
             "initspeed": 60,
             "repeatimage": 10
+        },
+        "idle": {
+            "image": "assets/img/personnages/gros/idle.png",
+            "framesize": (80, 98),
+            "nbimage": 1,
+            "initspeed": 1,
+            "repeatimage": 1
         }
     },
     "normal": {
@@ -53,6 +60,13 @@ Animations = {
             "nbimage": 8,
             "initspeed": 60,
             "repeatimage": 5
+        },
+        "idle": {
+            "image": "assets/img/personnages/normal/idle.png",
+            "framesize": (80, 98),
+            "nbimage": 1,
+            "initspeed": 1,
+            "repeatimage": 1
         }
     },
     "athlete": {
@@ -69,6 +83,13 @@ Animations = {
             "nbimage": 13,
             "initspeed": 60,
             "repeatimage": 11
+        },
+        "idle": {
+            "image": "assets/img/personnages/athlete/idle.png",
+            "framesize": (80, 98),
+            "nbimage": 1,
+            "initspeed": 1,
+            "repeatimage": 1
         }
     },
     "poursuiveur": {
@@ -85,6 +106,13 @@ Animations = {
             "nbimage": 8,
             "initspeed": 60,
             "repeatimage": 6
+        },
+        "idle": {
+            "image": "assets/img/personnages/poursuiveur/idle.png",
+            "framesize": (80, 98),
+            "nbimage": 1,
+            "initspeed": 1,
+            "repeatimage": 1
         }
     }
 }
