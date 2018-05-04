@@ -8,9 +8,9 @@ import view
 class SpriteSheet:
 
     def __init__(self, filename):
-        self.sheet = view.View.pygame.image.load(filename).convert_alpha()
+        self.sheet = pygame.image.load(filename).convert_alpha()
 
-    def load(self, nombre_images, taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement
+    def load(self, nombre_images, taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement et qu'ils ont la même taille x
         # Clear Strip
         strip = []
         masks = []
@@ -30,8 +30,8 @@ class SpriteSheet:
     # Load a specific image from a specific rectangle
     def image_at(self, rectangle, colorkey = None):
         # Loads image from x,y,x+offset,y+offset
-        rect = view.View.pygame.Rect(rectangle)
-        image = view.View.pygame.Surface(rect.size, pygame.SRCALPHA, 32).convert_alpha()
+        rect = pygame.Rect(rectangle)
+        image = pygame.Surface(rect.size, pygame.SRCALPHA, 32).convert_alpha()
         image.blit(self.sheet, (0, 0), rect)
         if colorkey is not None:
             if colorkey is -1:

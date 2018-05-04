@@ -36,7 +36,7 @@ class Controller:
                 button_number = event.button
                 Controller.pressing_buttons["Mouse" + str(button_number)] = False
                 if button_number == 1:  # clic gauche
-                    model.Model.mousebutton1up(event.pos)
+                    model.Model.mousebutton1up()
             elif event.type == pygame.MOUSEMOTION:
                 model.Model.mousebutton1move(event.pos)
             elif event.type == pygame.KEYDOWN:

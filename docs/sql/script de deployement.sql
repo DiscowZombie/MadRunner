@@ -18,7 +18,7 @@ USE `madrunner` ;
 -- Table `madrunner`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `madrunner`.`user` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT(10) UNSIGNED NOT NULL,
   `pseudo` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
@@ -30,13 +30,15 @@ ENGINE = InnoDB;
 -- Table `madrunner`.`session`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `madrunner`.`session` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) UNSIGNED NOT NULL,
   `uuid` VARCHAR(255) NOT NULL,
-  `user_id` INT UNSIGNED NOT NULL,
-  `ip` VARCHAR(255) NOT NULL,
-  `date` DATE NULL,
-  PRIMARY KEY (`uuid`),
+  `ip` VARCHAR(255) NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   INDEX `fk_session_user_idx` (`user_id` ASC),
   UNIQUE INDEX `uuid_UNIQUE` (`uuid` ASC),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   CONSTRAINT `fk_session_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `madrunner`.`user` (`id`)
@@ -49,11 +51,13 @@ ENGINE = InnoDB;
 -- Table `madrunner`.`score`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `madrunner`.`score` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` INT UNSIGNED NOT NULL,
-  `score` INT UNSIGNED NOT NULL,
-  `date` DATE NULL,
-  `coursetype` ENUM('Q', 'QH', 'I') NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `score` INT(16) UNSIGNED NOT NULL,
+  `time` VARCHAR(255) NOT NULL,
+  `difficulty` ENUM('F', 'M', 'D') NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `course_type` ENUM('Q', 'QH', 'I') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_score_user1_idx` (`user_id` ASC),

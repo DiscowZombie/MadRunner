@@ -93,7 +93,7 @@ class Model:
             else:
                 textboxe.unfocus()
 
-    def mousebutton1up(cls, position):
+    def mousebutton1up(cls):
         for bouton in list(button.Button.getButtons()):
             if bouton.mousein and bouton.clicking:
                 bouton.unclick()
