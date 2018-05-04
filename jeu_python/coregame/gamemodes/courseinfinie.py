@@ -93,10 +93,12 @@ class CourseInfinie:
         POSITION_Y = 65
         SCALE_X = 0.85
         SCALE_Y = 0.35
-        INITDIST = - 2
+        INITDIST = - 9  # le départ prend 7 secondes, et le poursuiveur court au début à 1 m/s, donc -9 m est convenable (inférieur à -8.75 m est convenable)
 
         self.courseur = coregame.Character(constantes.CharactersFeatures["normal"], constantes.Animations["poursuiveur"], POSITION_X, POSITION_Y,
                   SCALE_X, SCALE_Y, INITDIST)
+        self.courseur.run()
+        self.courseur.speed = 1
 
     def refresh(self):
 
@@ -141,7 +143,8 @@ class CourseInfinie:
             self.farthest = self.next_obstacle
             self.next_obstacle = self.farthest + 35*random.randint(5, 15)/10
 
-        self.courseur.speed = distance**(0.275 + coregame.CoreGame.current_core.level_obj.courseurspeed/100)
+        if coregame.CoreGame.current_core.started:
+            self.courseur.speed = distance**(0.275 + coregame.CoreGame.current_core.level_obj.courseurspeed/100)
 
     def computescore(self):  # le score dépend de la distance parcourue et du nombre d'obstacles non renversées
         dist = coregame.CoreGame.current_core.distance
