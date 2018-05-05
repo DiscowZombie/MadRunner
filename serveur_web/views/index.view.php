@@ -42,7 +42,7 @@
 
         <h3>Téléchargement</h3>
         <br/>
-        <a class="btn btn-primary" href="https://github.com/DiscowZombie/MadRunner/releases/latest" role="button">Windows
+        <a class="btn btn-primary" href="https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.exe" role="button">Windows
             (64 bits)</a>
     </div>
 
