@@ -8,7 +8,7 @@ added_files = [
          ( '..\\LICENSE', '' ),
          ( 'assets', 'assets' )]
 a = Analysis(['__init__.py'],
-             pathex=['C:\\Users\\€¤\\PycharmProjects\\MadRunner\\jeu_python'],
+             pathex=['C:\\Users\\Bilgisayar\\Documents\\Projet_Bac_ISN_Mad_Runner\\MadRunner\\jeu_python'],
              binaries=[],
              datas=added_files,
              hiddenimports=[],
@@ -36,7 +36,7 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-		  icon='C:\\Users\\€¤\\PycharmProjects\\MadRunner\\jeu_python\\assets\\img\\icon\\propicon48.ico',
+		  icon='C:\\Users\\Bilgisayar\\Documents\\Projet_Bac_ISN_Mad_Runner\\MadRunner\\jeu_python\\assets\\img\\icon\\propicon48.ico',
           console=False,
-		  version='version.rc'
+		  version='C:\\Users\\Bilgisayar\\Documents\\Projet_Bac_ISN_Mad_Runner\\MadRunner\\jeu_python\\version.rc'
 )
