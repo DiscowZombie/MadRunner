@@ -8,7 +8,7 @@ import view
 class SpriteSheet:
 
     def __init__(self, filename):
-        self.sheet = pygame.image.load(filename).convert_alpha()
+        self.sheet = pygame.image.load(f.resource_path(filename)).convert_alpha()
 
     def load(self, nombre_images, taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement et qu'ils ont la même taille x
         # Clear Strip
