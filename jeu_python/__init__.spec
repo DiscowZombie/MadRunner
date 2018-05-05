@@ -31,7 +31,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='Mad Runner 0.2b',
+          name='Mad Runner 1.0',
           debug=False,
           strip=False,
           upx=True,
@@ -39,4 +39,4 @@ exe = EXE(pyz,
 		  icon='C:\\Users\\€¤\\PycharmProjects\\MadRunner\\jeu_python\\assets\\img\\icon\\propicon48.ico',
           console=False,
 		  version='version.rc'
-		  )
+)
