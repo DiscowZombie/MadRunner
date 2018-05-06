@@ -18,7 +18,7 @@ Le jeu regroupe plusieurs fonctionnalités pour une bonne expérience de jeu:
 - Interface utilisateur simple et en français ;
 - Musique pour une meilleure expérience ;
 - Possibilité de jouer en ligne et hors ligne ;
-- Site internet sur lequel vous pouvez vous inscrire pour sauvegarder vos scores
+- [Site internet](https://madrunner.discowzombie.fr/) sur lequel vous pouvez vous inscrire pour [sauvegarder vos scores](https://madrunner.discowzombie.fr/scoreboard) ;
 - Double sauvegarde de votre score (local et en ligne) ;
 - Tableau de score en ligne pour affronter ses amis ;
 - Jeu optimisé et léger, pour fonctionner sur tous les ordinateurs ;
