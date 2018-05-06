@@ -28,9 +28,8 @@ Vous êtes développeur ou avez un problème ? Activez le "mode debug" dans les 
 
 ### Galerie
 
-<img width="320" height="255" src="http://madrunner.discowzombie.fr/inc/img/screenshot1.png" />
-<img width="320" height="255" src="http://madrunner.discowzombie.fr/inc/img/screenshot2.png" />
-<img width="320" height="255" src="http://madrunner.discowzombie.fr/inc/img/screenshot3.png" /!>
+<img width="416" height="331" src="http://madrunner.discowzombie.fr/inc/img/screenshot1.png" /> <img width="416" height="331" src="http://madrunner.discowzombie.fr/inc/img/screenshot2.png" /> 
+<img width="416" height="331" src="http://madrunner.discowzombie.fr/inc/img/screenshot3.png" />
 
 ## Licence et Dépendances
 
