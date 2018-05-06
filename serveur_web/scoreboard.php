@@ -41,7 +41,7 @@ if(!empty($_GET["sort"])) {
 /** == DEBUT PARTIE SQL == **/
 
 // On recupère les meilleures scores
-$q = $pdo->prepare("SELECT * FROM score" . ($uid > 0 ? " WHERE user_id = ?" : "") . $sort_param);
+$q = $pdo->prepare("SELECT * FROM score" . ($uid > 0 ? " WHERE user_id = ?" : "") . $sort_param . " LIMIT 30");
 $q->execute( ($uid > 0 ? [$uid] : []) );
 
 $scoreboard = array();
