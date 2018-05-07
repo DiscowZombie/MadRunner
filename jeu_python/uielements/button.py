@@ -1342,11 +1342,84 @@ class BPause(Button):
     def __init__(self, *arguments):
         Button.__init__(self, *arguments)
         self.on = False  # est-ce en pause
+        self.surface_pause = None  # n'existe que lorsque self.on est sur True
 
     def button1click(self):
+        core = coregame.CoreGame.current_core
+        if not core.started:  # pas possible de faire pause avant que la partie aie commencée !
+            return
         self.on = not self.on
-        coregame.CoreGame.current_core.pause = self.on
-        coregame.CoreGame.current_core.surface_boutons.visible = not self.on
+        core.pause = self.on
+        core.surface_boutons.visible = not self.on
+
+        if self.on:
+
+            LARGEUR = 300
+            HAUTEUR = 150
+            POSITION_X = - int(LARGEUR / 2)
+            POSITION_Y = - int(HAUTEUR / 2)
+            SCALE_X = 0.5
+            SCALE_Y = 0.5
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR = constantes.LIGHT_GRAY
+            BORDURE = 0
+            ALPHA = 255
+            CONVERT_ALPHA = False
+
+            self.surface_pause = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                                 SCALE_Y, LARGEUR,HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+            TEXTE = "PAUSE"
+            ANTIALIAS = True
+            COULEUR = constantes.BLACK
+            FONT = "Arial"
+            TAILLE_FONT = 35
+            CENTRE_X = True
+            CENTRE_Y = False
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 280
+            HAUTEUR = 75
+            POSITION_X = 10
+            POSITION_Y = 15
+            SCALE_X = 0
+            SCALE_Y = 0
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                      SEUL, self.surface_pause, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
+                      SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+            POSITION_X = 10
+            POSITION_Y = 105
+            SCALE_X = 0
+            SCALE_Y = 0
+            LARGEUR = 280
+            HAUTEUR = 35
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR = constantes.GRAY
+            ANTIALIAS = True
+            COULEUR_TEXTE = constantes.BLACK
+            ARRIERE_PLAN_TEXTE = None
+            FONT = "Arial"
+            TAILLE_FONT = 24
+            CENTRE_X = True
+            CENTRE_Y = True
+            ECART = 0
+            BORDURE = 0  # rempli
+
+            BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                        ECART, self.surface_pause, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
+                        SCALE_HEIGHT, COULEUR, BORDURE)
+        else:
+            self.surface_pause.unreferance()
+            self.surface_pause = None
 
 
 """
@@ -1360,4 +1433,7 @@ class BRetourMenu(Button):
         Button.__init__(*arguments)
 
     def button1click(self):
-        coregame.CoreGame.current_core.unreferance()  # "efface" la partie
+        core = coregame.CoreGame.current_core
+        if not core.finished:  # quitte depuis le menu pause
+            core.end(False, True)
+        core.unreferance()  # "efface" la partie

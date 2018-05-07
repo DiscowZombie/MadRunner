@@ -1,5 +1,5 @@
+import pygame
 import uielement
-import view
 import functions as f
 
 
@@ -26,7 +26,7 @@ class Text(uielement.UIelement):
         self.textoffset = offset
         self.alone = alone
         self.recreate = False  # permet de savoir s'il faut recréer le texte
-        self.textreferance = view.View.pygame.font.SysFont(font, font_size)
+        self.textreferance = pygame.font.Font(f.resource_path("assets/fonts/" + font + ".ttf"), font_size)
         self.referance = self.create()
 
         Text.texts.append(self)
@@ -62,7 +62,7 @@ class Text(uielement.UIelement):
     def draw(self):
         if self.recreate:
             self.recreate = False
-            self.textreferance = view.View.pygame.font.SysFont(self.font, int(self.fontsize))
+            self.textreferance = pygame.font.Font(f.resource_path("assets/fonts/" + self.font + ".ttf"), int(self.fontsize))
         if self.alone:  # si l'objet texte fait partie d'un autre objet (ex: bouton), on laisse l'autre objet se charger de l'apparition du texte
             self.referance = self.create()
 
