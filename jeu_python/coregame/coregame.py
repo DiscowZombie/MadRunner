@@ -691,7 +691,7 @@ class CoreGame:
                     char.run()
                 self.countdownobj = None
 
-    def end(self, completed):
+    def end(self, completed, quitted=False):
         if self.finished:  # cela arrive si jamais on se fait chopper après avoir predu toute sa vitesse par exemple
             return
         self.finished = True
@@ -701,6 +701,9 @@ class CoreGame:
 
         self.game_mode_disp.unreferance()
         self.gamemode_obj.unreferance()
+
+        if quitted:
+            return
 
         new_score_record = False
         new_gm_record = False
