@@ -70,10 +70,15 @@
                     <div class="col-sm-10"> </div>
                     <div class="col-sm-2">
                         <?php if(!empty($_REQUEST['id'])) { ?>
-                            <a type="button" class="btn btn-info btn-md" href="scoreboard"><?= readtext("general:seeglobalranks"); ?></a>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard?refresh=true"><?= readtext("general:seeglobalranks"); ?></a>
                         <?php } else { ?>
-                            <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>"><?= readtext("general:seepersonalranks"); ?></a>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>&refresh=true"><?= readtext("general:seepersonalranks"); ?></a>
                         <?php } ?>
+                    </div>
+                <?php } else { ?>
+                    <div class="col-sm-11"> </div>
+                    <div class="col-sm-1">
+                        <a type="button" class="btn btn-info btn-md" href="scoreboard?refresh=true"><?= readtext("general:refresh"); ?></a>
                     </div>
                 <?php } ?>
 

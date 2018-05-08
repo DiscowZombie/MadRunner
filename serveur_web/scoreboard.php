@@ -32,6 +32,12 @@ if (!empty($_GET["id"])) {
     $uid = $_GET["id"];
 }
 
+# Mettre à jour depuis la DB
+$refresh = False;
+if (!empty($_GET["refresh"])) {
+	$refresh = $_GET["refresh"] == "true" || $_GET["refresh"] == 1;
+}
+
 // Un peu d'initialisation des variables de session
 if(empty($_SESSION["cache"])) {
     $_SESSION["cache"] = [];
@@ -42,7 +48,7 @@ if(empty($_SESSION["cache"]["scoreboard"])) {
 
 $scoreboard = $_SESSION["cache"]["scoreboard"];
 
-if(empty($scoreboard)) {
+if(empty($scoreboard) || $refresh) {
     // On recupère les meilleures scores
     $q = $pdo->prepare("SELECT * FROM score" . ($uid > 0 ? " WHERE user_id = ?" : "") . " LIMIT 50");
     $q->execute(($uid > 0 ? [$uid] : []));

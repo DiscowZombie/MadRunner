@@ -151,6 +151,10 @@
     "fr": "Changement de la langue",
     "en": "Language Change"
   },
+  "general:refresh": {
+    "fr": "Mettre à jour",
+    "en": "Refresh"
+  },
   "error:mustlogin": {
     "fr": "Vous devez être connecté pour voir cette page ou effectuer cette action !",
     "en": "You must be login to view this page or perform this action !"

@@ -23,7 +23,7 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> <?= $_SESSION["username"] ?> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li class="<?= $page_title == readtext("pagetitle:myprofile") ? "active" : "" ?>"><a href="myprofil"><?= readtext("pagetitle:myprofile") ?></a></li>
-                            <li class="<?= $page_title == readtext("pagetitle:scoreboard") ? "active" : "" ?>"><a href="scoreboard?id=<?= $_SESSION["user_id"] ?>"><?= readtext("pagetitle:myrankings") ?></a></li>
+                            <li class="<?= $page_title == readtext("pagetitle:scoreboard") ? "active" : "" ?>"><a href="scoreboard?id=<?= $_SESSION["user_id"] ?>&refresh=true"><?= readtext("pagetitle:myrankings") ?></a></li>
                         </ul>
                     </li>
 
