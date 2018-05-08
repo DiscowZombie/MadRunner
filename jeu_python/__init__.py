@@ -17,15 +17,15 @@ import userstatistics
 import onlineconnector
 import pycurl
 
-# Initialisation de pygame
-pygame.init()
-
 # Initialisation du mixer de pygame (pour les sons)
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
 # Initialisation du font
 pygame.font.init()
+
+# Initialisation de pygame
+pygame.init()
 
 # Chargement de l'horloge de pygame
 clock = pygame.time.Clock()
