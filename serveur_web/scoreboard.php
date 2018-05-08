@@ -24,7 +24,7 @@ require("includes/databases.php");
 require("includes/functions.php");
 
 // On définit les variables propres à notre page
-$page_title = "Tableau de score";
+$page_title = readtext("pagetitle:scoreboard");
 
 # Id de l'utilisateur
 $uid = 0;

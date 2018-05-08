@@ -20,9 +20,10 @@
 // On importe ce que l'on as besoin
 session_start();
 require("includes/constants.php");
+require("includes/functions.php");
 
 // On définit les variables propres à notre page
-$page_title = "Informations";
+$page_title = readtext("pagetitle:info");
 
 // On affiche la page
 include("views/informations.view.php");

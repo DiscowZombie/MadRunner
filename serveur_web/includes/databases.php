@@ -30,5 +30,5 @@ try {
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 } catch (Exception $e) {
-	die("Erreur: " . $e->getMessage());
+	die("DB - Error: " . $e->getMessage());
 }

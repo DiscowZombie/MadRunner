@@ -25,29 +25,38 @@ require("includes/constants.php");
 require("includes/functions.php");
 
 // On définit les variables propres à notre page
-$page_title = "Mon profil";
+$page_title = readtext("pagetitle:myprofile");
 
 // On vérifie si l'utilisateur a rempli le formulaire
 if(!empty($_POST["password"]) && !empty($_POST["password1"]) && !empty($_POST["password2"])) {
     extract($_POST);
 
     $_SESSION['infobar']['level'] = "danger";
-    $_SESSION['infobar']['title'] = "Erreur:";
+    $_SESSION['infobar']['title'] = readtext("general:error") . ":";
 
     if (strlen($password) < 3 || strlen($password) > 32) {
-        $_SESSION['infobar']['message'] = "Le mot de passe doit contenir entre 3 et 16 caractères.";
+        $_SESSION['infobar']['message'] = readtext("error:passlenght");
     } else if(!isPasswordValidFor($pdo, $_SESSION["user_id"], $password)) {
-        $_SESSION['infobar']['message'] = "Votre mot de passe n'est pas valide, veuillez reesayer.";
+        $_SESSION['infobar']['message'] = readtext("error:invalidpass");
     } else if(strcmp($password1, $password2) != 0) {
-        $_SESSION['infobar']['message'] = "Les deux mots de passe ne sont pas identiques !";
+        $_SESSION['infobar']['message'] = readtext("error:notsamepass");
     } else if(strlen($password1) < 3 || strlen($password1) > 32) {
-        $_SESSION['infobar']['message'] = "Le nouveau mot de passe doit contenir entre 3 et 16 caractères.";
+        $_SESSION['infobar']['message'] = readtext("error:passlenght");
     } else {
         $_SESSION['infobar']['level'] = "success";
-        $_SESSION['infobar']['title'] = "Félicitation !";
-        $_SESSION['infobar']['message'] = "Votre mot de passe a été mis à jour avec succès !";
+        $_SESSION['infobar']['title'] = readtext("general:congrat");
+        $_SESSION['infobar']['message'] = readtext("general:passupdatesuccess");
 
         updatePassword($pdo, $_SESSION["user_id"], $password1);
+    }
+}
+
+// On vérifie si il essaye de changer sa langue
+if(!empty($_GET["lang"])) {
+    if ($_GET["lang"] == "English") {
+        $_SESSION["lang"] = "en";
+    } else if ($_GET["lang"] == "Français (French)") {
+        $_SESSION["lang"] = "fr";
     }
 }
 

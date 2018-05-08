@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title><?= $page_title ?> | <?= WEBSITE_NAME ?></title>
+    <link rel="shortcut icon" href="../inc/img/icon/favicon.ico" />
+    <link rel="icon" type="image/png" href="../inc/img/icon/favicon.png" />
     <link rel="stylesheet" href="inc/css/mainstyle.css">
 
     <!-- On ajoute bootstrap -->
@@ -30,25 +32,25 @@
 
             <!-- Partie gauche de l'écran -->
             <div class="col-sm-6">
-                <strong>Connexion: </strong>
+                <strong><?= readtext("pagetitle:login"); ?> </strong>
                 <br />
                 <br />
                 <form class="form-horizontal" method="post">
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="pseudo">Pseudonyme:</label>
+                        <label class="control-label col-sm-3" for="pseudo"><?= readtext("general:pseudo"); ?>:</label>
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="pseudo" name="pseudo" value="<?php if(!empty($_SESSION["cache"]["pseudo"])) echo $_SESSION["cache"]["pseudo"]; ?>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="password">Mot de passe:</label>
+                        <label class="control-label col-sm-3" for="password"><?= readtext("general:password"); ?>:</label>
                         <div class="col-sm-5">
                             <input class="form-control" type="password" id="password" name="password">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9">
-                            <button type="submit" class="btn btn-default">Connexion</button>
+                            <button type="submit" class="btn btn-default"><?= readtext("pagetitle:login"); ?></button>
                         </div>
                     </div>
                 </form>
@@ -56,9 +58,9 @@
 
             <!-- Partie droite de l'écran -->
             <div class="col-sm-6">
-                <strong>La connexion, à quoi ça sert ?</strong>
+                <strong><?= readtext("text:loginwhyt"); ?></strong>
                 <br /> <br />
-                <p>La connexion vous permet d'acceder à un espace personnel contenant des informations sur votre personnage. Vous pourrez également y trouvez vos classements et les confronter à ceux de vos amis.</p>
+                <p><?= readtext("text:loginwhy"); ?></p>
             </div>
 
         </div>

@@ -92,13 +92,13 @@ if (!function_exists('get_coursename')) {
 
         switch ($enum) {
             case 'Q':
-                $name = "400 mètres";
+                $name = "400 " . readtext("general:meter") . "s";
                 break;
             case 'QH':
-                $name = "400 mètres haies";
+                $name = "400 " . readtext("general:meter") . "s " . readtext("general:hedge") . "s";
                 break;
             case "I":
-                $name = "Course infinie";
+                $name = readtext("general:infiniterace");
                 break;
             default:
                 break;
@@ -115,13 +115,13 @@ if (!function_exists('get_difficulty')) {
 
         switch ($enum) {
             case 'F':
-                $name = "Facile";
+                $name = readtext("general:easy");
                 break;
             case 'M':
-                $name = "Moyen";
+                $name = readtext("general:normal");
                 break;
             case "D":
-                $name = "Difficile";
+                $name = readtext("general:hard");
                 break;
             default:
                 break;
@@ -169,8 +169,9 @@ if (!function_exists('login_user')) {
     }
 }
 
-if(!function_exists('isPasswordValidFor')){
-    function isPasswordValidFor($pdo, $user_id, $password) {
+if (!function_exists('isPasswordValidFor')) {
+    function isPasswordValidFor($pdo, $user_id, $password)
+    {
         $q = $pdo->prepare("SELECT `password` FROM `user` WHERE id = ?");
         $q->execute([$user_id]);
         $row = $q->fetch(PDO::FETCH_OBJ);
@@ -181,10 +182,28 @@ if(!function_exists('isPasswordValidFor')){
     }
 }
 
-if(!function_exists('updatePassword')) {
-    function updatePassword($pdo, $user_id, $newpassword){
+if (!function_exists('updatePassword')) {
+    function updatePassword($pdo, $user_id, $newpassword)
+    {
         $q = $pdo->prepare("UPDATE `user` SET `password` = ? WHERE id = ? ");
         $q->execute([sha1($newpassword), $user_id]);
         $q->closeCursor();
+    }
+}
+
+if (!function_exists('readtext')) {
+    function readtext($path, $lang = null)
+    {
+        if ($lang == null) {
+            if (empty($_SESSION["lang"])) {
+                $pays = json_decode(file_get_contents('http://freegeoip.net/json/' . get_ip()), true)['country_name'];
+                $_SESSION["lang"] = ($pays == "France" ? "fr" : "en");
+            }
+            $lang = $_SESSION["lang"];
+        }
+
+        $mess = json_decode(file_get_contents("config/lang.json"), true)[$path][$lang];
+
+        return $mess;
     }
 }

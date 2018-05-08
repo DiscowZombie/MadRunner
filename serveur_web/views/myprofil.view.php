@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title><?= $page_title ?> | <?= WEBSITE_NAME ?></title>
+        <link rel="shortcut icon" href="../inc/img/icon/favicon.ico" />
+        <link rel="icon" type="image/png" href="../inc/img/icon/favicon.png" />
         <link rel="stylesheet" href="inc/css/mainstyle.css">
 
         <!-- On ajoute bootstrap -->
@@ -30,31 +32,31 @@
 
             <!-- Partie gauche de l'écran - Changement du mot de passe -->
             <div class="col-sm-6">
-              <strong>Changement du mot de passe: </strong>
+              <strong><?= readtext("general:passwordchange") ?>: </strong>
                 <br/><br/>
 
                 <form class="form-horizontal" method="post">
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="password">Mot de passe actuel</label>
+                        <label class="control-label col-sm-3" for="password"><?= readtext("general:actualpass"); ?></label>
                         <div class="col-sm-5">
-                            <input class="form-control" type="password" id="password" name="password" placeholder="Votre mot de passe actuel">
+                            <input class="form-control" type="password" id="password" name="password">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="password1">Nouveau mot de passe:</label>
+                        <label class="control-label col-sm-3" for="password1"><?= readtext("general:newpass"); ?></label>
                         <div class="col-sm-5">
                             <input class="form-control" type="password" id="password1" name="password1">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="password2">Confirmation du nouveau mot de passe:</label>
+                        <label class="control-label col-sm-3" for="password2"><?= readtext("general:confirmpass"); ?></label>
                         <div class="col-sm-5">
                             <input class="form-control" type="password" id="password2" name="password2">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9">
-                            <button type="submit" class="btn btn-default">Valider</button>
+                            <button type="submit" class="btn btn-default"><?= readtext("general:submit"); ?></button>
                         </div>
                     </div>
                 </form>
@@ -65,19 +67,35 @@
                 <div class="panel-group">
                     <!-- Titre du panel -->
                     <div class="panel panel-primary">
-                        <div class="panel-heading">Profil de <?= $_SESSION["username"] ?></div>
+                        <div class="panel-heading"><?= readtext("pagetitle:myprofile"); ?></div>
                     </div>
                     <!-- Premier champ -->
                     <div class="panel panel-primary">
-                        <div class="panel-heading">Pseudonyme:</div>
+                        <div class="panel-heading"><?= readtext("general:pseudo"); ?>:</div>
                         <div class="panel-body"><?= $_SESSION["username"] ?></div>
+                    </div>
+                    <!-- Choisir sa langue -->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><?= readtext("general:langchange"); ?></div>
+                        <div class="panel-body">
+                            <form class="form-inline" method="get">
+                                <div class="form-group">
+                                    <select class="selectpicker" data-style="btn-info" id="lang" name="lang">
+                                        <option data-tokens="fr" <?php echo ($_SESSION["lang"] == "fr" ? " selected='selected'" : ""); ?>>Français (French)</option>
+                                        <option data-tokens="en" <?php echo ($_SESSION["lang"] == "en" ? " selected='selected'" : ""); ?>>English</option>
+                                    </select>
+                                </div>
+                            <br /> <br/>
+                            <button type="submit" class="btn btn-default"><?= readtext("general:submit"); ?></button>
+                            </form>
+                        </div>
                     </div>
                     <!-- Classement -->
                     <div class="panel panel-primary">
-                        <div class="panel-heading">Classements:</div>
+                        <div class="panel-heading"><?= readtext("pagetitle:myrankings"); ?>:</div>
                         <div class="panel-body">
-                            <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>">Classement personnel</a>
-                            <a type="button" class="btn btn-info btn-md" href="scoreboard">Classement global</a>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>"><?= readtext("general:personnalrankings"); ?></a>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard"><?= readtext("general:allrankings"); ?></a>
                         </div>
                     </div>
                 </div>

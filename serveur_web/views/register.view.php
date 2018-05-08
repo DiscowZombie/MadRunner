@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title><?= $page_title ?> | <?= WEBSITE_NAME ?></title>
+    <link rel="shortcut icon" href="../inc/img/icon/favicon.ico" />
+    <link rel="icon" type="image/png" href="../inc/img/icon/favicon.png" />
     <link rel="stylesheet" href="inc/css/mainstyle.css">
 
     <!-- On ajoute bootstrap -->
@@ -30,31 +32,31 @@
 
             <!-- Partie gauche de l'écran -->
             <div class="col-sm-6">
-                <strong>Inscription: </strong>
+                <strong><?= readtext("pagetitle:register"); ?></strong>
                 <br />
                 <br />
                 <form class="form-horizontal" method="post">
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="pseudo">Pseudonyme:</label>
+                        <label class="control-label col-sm-3" for="pseudo"><?= readtext("general:pseudo"); ?>:</label>
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="pseudo" name="pseudo" value="<?php if(!empty($_SESSION["cache"]["pseudo"])) echo $_SESSION["cache"]["pseudo"]; ?>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="password1">Mot de passe:</label>
+                        <label class="control-label col-sm-3" for="password1"><?= readtext("general:password"); ?>:</label>
                         <div class="col-sm-5">
                             <input class="form-control" type="password" id="password1" name="password1">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="password2">Confirmation du mot de passe:</label>
+                        <label class="control-label col-sm-3" for="password2"><?= readtext("general:confirmpass"); ?>:</label>
                         <div class="col-sm-5">
                             <input class="form-control" type="password" id="password2" name="password2">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9">
-                            <button type="submit" class="btn btn-default">Valider</button>
+                            <button type="submit" class="btn btn-default"><?= readtext("general:submit"); ?></button>
                         </div>
                     </div>
                 </form>
@@ -62,13 +64,10 @@
 
             <!-- Partie droite de l'écran -->
             <div class="col-sm-6">
-                <strong>Pourquoi s'inscire ?</strong>
+                <strong><?= readtext("text:registerwhyt"); ?></strong>
                 <br /> <br />
-                <p>L'inscription vous permet de sauvegarder vos meilleurs en ligne et ainsi de les comparer facilement avec les autres. Cela vous permet également d'apparaitre dans le classement général des meilleurs joueurs de Mad Runner.</p>
-                <br />
-                <p>Votre inscription est totalement anonyme et sécurisé. Nous ne vous demanderons jamais votre nom ni prénom, vous utilisez un pseudonyme de votre choix pour tout le jeu. Ce dèrnier est unique et permet de vous reconnaitre. Pour la sécurité, notre site dispose d'un certificat officiel ce qui signique que vos données ne transittent jamais en clair.</p>
+                <p><?= readtext("text:registerwhy"); ?></p>
             </div>
-
         </div>
     </div>
 

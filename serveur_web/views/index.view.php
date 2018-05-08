@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title><?= $page_title ?> | <?= WEBSITE_NAME ?></title>
+    <link rel="shortcut icon" href="../inc/img/icon/favicon.ico" />
+    <link rel="icon" type="image/png" href="../inc/img/icon/favicon.png" />
     <link rel="stylesheet" href="inc/css/mainstyle.css">
 
     <!-- On ajoute bootstrap -->
@@ -30,17 +32,16 @@
     <div class="col-sm-12">
 
         <p>
-            Mad Runner est un jeu de course gratuit dans lequel le but est de courir le plus rapidement possible une
-            certaine distance, ou de courir la plus grande distance possible.
+            <?= readtext("text:smalldescribe"); ?>
         </p>
 
-        <h3>Aperçu</h3>
+        <h3><?= readtext("general:preview") ?></h3>
         <br/>
         <img src="inc/img/screenshot1.png" width="300" height="239">
         <img src="inc/img/screenshot2.png" width="300" height="239">
         <img src="inc/img/screenshot3.png" width="300" height="239">
 
-        <h3>Téléchargement</h3>
+        <h3><?= readtext("general:download"); ?></h3>
         <br/>
 		<a class="btn btn-primary" href="https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.32.bits.x86.exe" role="button">Windows
             (32 bits)</a>

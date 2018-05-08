@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title><?= $page_title ?> | <?= WEBSITE_NAME ?></title>
+    <link rel="shortcut icon" href="../inc/img/icon/favicon.ico" />
+    <link rel="icon" type="image/png" href="../inc/img/icon/favicon.png" />
     <link rel="stylesheet" href="inc/css/mainstyle.css">
 
     <!-- On ajoute bootstrap -->
@@ -36,12 +38,12 @@
                         <thead>
                         <tr>
                             <!-- Cette partie peut-encore être amméliorer dans le futur. Utilisez le classement Bootstrap 3 avec le JS ? -->
-                            <th>Pseudonyme <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=user_id/ASC'>&darr;</a>"; ?></th>
-                            <th>Type de course <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=course_type/ASC'>&darr;</a>"; ?></th>
-                            <th>Difficulté <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=difficulty/ASC'>&darr;</a>"; ?></th>
-                            <th>Score <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score/ASC'>&darr;</a>"; ?></th>
-                            <th>Temps/Distance</th>
-                            <th>Date de réalisation</th>
+                            <th><?= readtext("general:pseudo"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=user_id/ASC'>&darr;</a>"; ?></th>
+                            <th><?= readtext("general:coursetype"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=course_type/ASC'>&darr;</a>"; ?></th>
+                            <th><?= readtext("general:difficulty"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=difficulty/ASC'>&darr;</a>"; ?></th>
+                            <th><?= readtext("general:score"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score/ASC'>&darr;</a>"; ?></th>
+                            <th><?= readtext("general:timedist"); ?></th>
+                            <th><?= readtext("general:completdate"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -53,14 +55,8 @@
                             echo "<td>" . get_difficulty($item["difficulty"]) . "</td>";
                             echo "<td>" . $item["score"] . "</td>";
                             echo "<td>" . ($item["course_type"] == "I" ? round($item["time"]) . " m" : gmdate("i:s", ((int)$item["time"] / 1000)) . "." . ((int)$item["time"])%1000 ) . "</td>";
-                            $french_dateF = date_format(date_create($item["date"]), 'd M Y - H:i');
-                            $french_dateF = str_replace("Feb", "Fev", $french_dateF);
-                            $french_dateF = str_replace("Apr", "Avr", $french_dateF);
-                            $french_dateF = str_replace("May", "Mai", $french_dateF);
-                            $french_dateF = str_replace("Jun", "Juin", $french_dateF);
-                            $french_dateF = str_replace("Jul", "Juil", $french_dateF);
-                            $french_dateF = str_replace("Aug", "Aoû", $french_dateF);
-                            echo "<td>" . $french_dateF . "</td>";
+                            $date = date_format(date_create($item["date"]), 'd M Y - H:i');
+                            echo "<td>" . $date . "</td>";
                             echo "</tr>";
                         }
                         ?>
@@ -74,9 +70,9 @@
                     <div class="col-sm-10"> </div>
                     <div class="col-sm-2">
                         <?php if(!empty($_REQUEST['id'])) { ?>
-                            <a type="button" class="btn btn-info btn-md" href="scoreboard">Voir le classement global</a>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard"><?= readtext("general:seeglobalranks"); ?></a>
                         <?php } else { ?>
-                            <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>">Voir le classement personnel</a>
+                            <a type="button" class="btn btn-info btn-md" href="scoreboard?id=<?= $_SESSION["user_id"]; ?>"><?= readtext("general:seepersonalranks"); ?></a>
                         <?php } ?>
                     </div>
                 <?php } ?>
@@ -84,7 +80,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Bas de la page -->
     <?php include("partials/_footer.php"); ?>

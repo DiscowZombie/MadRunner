@@ -25,7 +25,7 @@ require_once("includes/databases.php");
 require_once("includes/functions.php");
 
 // On définit les variables propres à notre page
-$page_title = "Connexion";
+$page_title = readtext("pagetitle:login");
 
 // On vérifie si l'utilisateur a rempli le formulaire
 if(!empty($_POST["pseudo"]) && !empty($_POST["password"])) {
@@ -40,8 +40,8 @@ if(!empty($_POST["pseudo"]) && !empty($_POST["password"])) {
         header("Location: index.php");
     } else {
         $_SESSION['infobar']['level'] = "danger";
-        $_SESSION['infobar']['title'] = "Erreur:";
-        $_SESSION['infobar']['message'] = "Pseudonyme ou mot de passe invalide. Veuillez essayer à nouveau.";
+        $_SESSION['infobar']['title'] = readtext("general:error");
+        $_SESSION['infobar']['message'] = readtext("error:invalidcredentials");
     }
 }
 

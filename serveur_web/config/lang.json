@@ -1,0 +1,214 @@
+{
+  "pagetitle:main": {
+    "fr": "Accueil",
+    "en": "Home"
+  },
+  "pagetitle:info": {
+    "fr": "Informations",
+    "en": "Information"
+  },
+  "pagetitle:myprofile": {
+    "fr": "Mon profil",
+    "en": "My profile"
+  },
+  "pagetitle:scoreboard": {
+    "fr": "Tableau de score",
+    "en": "Scoreboard"
+  },
+  "pagetitle:myrankings": {
+    "fr": "Mes classements",
+    "en": "My rankings"
+  },
+  "pagetitle:login": {
+    "fr": "Connexion",
+    "en": "Login"
+  },
+  "pagetitle:logout": {
+    "fr": "Déconnexion",
+    "en": "Logout"
+  },
+  "pagetitle:register": {
+    "fr": "Inscription",
+    "en": "Register"
+  },
+  "general:meter": {
+    "fr": "mètre",
+    "en": "meter"
+  },
+  "general:hedge": {
+    "fr": "haie",
+    "en": "hedge"
+  },
+  "general:coursetype": {
+    "fr": "Type de course",
+    "en": "Race type"
+  },
+  "general:difficulty": {
+    "fr": "Difficulté",
+    "en": "Difficulty"
+  },
+  "general:score": {
+    "fr": "Score",
+    "en": "Score"
+  },
+  "general:completdate": {
+    "fr": "Date de réalisation",
+    "en": "Date of completion"
+  },
+  "general:timedist": {
+    "fr": "Temps/Distance",
+    "en": "Time/Distance"
+  },
+  "general:infiniterace": {
+    "fr": "Course infinie",
+    "en": "Infinite race"
+  },
+  "general:easy": {
+    "fr": "Facile",
+    "en": "Easy"
+  },
+  "general:normal": {
+    "fr": "Moyen",
+    "en": "Normal"
+  },
+  "general:hard": {
+    "fr": "Difficile",
+    "en": "Hard"
+  },
+  "general:error": {
+    "fr": "Erreur",
+    "en": "Error"
+  },
+  "general:congrat": {
+    "fr": "Félicitation",
+    "en": "Congratulation"
+  },
+  "general:registersuccess": {
+    "fr": "Inscription realisée avez succès ! Vous pouvez maintenant utilisez ces identifiants dans le jeu !",
+    "en": "Registration realized have success! You can now use these identifiers in the game!"
+  },
+  "general:passupdatesuccess":  {
+    "fr": "Votre mot de passe a été mis à jour avec succès !",
+    "en": "Your password has been successfully updated !"
+  },
+  "general:download": {
+    "fr": "Téléchargement",
+    "en": "Download"
+  },
+  "general:preview": {
+    "fr": "Aperçu",
+    "en": "Preview"
+  },
+  "general:history": {
+    "fr": "Histoire",
+    "en": "History"
+  },
+  "general:pseudo": {
+    "fr": "Pseudonyme",
+    "en": "Pseudo"
+  },
+  "general:password": {
+    "fr": "Mot de passe",
+    "en": "Password"
+  },
+  "general:passwordchange": {
+    "fr": "Changement du mot de passe",
+    "en": "Password change"
+  },
+  "general:actualpass": {
+    "fr": "Mot de passe actuel",
+    "en": "Current Password"
+  },
+  "general:newpass": {
+    "fr": "Nouveau mot de passe",
+    "en": "New password"
+  },
+  "general:confirmpass": {
+    "fr": "Confirmation du mot de passe",
+    "en": "Password Confirmation"
+  },
+  "general:submit": {
+    "fr": "Valider",
+    "en": "Submit"
+  },
+  "general:personnalrankings": {
+    "fr": "Mes classements",
+    "en": "My rankings"
+  },
+  "general:allrankings": {
+    "fr": "Classements globaux",
+    "en": "Overall rankings"
+  },
+  "general:seepersonalranks": {
+    "fr": "Voir le classement personnel",
+    "en": "See personal ranking"
+  },
+  "general:seeglobalranks": {
+    "fr": "Voir le classement global",
+    "en": "See overall ranking"
+  },
+  "general:langchange": {
+    "fr": "Changement de la langue",
+    "en": "Language Change"
+  },
+  "error:mustlogin": {
+    "fr": "Vous devez être connecté pour voir cette page ou effectuer cette action !",
+    "en": "You must be login to view this page or perform this action !"
+  },
+  "error:mustlogout": {
+    "fr": "Vous ne pouvez pas accéder à cette page en étant connecté !",
+    "en": "You cannot access this page while login !"
+  },
+  "error:invalidcredentials": {
+    "fr": "Pseudonyme ou mot de passe invalide. Veuillez essayer à nouveau.",
+    "en": "Invalid username or password. Please try again."
+  },
+  "error:usernamelenght": {
+    "fr": "Le nom d'utilisateur doit contenir entre 3 et 16 caractères.",
+    "en": "The user name must be between 3 and 16 characters long."
+  },
+  "error:notsamepass": {
+    "fr": "Les deux mots de passe ne sont pas identiques.",
+    "en": "The two passwords are not the same."
+  },
+  "error:passlenght": {
+    "fr": "Le mot de passe doit contenir entre 3 et 32 caractères.",
+    "en": "The password must be between 3 and 32 characters long."
+  },
+  "error:namenotunique": {
+    "fr": "Ce pseudonyme est déjà utilisé. Veuillez en choisir un autre.",
+    "en": "This pseudonym is already taken. Please choose another one."
+  },
+  "error:invalidpass": {
+    "fr": "Votre mot de passe n'est pas valide, veuillez reesayer.",
+    "en": "Your password is invalid, please try again."
+  },
+  "text:smalldescribe": {
+    "fr": "Mad Runner est un jeu de course gratuit dans lequel le but est de courir le plus rapidement possible une certaine distance, ou de courir la plus grande distance possible.",
+    "en": "SOON !"
+  },
+  "text:fulldescribe": {
+    "fr": "Mad Runner est un jeu de course gratuit et open-source développé par ADAM Ahmet et CIMBARO Mathéo, réalisé pour un projet en cours d'Informatique et Sciences du Numérique (ISN). Le but du projet en question était de créer un jeu drôle et divertissant. Le jeu a été créé avec le language de programmation Python et en utilisant le module Pygame, permettant la création de jeux.",
+    "en": "SOON !"
+  },
+  "text:history": {
+    "fr": "Le développement du jeu a commencé le 1er janvier 2018, et la première version beta est sortie le 5 mars. La dernière version officielle est sortie le 5 mai 2018 (v1.0).",
+    "en": "SOON !"
+  },
+  "text:loginwhyt": {
+    "fr": "La connexion, à quoi ça sert ?",
+    "en": "Login, why ?"
+  },
+  "text:loginwhy": {
+    "fr": "La connexion vous permet d'acceder à un espace personnel contenant des informations sur votre personnage. Vous pourrez également y trouvez vos classements et les confronter à ceux de vos amis.",
+    "en": "SOON !"
+  },
+  "text:registerwhyt": {
+    "fr": "Pourquoi s'inscire ?",
+    "en": "Registration, why ?"
+  },
+  "text:registerwhy": {
+    "fr": "L'inscription vous permet de sauvegarder vos meilleurs en ligne et ainsi de les comparer facilement avec les autres. Cela vous permet également d'apparaitre dans le classement général des meilleurs joueurs de Mad Runner.\n\nVotre inscription est totalement anonyme et sécurisé. Nous ne vous demanderons jamais votre nom ni prénom, vous utilisez un pseudonyme de votre choix pour tout le jeu. Ce dèrnier est unique et permet de vous reconnaitre. Pour la sécurité, notre site dispose d'un certificat officiel ce qui signique que vos données ne transittent jamais en clair.",
+    "en": "SOON !"
+  }
+}
