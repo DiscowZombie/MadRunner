@@ -9,7 +9,13 @@
 
 Mad Runner est un jeu 2d écrit en Python. Notre objectif est plutôt simple, proposer aux utilisateurs un jeu simple et divertissant. Ainsi, vous incarnez un coureur que vous pouvez faire évoluer tout au long du jeu. Il pourra se confronter à différents modes de jeu sur différents terrains. Vous pouvez également choisir la difficulté pour une meilleure expérience de jeu.
 
-Mad Runner est disponible en [téléchargement sur Windows (64 bits)](https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.exe).
+Téléchargement :
+
+| OS                 | Dernière version |
+|:------------------:| ---------------- |                                                       
+| Windows (64 bits)  | [![GitHub release](https://img.shields.io/github/release/DiscowZombie/MadRunner.svg)](https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.exe) |
+| Windows (32 bits)  | [![GitHub release](https://img.shields.io/github/release/DiscowZombie/MadRunner.svg)](https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.32.bits.x86.exe) |
+| Autre              | Pas encore supporté :'( |
 
 ### Fonctionnalités 
 
