@@ -34,16 +34,16 @@
             <div class="col-12 col-sm-12 col-lg-12">
                 <!-- Le tableau de score -->
                 <div class="table-responsive">
-                    <table class="table table-bordered table-responsive">
+                    <table class="table table-bordered table-responsive" id="scoreboard">
                         <thead>
                         <tr>
                             <!-- Cette partie peut-encore être amméliorer dans le futur. Utilisez le classement Bootstrap 3 avec le JS ? -->
-                            <th><?= readtext("general:pseudo"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=user_id/ASC'>&darr;</a>"; ?></th>
-                            <th><?= readtext("general:coursetype"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=course_type/ASC'>&darr;</a>"; ?></th>
-                            <th><?= readtext("general:difficulty"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=difficulty/ASC'>&darr;</a>"; ?></th>
-                            <th><?= readtext("general:score"); ?> <?php echo !empty($_REQUEST['sort']) ? "<a role='button' href='scoreboard" . (!empty($_REQUEST['id']) ? "?id=" . $_REQUEST["id"] : "") . "'>&times;</a>" : "<a href='scoreboard?" . (!empty($_REQUEST['id']) ? "id=" . $_REQUEST["id"] . "&" : "") . "sort=score/ASC'>&darr;</a>"; ?></th>
-                            <th><?= readtext("general:timedist"); ?></th>
-                            <th><?= readtext("general:completdate"); ?></th>
+                            <th onclick="sortTable(0)"><?= readtext("general:pseudo"); ?></th>
+                            <th onclick="sortTable(1)"><?= readtext("general:coursetype"); ?></th>
+                            <th onclick="sortTable(2)"><?= readtext("general:difficulty"); ?></th>
+                            <th onclick="sortTable(3)"><?= readtext("general:score"); ?></th>
+                            <th onclick="sortTable(4)"><?= readtext("general:timedist"); ?></th>
+                            <th onclick="sortTable(5)"><?= readtext("general:completdate"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -84,5 +84,58 @@
     <!-- Bas de la page -->
     <?php include("partials/_footer.php"); ?>
 
-  </body>
+    <!-- Un peu de js, c'est pas si loin du Java que ça et c'est juste une petite fonction :P -->
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("scoreboard");
+            switching = true;
+            // On met l'odre de sortie sur ascendant par défaut
+            dir = "asc";
+            // Boucle qui tourne tant que les changements (classements) n'ont pas été faits
+            while (switching) {
+                // Aucun changement n'a été fait pour le moment
+                switching = false;
+                // On recupère chaque ligne de notre tableau
+                rows = table.getElementsByTagName("TR");
+                // Boucle pour chaque ligne, sauf la première, car c'est le titre
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Par défaut, les élements ne doivent pas etre échangés, la c'est l'initialisation
+                    shouldSwitch = false;
+                    // Récupérer les deux élements à comparer
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    // Véirifer si les deux élements sont bien classés ou non
+                    if (dir === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            // S'ils ne sont pas bien placés, marqué qu'il y a un changement à faire et sortir de la boucle
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    // Il y a du changement à faire, nous le faissont de suite
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    // Un changement a été fait avec succès
+                    switching = true;
+                    // Juste un compteur que l'on incrémente à chaque fois
+                    switchcount ++;
+                } else {
+                    // Si tout est déjà bien classé, c'est que ASC n'est pas la bonne direction, donc classons par DESC et retournons dans la boucle!
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+
+    </body>
 </html>

@@ -28,42 +28,39 @@ $page_title = readtext("pagetitle:scoreboard");
 
 # Id de l'utilisateur
 $uid = 0;
-if(!empty($_GET["id"])) {
+if (!empty($_GET["id"])) {
     $uid = $_GET["id"];
 }
 
-# Classé les résulats
-$sort_param = " ORDER BY score DESC";
-if(!empty($_GET["sort"])) {
-    $sort_param = " ORDER BY " . str_replace("/", " ", $_GET["sort"]);
+// Un peu d'initialisation des variables de session
+if(empty($_SESSION["cache"])) {
+    $_SESSION["cache"] = [];
+}
+if(empty($_SESSION["cache"]["scoreboard"])) {
+    $_SESSION["cache"]["scoreboard"] = array();
 }
 
-/** == DEBUT PARTIE SQL == **/
+$scoreboard = $_SESSION["cache"]["scoreboard"];
 
-// On recupère les meilleures scores
-$q = $pdo->prepare("SELECT * FROM score" . ($uid > 0 ? " WHERE user_id = ?" : "") . $sort_param . " LIMIT 30");
-$q->execute( ($uid > 0 ? [$uid] : []) );
+if(empty($scoreboard)) {
+    // On recupère les meilleures scores
+    $q = $pdo->prepare("SELECT * FROM score" . ($uid > 0 ? " WHERE user_id = ?" : "") . " LIMIT 50");
+    $q->execute(($uid > 0 ? [$uid] : []));
 
-$scoreboard = array();
+    $scoreboard = array();
 
-while($row = $q->fetch(PDO::FETCH_OBJ)){
-    $scoreboard[$row->id]["difficulty"] = $row->difficulty;
-    $scoreboard[$row->id]["course_type"] = $row->course_type;
-    $scoreboard[$row->id]["user_id"] = $row->user_id;
-    $scoreboard[$row->id]["score"] = $row->score;
-    $scoreboard[$row->id]["time"] = $row->time;
-    $scoreboard[$row->id]["date"] = $row->date;
+    while ($row = $q->fetch(PDO::FETCH_OBJ)) {
+        $scoreboard[$row->id]["difficulty"] = $row->difficulty;
+        $scoreboard[$row->id]["course_type"] = $row->course_type;
+        $scoreboard[$row->id]["user_id"] = $row->user_id;
+        $scoreboard[$row->id]["score"] = $row->score;
+        $scoreboard[$row->id]["time"] = $row->time;
+        $scoreboard[$row->id]["date"] = $row->date;
+    }
+
+    $q->closeCursor();
+    $_SESSION["cache"]["scoreboard"] = $scoreboard;
 }
-
-$q->closeCursor();
-
-# TODO: Mettre la variable en cache
-# var_dump($scoreboard);
-
-/** == FIN PARTIE SQL == **/
-
 
 // On affiche la page
 include("views/scoreboard.view.php");
-
-?>
