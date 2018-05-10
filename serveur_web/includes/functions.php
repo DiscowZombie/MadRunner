@@ -192,7 +192,7 @@ if (!function_exists('updatePassword')) {
 }
 
 if (!function_exists('readtext')) {
-    function readtext($path, $lang = null)
+    function readtext($path, $lang = "en")
     {
         if ($lang == null) {
             if (empty($_SESSION["lang"])) {
@@ -202,7 +202,7 @@ if (!function_exists('readtext')) {
             $lang = $_SESSION["lang"];
         }
 
-        $mess = json_decode(file_get_contents("config/lang.json"), true)[$path][$lang];
+		$mess = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', file_get_contents("config/lang.json")), true)[$path][$lang];
 
         return $mess;
     }
