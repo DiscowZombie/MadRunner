@@ -192,7 +192,7 @@ if (!function_exists('updatePassword')) {
 }
 
 if (!function_exists('readtext')) {
-    function readtext($path, $lang = "en")
+    function readtext($path, $lang = null)
     {
         if ($lang == null) {
             if (empty($_SESSION["lang"])) {
