@@ -1,3 +1,4 @@
+import pygame
 import functions as f
 import constantes
 import statemanager
@@ -7,19 +8,15 @@ import uielement
 
 
 class View:
-    pygame = None
     screen = None
     screensize = (640, 480)  # taille par défaut de la fenêtre
 
-    def __init__(self, pygame):
-        View.pygame = pygame
-        self.pygame = pygame
+    def __init__(self):
         self.updatewindow(View.screensize)
-        self.pygame.display.set_caption("Mad Runner")
+        pygame.display.set_caption("Mad Runner")
 
-        image_menu = self.pygame.image.load(f.resource_path("assets\img\menu_fond.png")).convert_alpha()
-        self.pygame.display.set_icon(image_menu)  # Icône du jeu
-        View.pygame = pygame
+        image_menu = pygame.image.load(f.resource_path("assets\img\menu_fond.png")).convert_alpha()
+        pygame.display.set_icon(image_menu)  # Icône du jeu
 
     def updatewindow(cls, newsize):  # quand la fenêtre est redimensionnée, ou initialisée
         old_screen_obj = View.screen
@@ -27,7 +24,7 @@ class View:
         View.screensize = newsize
         screen = uielement.UIelement(None, 0, 0, 0, 0, newsize[0], newsize[1], 0, 0, constantes.WHITE, 0, "screen",
                                      None, True)
-        screen.referance = View.pygame.display.set_mode(newsize, View.pygame.RESIZABLE)
+        screen.referance = pygame.display.set_mode(newsize, pygame.RESIZABLE)
         View.screen = screen
         View.screen.updated = True  # n'est sur True que pendant 1 image ! Il permet aux objets de savoir que l'écran a été redimensionné
 
@@ -38,7 +35,7 @@ class View:
                     screen.addchild(obj)
 
     def updatescreen(cls):
-        a = View.pygame.Surface(View.screensize)  # une surface pour reset l'écran
+        a = pygame.Surface(View.screensize)  # une surface pour reset l'écran
         a.fill((255, 255, 255))
         View.screen.referance.blit(a, (0, 0))
 
@@ -108,7 +105,7 @@ class View:
                 state_sprite = character.__getattribute__(attrname)
                 View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (character.absx + state_sprite.x, character.absy + state_sprite.y))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
 
-        View.pygame.display.update()
+        pygame.display.update()
         View.screen.updated = False
 
     updatewindow = classmethod(updatewindow)

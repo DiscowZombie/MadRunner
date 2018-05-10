@@ -76,7 +76,7 @@ class CourseInfinie:
 
     dist_to_travel = None
     disp_function = None
-    score_text = "Distance"
+    score_text = "distance"
     coursetype = "I"
 
     def __init__(self):
@@ -107,6 +107,8 @@ class CourseInfinie:
 
         if not self.caught and distance - self.courseur.distance <= 1.75:
             self.caught = True
+            trop = self.courseur.distance + 1.75 - distance
+            coregame.CoreGame.current_core.distance -= trop  # c'est plus précis comme ça
             coregame.CoreGame.current_core.end(True)
             return
 

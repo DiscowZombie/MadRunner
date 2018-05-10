@@ -1,5 +1,5 @@
+import pygame
 import uielement
-import view
 
 from uielements import image
 from uielements import text
@@ -11,7 +11,8 @@ class Checkbox(uielement.UIelement):
     checkboxes = []
 
     """
-    :param boxsize = la taille x du checkbox (carré)
+    :param boxsize - la taille x du checkbox (carré)
+    :param name - Le nom du checkbox (pour l'identifier), ne dépend pas de la langue
     :param text - Le texte à côté du checkbox
     :param antialias - Y a-t-il l'anti-alias ou pas ?
     :param couleur_text - La couleur du texte
@@ -24,12 +25,13 @@ class Checkbox(uielement.UIelement):
     :param *UIargs - Tous les paramètres d'un élément graphique (voir classe "UIelement")
     """
 
-    def __init__(self, boxsize, textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
+    def __init__(self, boxsize, name, textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
                  *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Checkbox")
 
         self.boxsize = boxsize
+        self.name = name
         self.text = textb
         self.antialias = antialias
         self.textcolor = couleur_text
@@ -56,13 +58,13 @@ class Checkbox(uielement.UIelement):
     def create(self):
         posx = self.parentsurface.abswidth*self.scalex + self.x
         posy = self.parentsurface.absheight*self.scaley + self.y + int(self.height/2 - self.boxsize/2)
-        view.View.pygame.draw.rect(
+        pygame.draw.rect(
             self.parentsurface.referance,
             constantes.WHITE,
             [posx, posy, self.boxsize, self.boxsize],
             0
         )
-        view.View.pygame.draw.rect(
+        pygame.draw.rect(
             self.parentsurface.referance,
             self.color,
             [posx, posy, self.boxsize, self.boxsize],
@@ -84,7 +86,7 @@ class Checkbox(uielement.UIelement):
     def linkcheckboxes(cls, *checkboxes):  # méthode pour lier des checkbox. Il faut passer les objets checkbox qu'on veut lier
         for checkbox in checkboxes:
             for othercheckbox in checkboxes:
-                if checkbox.text != othercheckbox.text:  # on suppose que les checkbox ne sont pas identiques s'il n'ont pas le même texte
+                if checkbox.name != othercheckbox.name:
                     checkbox.linkedcheckboxes.append(othercheckbox)
 
     getCheckboxes = classmethod(getCheckboxes)

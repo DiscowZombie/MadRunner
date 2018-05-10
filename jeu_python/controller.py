@@ -1,18 +1,15 @@
+import pygame
 import model
 import view
 
 
 class Controller:
     pressing_buttons = {}
-    pygame = None
-    view = None
 
-    def __init__(self, pygame, view):
-        Controller.pygame = pygame
-        Controller.view = view
+    def __init__(self):
+        self.initialised = True
 
     def checkevents(cls):
-        pygame = Controller.pygame
         for event in pygame.event.get():
             # Si on appuie sur la croix pour fermer le programme
             if event.type == pygame.QUIT:

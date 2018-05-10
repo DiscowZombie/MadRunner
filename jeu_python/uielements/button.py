@@ -18,6 +18,7 @@ from uielements import textbox
 import constantes
 import functions
 import onlineconnector
+import settings
 
 
 class Button(uielement.UIelement):
@@ -173,13 +174,13 @@ class BJouer(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        B1Joueur("1 joueur", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        B1Joueur(functions.translate("1player"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                  ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
 
         """
-        B2Joueurs("2 joueurs", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        B2Joueurs(functions.translate("2players"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                   ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
 
@@ -202,7 +203,7 @@ class BJouer(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -218,7 +219,7 @@ class BParam(Button):
         SCALE_X = 0.5
         SCALE_Y = 0.5
         LARGEUR = 400
-        HAUTEUR = 50
+        HAUTEUR = 175
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
         POSITION_X = - int(LARGEUR / 2)
@@ -251,9 +252,13 @@ class BParam(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BConnexion("Connexion / Inscription", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BConnexion(functions.translate("login/register"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                    ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        POSITION_Y += 75
+        BLangue(functions.translate("language"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -274,9 +279,105 @@ class BParam(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+
+class BLangue(Button):
+
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        statemanager.StateManager.setstate(statemanager.StateEnum.LANGUAGE_MENU)
+        functions.delete_menu_obj()
+
+        LARGEUR = 400
+        HAUTEUR = 175
+        POSITION_X = -int(LARGEUR / 2)
+        POSITION_Y = -int(HAUTEUR / 2)
+        SCALE_X = 0.5
+        SCALE_Y = 0.5
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.WHITE
+        BORDURE = 0
+        ALPHA = 255
+        CONVERT_ALPHA = True
+
+        surface_lang = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                      SCALE_Y, LARGEUR,
+                                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                      BORDURE)  # creation de la l'objet surface où on va mettre les choix de langue
+
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 400
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = None
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BLanguage("en", "English", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ECART, surface_lang, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        POSITION_Y += 75
+        BLanguage("fr", "Français", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ECART, surface_lang, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = None
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+
+class BLanguage(Button):
+
+    def __init__(self, language_id, *arguments):
+        Button.__init__(self, *arguments)
+        self.language = language_id
+
+    def button1click(self):
+        current_settings = settings.SettingsManager.current_settings
+        current_settings["game_settings"]["language"] = self.language
+
+        f = open(settings.FILE_PATH, "w")
+        f.write(str(current_settings).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('None', 'null'))
+        f.close()
+
+        settings.SettingsManager.update_settings()
+        BRetour.button1click(None)
 
 
 class BConnexion(Button):
@@ -309,7 +410,7 @@ class BConnexion(Button):
         connected = onlineconnector.OnlineConnector.current_connection.connected
 
         if connected:
-            TEXTE_BOUTON = "Se déconnecter"
+            TEXTE_BOUTON = "logout"
 
             ANTIALIAS = True
             COULEUR = constantes.BLACK
@@ -331,7 +432,7 @@ class BConnexion(Button):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text("Connecté en tant que :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+            text.Text(functions.translate("logged_as") + " :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                       ECART,
                       SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
                       SCALE_HEIGHT,
@@ -363,7 +464,7 @@ class BConnexion(Button):
                       SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
         else:
-            TEXTE_BOUTON = "Se connecter"
+            TEXTE_BOUTON = "login"
 
             ANTIALIAS = True
             COULEUR = constantes.BLACK
@@ -385,7 +486,7 @@ class BConnexion(Button):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text("Nom d'utilisateur :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+            text.Text(functions.translate("username") + " :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                       ECART,
                       SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
                       SCALE_HEIGHT,
@@ -393,7 +494,7 @@ class BConnexion(Button):
 
             POSITION_Y += 50
 
-            text.Text("Mot de passe :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+            text.Text(functions.translate("password") + " :", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
                       SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
                       SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
@@ -454,7 +555,7 @@ class BConnexion(Button):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            debut_texte = text.Text("Vous n'avez pas de compte ? Inscrivez vous ", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+            debut_texte = text.Text(functions.translate("no_account") + " ", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
                       SEUL, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
                       SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
@@ -478,7 +579,7 @@ class BConnexion(Button):
             ECART = 0
             BORDURE = 0  # rempli
 
-            BSinscrire("ici", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            BSinscrire(functions.translate("here"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                     ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -501,7 +602,7 @@ class BConnexion(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BSeConnecter(TEXTE_BOUTON, ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BSeConnecter(functions.translate(TEXTE_BOUTON), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                      ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -524,7 +625,7 @@ class BConnexion(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -597,14 +698,14 @@ class BStats(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BMeilleurScore("Meilleur score", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        BMeilleurScore(functions.translate("best_score"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                        CENTRE_Y,
                        ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 75
 
-        BAutreStats("Autre", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BAutreStats(functions.translate("other"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                     ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -627,7 +728,7 @@ class BStats(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -678,7 +779,7 @@ class B1Joueur(Button):
         BORDURE = 0  # rempli
         SEUL = True
 
-        texte_carte = text.Text("Carte :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        texte_carte = text.Text(functions.translate("map") + " :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                                 ARRIERE_PLAN, ECART, SEUL, surface_carte, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                                 LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -702,19 +803,20 @@ class B1Joueur(Button):
         ECART = 10
         BORDURE = 3
 
-        check_jo = checkbox.Checkbox(BOXSIZE, "Jeux Olympiques", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        check_jo = checkbox.Checkbox(BOXSIZE, "Jeux Olympiques", functions.translate("olympic_games"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                                      CENTRE_X,
                                      CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y, SCALE_X,
                                      SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         check_jo.check()
+
         POSITION_Y += 75
-        check_athenes = checkbox.Checkbox(BOXSIZE, "Athènes", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        check_athenes = checkbox.Checkbox(BOXSIZE, "Athènes", functions.translate("athens"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                                           CENTRE_X,
                                           CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y,
                                           SCALE_X,
                                           SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        check_foret = checkbox.Checkbox(BOXSIZE, "Forêt", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        check_foret = checkbox.Checkbox(BOXSIZE, "Forêt", functions.translate("forest"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                                         CENTRE_Y, ARRIERE_PLAN, ECART, surface_carte, POSITION_X, POSITION_Y,
                                         SCALE_X,
                                         SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -760,7 +862,7 @@ class B1Joueur(Button):
         BORDURE = 0  # rempli
         SEUL = True
 
-        texte_mdj = text.Text("Mode de jeu :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        texte_mdj = text.Text(functions.translate("game_mode") + " :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                               ARRIERE_PLAN, ECART, SEUL, surface_mdj, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                               HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -784,19 +886,19 @@ class B1Joueur(Button):
         ECART = 10
         BORDURE = 3
 
-        check_400m = checkbox.Checkbox(BOXSIZE, "400m", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        check_400m = checkbox.Checkbox(BOXSIZE, "400m", functions.translate("400m"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                                        CENTRE_Y,
                                        ARRIERE_PLAN, ECART, surface_mdj, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                                        LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         check_400m.check()
         POSITION_Y += 75
-        check_400m_haie = checkbox.Checkbox(BOXSIZE, "400m haie", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        check_400m_haie = checkbox.Checkbox(BOXSIZE, "400m haie",  functions.translate("400m_hurdles"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                                             CENTRE_X,
                                             CENTRE_Y, ARRIERE_PLAN, ECART, surface_mdj, POSITION_X, POSITION_Y,
                                             SCALE_X,
                                             SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        check_course_inf = checkbox.Checkbox(BOXSIZE, "Course infinie", ANTIALIAS, COULEUR_TEXTE, FONT,
+        check_course_inf = checkbox.Checkbox(BOXSIZE, "Course infinie", functions.translate("infinite_run"), ANTIALIAS, COULEUR_TEXTE, FONT,
                                              TAILLE_FONT,
                                              CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART, surface_mdj, POSITION_X,
                                              POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
@@ -844,7 +946,7 @@ class B1Joueur(Button):
         BORDURE = 0  # rempli
         SEUL = True
 
-        texte_diff = text.Text("Difficulté :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        texte_diff = text.Text(functions.translate("difficulty") + " :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                                ARRIERE_PLAN, ECART, SEUL, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -868,18 +970,18 @@ class B1Joueur(Button):
         ECART = 10
         BORDURE = 3
 
-        check_facile = checkbox.Checkbox(BOXSIZE, "Facile", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        check_facile = checkbox.Checkbox(BOXSIZE, "Facile", functions.translate("easy"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                                          CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
                                          SCALE_X,
                                          SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        check_moyen = checkbox.Checkbox(BOXSIZE, "Moyen", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        check_moyen = checkbox.Checkbox(BOXSIZE, "Moyen", functions.translate("medium"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                                         CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
                                         SCALE_X,
                                         SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         check_moyen.check()
         POSITION_Y += 75
-        check_difficile = checkbox.Checkbox(BOXSIZE, "Difficile", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        check_difficile = checkbox.Checkbox(BOXSIZE, "Difficile", functions.translate("hard"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                                             CENTRE_X,
                                             CENTRE_Y, ARRIERE_PLAN, ECART, surface_diff, POSITION_X, POSITION_Y,
                                             SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
@@ -907,7 +1009,7 @@ class B1Joueur(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BCommencer("Commencer", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BCommencer(functions.translate("start"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                    ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -930,7 +1032,7 @@ class B1Joueur(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -965,7 +1067,7 @@ class B2Joueurs(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
 
@@ -988,7 +1090,7 @@ class BCommencer(Button):
                 else:
                     level = checkboxe
 
-        coregame.CoreGame(carte.text, modejeu.text, level.text)
+        coregame.CoreGame(carte.name, modejeu.name, level.name)
 
 
 class BMeilleurScore(Button):
@@ -1039,7 +1141,7 @@ class BMeilleurScore(Button):
         IMAGE = "assets/img/local.png"
         BORDURE = 0  # rempli
 
-        tab_local = tab.TMeilleurScoreLocal("Personnel", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+        tab_local = tab.TMeilleurScoreLocal("Personnel", functions.translate("personal"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
                                             CENTRE_X, CENTRE_Y,
                                             ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
                                             ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
@@ -1049,7 +1151,7 @@ class BMeilleurScore(Button):
         POSITION_X += LARGEUR
         IMAGE = "assets/img/en ligne.png"
 
-        tab_ligne = tab.TMeilleurScoreEnLigne("Global", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT,
+        tab_ligne = tab.TMeilleurScoreEnLigne("Global", functions.translate("global"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT,
                                               TAILLE_FONT, CENTRE_X, CENTRE_Y,
                                               ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
                                               ECART, IMAGE, surface_population, POSITION_X, POSITION_Y, SCALE_X,
@@ -1099,7 +1201,7 @@ class BMeilleurScore(Button):
         IMAGE = None
         BORDURE = 0  # rempli
 
-        tab_facile = tab.TFacile("Facile", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        tab_facile = tab.TFacile("Facile", functions.translate("easy"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                                  CENTRE_Y,
                                  ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
                                  ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
@@ -1107,7 +1209,7 @@ class BMeilleurScore(Button):
 
         POSITION_X += LARGEUR
 
-        tab_moyen = tab.TMoyen("Moyen", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        tab_moyen = tab.TMoyen("Moyen", functions.translate("medium"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                                CENTRE_Y,
                                ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
                                ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
@@ -1115,7 +1217,7 @@ class BMeilleurScore(Button):
 
         POSITION_X += LARGEUR
 
-        tab_difficile = tab.TDifficile("Difficile", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+        tab_difficile = tab.TDifficile("Difficile", functions.translate("hard"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
                                        CENTRE_X, CENTRE_Y,
                                        ARRIERE_PLAN_SELECT, ARRIERE_PLAN_UNSELECT,
                                        ECART, IMAGE, surface_diff, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
@@ -1143,7 +1245,7 @@ class BMeilleurScore(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -1177,14 +1279,14 @@ class BAutreStats(Button):
         BORDURE = 0  # rempli
         SEUL = True
 
-        text.Text("Score total: " + str(int(stats_obj.score_total)), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("total_score") +  ": " + str(int(stats_obj.score_total)), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Nombre de courses: " + str(stats_obj.nb_courses), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("course_number") + ": " + str(stats_obj.nb_courses), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -1192,7 +1294,7 @@ class BAutreStats(Button):
         POSITION_X += 35
         POSITION_Y += 30
 
-        text.Text("Dont échouées: " + str(stats_obj.nb_courses_echouees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("failed_courses") + ": " + str(stats_obj.nb_courses_echouees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -1200,44 +1302,43 @@ class BAutreStats(Button):
         POSITION_X -= 35
         POSITION_Y += 35
 
-        text.Text("Nombre de sauts: " + str(stats_obj.nb_sauts), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        text.Text(functions.translate("jump_number") + ": " + str(stats_obj.nb_sauts), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                   CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Distance parcourue: " + str(int(stats_obj.total_dist)) + " m", ANTIALIAS, COULEUR_TEXTE, FONT,
+        text.Text(functions.translate("traveled_distance") + ": " + str(int(stats_obj.total_dist)) + " m", ANTIALIAS, COULEUR_TEXTE, FONT,
                   TAILLE_FONT, CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text(
-            "Nombre de lettres: " + str(stats_obj.correct_letters + stats_obj.wrong_letters + stats_obj.missed_letters),
-            ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-            ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-            LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        text.Text(functions.translate("letters_number") + ": " + str(stats_obj.correct_letters + stats_obj.wrong_letters + stats_obj.missed_letters),
+                  ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                  ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                  LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X += 35
         POSITION_Y += 30
 
-        text.Text("Dont correctes: " + str(stats_obj.correct_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("correct_letters") + ": " + str(stats_obj.correct_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 30
 
-        text.Text("Dont incorrectes: " + str(stats_obj.wrong_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("wrong_letters") + ": " + str(stats_obj.wrong_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 30
 
-        text.Text("Dont manquées: " + str(stats_obj.missed_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("missed_letters") + ": " + str(stats_obj.missed_letters), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -1248,7 +1349,7 @@ class BAutreStats(Button):
         if stats_obj.wrong_letters + stats_obj.correct_letters > 0:
             precision = int((stats_obj.correct_letters / (stats_obj.wrong_letters + stats_obj.correct_letters)) * 100)
 
-        text.Text("Précision: " + str(precision) + " %", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        text.Text(functions.translate("accuracy") + ": " + str(precision) + " %", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                   CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -1256,21 +1357,21 @@ class BAutreStats(Button):
         POSITION_X -= 35
         POSITION_Y += 35
 
-        text.Text("Haie traversées: " + str(stats_obj.haies_traversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("crossed_hurdles") + ": " + str(stats_obj.haies_traversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Haie renversées: " + str(stats_obj.haies_renversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+        text.Text(functions.translate("knocked_down_hurdles") + ": " + str(stats_obj.haies_renversees), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
                   CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_Y += 35
 
-        text.Text("Temps de jeu: " + functions.computeplaytime(stats_obj.temps_jeu), ANTIALIAS, COULEUR_TEXTE, FONT,
+        text.Text(functions.translate("play_time") + ": " + functions.computeplaytime(stats_obj.temps_jeu), ANTIALIAS, COULEUR_TEXTE, FONT,
                   TAILLE_FONT, CENTRE_X, CENTRE_Y,
                   ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                   LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
@@ -1294,7 +1395,7 @@ class BAutreStats(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BRetour("Retour", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -1309,8 +1410,8 @@ class BRafraichir(Button):
         except:
             return
         for tabb in tab.Tab.getTabs():
-            if tabb.selected and tabb.text != "Global":
-                functions.displaybestscore("Global", tabb.text)
+            if tabb.selected and tabb.name != "Global":
+                functions.displaybestscore("Global", tabb.name)
 
 
 menu_states = [  # les états du jeu qui font retourner au menu principal lorsqu'on clique sur retour
@@ -1334,7 +1435,7 @@ class BRetour(Button):
             BJouer.button1click(None)  # C'est comme si on avait cliqué sur jouer
         elif game_state == statemanager.StateEnum.BEST_SCORE or game_state == statemanager.StateEnum.AUTRE_STATS:
             BStats.button1click(None)  # C'est comme si on avait cliqué sur statistiques
-        elif game_state == statemanager.StateEnum.CONNEXION_MENU:
+        elif game_state == statemanager.StateEnum.CONNEXION_MENU or game_state == statemanager.StateEnum.LANGUAGE_MENU:
             BParam.button1click(None)  # C'est comme si on avait cliqué sur paramètres
 
 
@@ -1370,7 +1471,6 @@ class BPause(Button):
             self.surface_pause = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
                                                  SCALE_Y, LARGEUR,HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-            TEXTE = "PAUSE"
             ANTIALIAS = True
             COULEUR = constantes.BLACK
             FONT = "Arial"
@@ -1391,7 +1491,7 @@ class BPause(Button):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+            text.Text(functions.translate("pause").upper(), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
                       SEUL, self.surface_pause, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                       SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
@@ -1414,7 +1514,7 @@ class BPause(Button):
             ECART = 0
             BORDURE = 0  # rempli
 
-            BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            BRetourMenu(functions.translate("return_menu"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                         ECART, self.surface_pause, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH,
                         SCALE_HEIGHT, COULEUR, BORDURE)
         else:
@@ -1423,10 +1523,8 @@ class BPause(Button):
 
 
 """
-Un bouon de retour au menu après la fin du jeu
+Un bouton de retour au menu après la fin du jeu
 """
-
-
 class BRetourMenu(Button):
 
     def __init__(*arguments):

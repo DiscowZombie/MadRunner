@@ -15,12 +15,8 @@ from uielements import textbox as textbox
 
 from coregame import coregame as coregame
 
-import settings
-import json
-
 
 class Model:
-    pygame = None
     last_passed = 0
 
     introplaying = False
@@ -28,8 +24,8 @@ class Model:
     firstintro = False  # première phase de l'intro: montrer l'icône et le nom
     secondintro = False  # deuxième phase de l'intro: effet de transiton
 
-    def __init__(self, pygame):
-        Model.pygame = pygame
+    def __init__(self):
+        self.initialised = True
 
     def updatemodel(cls, passed):
 
@@ -298,16 +294,16 @@ class Model:
         ECART = 0
         BORDURE = 0  # rempli
 
-        button.BJouer("Jouer", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        button.BJouer(f.translate("play"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                       ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                       SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        button.BStats("Statistiques", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+        button.BStats(f.translate("statistics"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                       CENTRE_Y,
                       ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                       SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
-        button.BParam("Paramètres", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        button.BParam(f.translate("settings"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                       ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                       SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 

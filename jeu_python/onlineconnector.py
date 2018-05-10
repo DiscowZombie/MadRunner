@@ -22,9 +22,9 @@ class OnlineConnector:
         self.responsejson = None  # Contient la réponse du serveur web (contient ["id"] et ["key"]. On admet que la connexion a été opéré sans soucis si elle est "not None"
         self.data = None  # Les stats du joueur
         if username is None:
-            username = settings.SettingsManager().readjson()["account_settings"]["username"]
+            username = settings.SettingsManager.current_settings["account_settings"]["username"]
         if password is None:
-            password = settings.SettingsManager().readjson()["account_settings"]["password"]
+            password = settings.SettingsManager.current_settings["account_settings"]["password"]
 
         self.username = username
         self.password = password
@@ -51,15 +51,16 @@ class OnlineConnector:
             if json_response is not None and json_response is not False and json_response != "":
                 self.responsejson = json_response
                 if self.save:  # On sauvegarde les identifiants en config
-                    json_rep = settings.SettingsManager().readjson()
+                    json_rep = settings.SettingsManager.current_settings
                     json_rep["account_settings"][
                         "username"] = "null" if self.username is None else self.username
                     json_rep["account_settings"][
                         "password"] = "null" if self.password is None else self.password
 
                     f = open(settings.FILE_PATH, "w")
-                    f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"'))
+                    f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('None', 'null'))
                     f.close()
+                    settings.SettingsManager.update_settings()
                 self.connected = True
             elif json_response is False:
                 self.internet = False
@@ -70,7 +71,7 @@ class OnlineConnector:
                 raise BaseException("Json response seems null: Bad username or password ?")
 
         return settings.CurlManager(c.WEBSITE_URI + "create_session.php", True,
-                             "pseudo=" + self.username + "&password=" + self.password, response)
+                                    "pseudo=" + self.username + "&password=" + self.password, response)
 
     """
     Retourne True si les stats se sont bien chargés, sinon une Exception()
@@ -98,7 +99,7 @@ class OnlineConnector:
         self.connected = False
 
         if clearidentifiants:
-            json_rep = settings.SettingsManager().readjson()
+            json_rep = settings.SettingsManager.current_settings
             json_rep["account_settings"][
                 "username"] = "null"
             json_rep["account_settings"][
@@ -108,3 +109,4 @@ class OnlineConnector:
             f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('"null"',
                                                                                                               'null'))
             f.close()
+            settings.SettingsManager.update_settings()

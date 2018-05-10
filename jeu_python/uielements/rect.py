@@ -1,5 +1,5 @@
+import pygame
 import uielement
-import view
 
 
 class Rect(uielement.UIelement):
@@ -17,7 +17,7 @@ class Rect(uielement.UIelement):
         rectangle = parentsurface.referance.fill(self.color, [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
              parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height])"""
         parentsurface = self.parentsurface
-        rectangle = view.View.pygame.draw.rect(
+        rectangle = pygame.draw.rect(
             parentsurface.referance,
             self.color,
             [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,

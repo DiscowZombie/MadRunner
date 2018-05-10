@@ -14,6 +14,7 @@ class StateEnum(Enum):
     BEST_SCORE = "best_score"
     AUTRE_STATS = "autre_stats"
     SETTINGS_MENU = "settings_menu"
+    LANGUAGE_MENU = "language_menu"
     CONNEXION_MENU = "connexion_menu"
     PLAYING = "playing"
 

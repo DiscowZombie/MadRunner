@@ -1,6 +1,5 @@
 import pygame
 import uielement
-import view
 
 
 class Surface(uielement.UIelement):

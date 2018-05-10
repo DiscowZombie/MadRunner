@@ -10,8 +10,8 @@ import view
 # Gère les contrôles
 import controller
 
+import functions
 import statemanager
-import utils
 import settings
 import userstatistics
 import onlineconnector
@@ -21,32 +21,34 @@ import pycurl
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
-# Initialisation du font
-pygame.font.init()
-
 # Initialisation de pygame
 pygame.init()
+
+# Initialisation du font
+pygame.font.init()
 
 # Chargement de l'horloge de pygame
 clock = pygame.time.Clock()
 
 # Initialisation de la partie "model" du model/view/controller
-model.Model(pygame)
+model.Model()  # bon, en réalité, il n'y a rien à initialiser ici...
 
 # Intitialisation de la partie "view" du model/view/controller
-view.View(pygame)
+view.View()
 
 # Initialisation de la partie "controller" de model/view/controller
-controller.Controller(pygame, view)
+controller.Controller()  # rien à initialiser ici aussi...
 
-running = True
+# Chargement des paramètres du joueur
+settings.SettingsManager()
 
 # Limite à 60 fps ou à la valeur en config si elle est valide
-fps = utils.GameSettings().setfps()
+fps = functions.setfps()
 
 # On charge le mode DEBUG pour les développeurs
-settings.DEBUG = True if settings.SettingsManager().readjson()["debug"] is not None and \
-                         settings.SettingsManager().readjson()["debug"] is True else False
+current_settings = settings.SettingsManager.current_settings
+settings.DEBUG = True if current_settings["debug"] is not None and \
+                         current_settings["debug"] is True else False
 
 if settings.DEBUG:
     print("[DEBUG] Debug mode is enabled.")
@@ -59,13 +61,18 @@ userstatistics.UserStatistics().load()
 occlass = onlineconnector.OnlineConnector(None, None, False)
 try:
     occlass.connect()
-    occlass.loadstatistiques()
 except pycurl.error:
     pass
 except BaseException:
     pass
 
+try:
+    occlass.loadstatistiques()
+except:
+    pass
+
 passed = 0
+running = True
 
 while running:
 

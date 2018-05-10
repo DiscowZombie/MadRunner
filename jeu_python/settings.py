@@ -69,22 +69,44 @@ class CurlManager(Thread):
 
 # Permet de récupérer les options du joueur (nombre de fps, etc...)
 class SettingsManager:
-    settings_file = None
+
+    current_settings = None  # les settings actuels (sous forme de dictionnaire)
 
     def __init__(self):
         if not os.path.exists(PATH):
             os.makedirs(PATH)
 
-        if not os.path.exists(FILE_PATH):
+        if not os.path.exists(FILE_PATH):  # si le jeu est lancé pour la première fois, ou si le fichier settings a été effacé
             file = open(FILE_PATH, "w")
             file.write(
                 '{ "account_settings": { "username": null, "password": null }, "game_settings": { "limit_fps": 60 }, "debug": false }')
             file.close()
 
-        self.settings_file = JsonManager(FILE_PATH).readjson()
+        readable_dict = JsonManager(FILE_PATH).readjson()
 
-    def readjson(self):
-        return self.settings_file
+        if not "language" in readable_dict["game_settings"]:
+            """ DETECTION DE LA LANGUE PAR DEFAUT DU SYSTEME """
+            import locale
+            import ctypes
+            import translations
+            kerneldll = ctypes.windll.kernel32
+            language_code = locale.windows_locale[kerneldll.GetUserDefaultUILanguage()]
+            language_id = language_code[:language_code.find("_")]
+            if not language_id in translations.translations["play"]:  # si la langue du système n'est pas disponible, met le jeu en anglais
+                language_id = "en"
+
+            readable_dict["game_settings"]["language"] = language_id
+
+            file = open(FILE_PATH, "w")
+            file.write(str(readable_dict).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('None', 'null'))
+            file.close()
+
+        SettingsManager.current_settings = readable_dict
+
+    def update_settings(cls):  # à appeler à chaque fois qu'on change un paramètre !
+        SettingsManager()
+
+    update_settings = classmethod(update_settings)
 
 
 # Permet de récuprer les stats du joueur (nb de courses, etc...)

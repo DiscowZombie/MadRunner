@@ -7,11 +7,12 @@ import uielements.checkbox as checkbox
 import uielements.tab as tab
 import uielements.textbox as textbox
 
+import translations
 import constantes
 import userstatistics
 import view
-import pycurl
 import onlineconnector
+import settings
 
 import json
 import sys
@@ -41,6 +42,16 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
     if posx >= minx and posx <= maxx and posy >= miny and posy <= maxy:
         return True
     return False
+
+
+def translate(textid):
+    language = settings.SettingsManager.current_settings["game_settings"]["language"]
+    return translations.translations[textid][language]
+
+
+def setfps():
+    jsonsettings = settings.SettingsManager.current_settings
+    return jsonsettings["game_settings"]["limit_fps"] if isvalidint(jsonsettings["game_settings"]["limit_fps"]) else 60
 
 
 def getrunner():  # retourne le personnage avec lequel le joueur va jouer à partir de ses stats (gros, normal ou athlète)
@@ -75,13 +86,13 @@ def computetime(num_value, customtime=None):
 
 def computeplaytime(temps_ms):
     temps_s = temps_ms / 1000
-    aff_s = str(int(temps_s % 60)) + " s "
+    aff_s = str(int(temps_s % 60)) + " " + translate("seconds")[0:1]
     temps_min = temps_s / 60
-    aff_m = str(int(temps_min % 60)) + " m "
+    aff_m = str(int(temps_min % 60)) + " " + translate("minutes")[0:1] + " "
     temps_h = temps_min / 60
-    aff_h = str(int(temps_h % 24)) + " h "
+    aff_h = str(int(temps_h % 24)) + " " + translate("hours")[0:1] + " "
     temps_jour = temps_h / 24
-    aff_j = str(int(temps_jour % 365.25)) + " j "
+    aff_j = str(int(temps_jour % 365.25)) + " " + translate("days")[0:1] + " "
 
     if temps_jour >= 1:
         return aff_j + aff_h + aff_m + aff_s
@@ -142,7 +153,7 @@ def displaybestscore(stype, level):
     BORDURE = 0  # rempli
     SEUL = True
 
-    text.Text("Score :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("score") + " :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -208,19 +219,19 @@ def displaybestscore(stype, level):
     BORDURE = 0  # rempli
     SEUL = True
 
-    text.Text("400m: " + str(suffix400), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("400m") + ": " + str(suffix400), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 50
 
-    text.Text("400m haie: " + str(suffix400h), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("400m_hurdles") + ": " + str(suffix400h), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 50
 
-    text.Text("Course infinie: " + str(suffixci), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("infinite_run") + ": " + str(suffixci), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -244,7 +255,7 @@ def displaybestscore(stype, level):
     BORDURE = 0  # rempli
     SEUL = True
 
-    text.Text("Temps/Distance :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("time") + "/" + translate("distance") + " :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -287,7 +298,7 @@ def displaybestscore(stype, level):
     if stype == "Global":
         exists = False
         for bouton in list(button.Button.getButtons()):
-            if bouton.text == "Rafraîchir":
+            if bouton.text == translate("refresh"):
                 exists = True
 
         if not exists:
@@ -310,7 +321,7 @@ def displaybestscore(stype, level):
             ECART = 0
             BORDURE = 0  # rempli
 
-            button.BRafraichir("Rafraîchir", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            button.BRafraichir(translate("refresh"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                      ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -335,9 +346,9 @@ def displaybestscore(stype, level):
         SEUL = True
 
         text_to_dislay = \
-            "Vos statistiques ne peuvent être envoyées car vous" \
+            translate("not_logged_1") \
                 if not connection.connected \
-                else "Connecté en tant que " + connection.username + "."
+                else translate("logged_as") + " " + connection.username + "."
         text.Text(
             text_to_dislay,
             ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
@@ -348,30 +359,26 @@ def displaybestscore(stype, level):
         if not connection.connected:
             POSITION_Y += 20
 
+            text.Text(translate("not_logged_2"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                      ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                      LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+            POSITION_Y += 20
+
             text.Text(
-                "n'êtes connecté à aucun compte. Vous pouvez créér un compte sur",
+                constantes.WEBSITE_URI + "register " + translate("not_logged_3"),
                 ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
                 LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
             POSITION_Y += 20
 
-            text.Text(
-                constantes.WEBSITE_URI + "register et vous connecter",
-                ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
-
-            POSITION_Y += 20
-
-            text.Text(
-                "à ce dèrnier depuis le menu Paramètres.",
-                ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
-                LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+            text.Text(translate("not_logged_4"), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                      ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                      LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
     else:
         for bouton in list(button.Button.getButtons()):
-            if bouton.text == "Rafraîchir":
+            if bouton.text == translate("refresh"):
                 bouton.unreferance()
 
 
@@ -409,7 +416,7 @@ def login(bouton_connection):
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text("Connexion en cours...", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+            text.Text(translate("logging_in"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                       ECART,
                       SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                       SCALE_WIDTH, SCALE_HEIGHT,
@@ -431,17 +438,17 @@ def login(bouton_connection):
                 bouton_connection.visible = True
                 if occlass.internet:
                     if occlass.errortype == BaseException:
-                        error = "Les identifiants semblent invalides !"
+                        error = translate("invalide_identifiers")
                     else:
-                        error = "Une erreur est survenue lors de la connexion avec le serveur web"
+                        error = translate("server_error")
                 else:
-                    error = "Vous n'êtes pas connecté à internet !"
+                    error = translate("you_no_internet")
         else:
             textbox_mdp.boxbordercolor = constantes.RED
-            error = "Mot de passe invalide"
+            error = translate("invalid_password")
     else:
         textbox_nom.boxbordercolor = constantes.RED
-        error = "Nom d'utilisateur invalide"
+        error = translate("invalid_username")
 
     if error:
         if bouton_connection.errorobj:
@@ -476,31 +483,6 @@ def login(bouton_connection):
 
 def logout(bouton_connection):
     bouton_connection.visible = False
-
-    ANTIALIAS = True
-    COULEUR = constantes.BLACK
-    FONT = "Arial"
-    TAILLE_FONT = 22
-    CENTRE_X = True
-    CENTRE_Y = True
-    ARRIERE_PLAN = None
-    ECART = 0
-    SEUL = True
-    LARGEUR = 300
-    HAUTEUR = 50
-    POSITION_X = 100
-    POSITION_Y = 100
-    SCALE_X = 0
-    SCALE_Y = 0
-    SCALE_WIDTH = 0
-    SCALE_HEIGHT = 0
-    COULEUR_ARRIERE = constantes.WHITE
-    BORDURE = 0
-
-    text.Text("Déconnexion en cours...", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-              SEUL, bouton_connection.parentsurface, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
-              SCALE_WIDTH, SCALE_HEIGHT,
-              COULEUR_ARRIERE, BORDURE)
 
     # On le déconnecte
     onlineconnector.OnlineConnector.current_connection.disconnect(True)

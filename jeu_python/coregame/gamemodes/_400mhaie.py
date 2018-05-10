@@ -86,7 +86,7 @@ class _400mHaie:
 
     dist_to_travel = 400
     disp_function = None
-    score_text = "Temps"
+    score_text = "time"
     coursetype = "QH"
 
     def __init__(self):

@@ -167,7 +167,8 @@ class Countdown(image.Image):
                             "name": "y",
                             "value": - int(end_height / 2),
                         },
-                    ]
+                    ],
+                    fige
                 )
         elif state_time <= 5000:  # 2
             if self.displayed == 3:
@@ -383,7 +384,7 @@ class CoreGame:
                                     v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
-        # Création du texte soit pour la distance (course infinie), soit pour le temps (400m et 400m haie)
+        # Création du texte soit pour la distance (course infinie), soit pour le temps (400m et 400m haies)
         TEXTE = ""
         ANTIALIAS = True
         COULEUR = constantes.BLACK
@@ -581,6 +582,8 @@ class CoreGame:
 
                 # Est-ce la fin du jeu ?
                 if new_distance >= self.dist_to_travel:
+                    trop = int((new_distance - self.dist_to_travel)/(charspeed/1000))
+                    self.time -= trop  # c'est plus précis comme ça
                     self.end(True)
                     return
 
@@ -632,7 +635,7 @@ class CoreGame:
         # Mise à jour de l'affichage de la vitesse
         self.vitesseobj.text = str(int(char.speed * 3.6)) + " km/h"
 
-        # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haie, et distance pour course infinie)
+        # Affichage du texte spécifique du mode de jeu (temps pour 400m et 400m haies, et distance pour course infinie)
         self.game_mode_disp.text = self.disp_function(False)
 
         if not self.pause:
@@ -759,7 +762,7 @@ class CoreGame:
                                BORDURE)
 
         # Afficher le score
-        TEXTE = "Score: " + self.score
+        TEXTE = functions.translate("score") + ": " + self.score
         ANTIALIAS = True
         COULEUR = constantes.BLACK
         FONT = "Arial"
@@ -786,7 +789,6 @@ class CoreGame:
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         if new_score_record:
-            TEXTE = "NOUVEAU RECORD !"
             ANTIALIAS = True
             COULEUR = constantes.RED
             FONT = "Arial"
@@ -807,13 +809,13 @@ class CoreGame:
             COULEUR_ARRIERE = None
             BORDURE = 0
 
-            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+            text.Text(functions.translate("new_record").upper(), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                       ECART, SEUL,
                       surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         # Afficher le score spécifique du mode de jeu (temps, distance...)
-        TEXTE = self.gamemodeclass.score_text + ": " + self.gamemode_score
+        TEXTE = functions.translate(self.gamemodeclass.score_text) + ": " + self.gamemode_score
         ANTIALIAS = True
         COULEUR = constantes.BLACK
         FONT = "Arial"
@@ -840,7 +842,6 @@ class CoreGame:
                   HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         if new_gm_record:
-            TEXTE = "NOUVEAU RECORD !"
             ANTIALIAS = True
             COULEUR = constantes.RED
             FONT = "Arial"
@@ -861,7 +862,7 @@ class CoreGame:
             COULEUR_ARRIERE = None
             BORDURE = 0
 
-            text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+            text.Text(functions.translate("new_record").upper(), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                       ECART, SEUL,
                       surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
@@ -920,7 +921,7 @@ class CoreGame:
             ECART = 0
             BORDURE = 0  # rempli
 
-            bouton_menu = button.BRetourMenu("Retour au menu", ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+            bouton_menu = button.BRetourMenu(functions.translate("return_menu"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
                                CENTRE_Y, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
                                SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             bouton_menu.visible = self.personnage == new_runner
@@ -930,7 +931,6 @@ class CoreGame:
 
             if self.personnage != new_runner:  # le personnage a-t-il évoluer ?
 
-                TEXTE = "Félicitation ! Votre personnage s'est amélioré !"
                 ANTIALIAS = True
                 COULEUR = constantes.RED
                 FONT = "Arial"
@@ -951,7 +951,7 @@ class CoreGame:
                 COULEUR_ARRIERE = None
                 BORDURE = 0
 
-                text.Text(TEXTE, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                text.Text(functions.translate("improved_character"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
                           ECART, SEUL,
                           surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                           HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)

@@ -1,4 +1,4 @@
-{
+﻿{
   "pagetitle:main": {
     "fr": "Accueil",
     "en": "Home"
@@ -61,7 +61,7 @@
   },
   "general:infiniterace": {
     "fr": "Course infinie",
-    "en": "Infinite race"
+    "en": "Infinite run"
   },
   "general:easy": {
     "fr": "Facile",
@@ -84,8 +84,8 @@
     "en": "Congratulation"
   },
   "general:registersuccess": {
-    "fr": "Inscription realisée avez succès ! Vous pouvez maintenant utilisez ces identifiants dans le jeu !",
-    "en": "Registration realized have success! You can now use these identifiers in the game!"
+    "fr": "Inscription realisée avec succès ! Vous pouvez maintenant utilisez ces identifiants dans le jeu !",
+    "en": "Registration succeeded ! You can now use these identifiers in the game !"
   },
   "general:passupdatesuccess":  {
     "fr": "Votre mot de passe a été mis à jour avec succès !",
@@ -112,12 +112,12 @@
     "en": "Password"
   },
   "general:passwordchange": {
-    "fr": "Changement du mot de passe",
-    "en": "Password change"
+    "fr": "Changer de mot de passe",
+    "en": "Change password"
   },
   "general:actualpass": {
     "fr": "Mot de passe actuel",
-    "en": "Current Password"
+    "en": "Current password"
   },
   "general:newpass": {
     "fr": "Nouveau mot de passe",
@@ -125,7 +125,7 @@
   },
   "general:confirmpass": {
     "fr": "Confirmation du mot de passe",
-    "en": "Password Confirmation"
+    "en": "Password confirmation"
   },
   "general:submit": {
     "fr": "Valider",
@@ -137,31 +137,31 @@
   },
   "general:allrankings": {
     "fr": "Classements globaux",
-    "en": "Overall rankings"
+    "en": "Global rankings"
   },
   "general:seepersonalranks": {
     "fr": "Voir le classement personnel",
-    "en": "See personal ranking"
+    "en": "Check personal ranking"
   },
   "general:seeglobalranks": {
     "fr": "Voir le classement global",
-    "en": "See overall ranking"
+    "en": "Check global ranking"
   },
   "general:langchange": {
-    "fr": "Changement de la langue",
-    "en": "Language Change"
+    "fr": "Changer la langue",
+    "en": "Change language"
   },
   "general:refresh": {
-    "fr": "Mettre à jour",
+    "fr": "Rafraîchir",
     "en": "Refresh"
   },
   "error:mustlogin": {
     "fr": "Vous devez être connecté pour voir cette page ou effectuer cette action !",
-    "en": "You must be login to view this page or perform this action !"
+    "en": "You must be logged in to view this page or to perform this action !"
   },
   "error:mustlogout": {
     "fr": "Vous ne pouvez pas accéder à cette page en étant connecté !",
-    "en": "You cannot access this page while login !"
+    "en": "You cannot access this page while being logged in !"
   },
   "error:invalidcredentials": {
     "fr": "Pseudonyme ou mot de passe invalide. Veuillez essayer à nouveau.",
@@ -169,11 +169,11 @@
   },
   "error:usernamelenght": {
     "fr": "Le nom d'utilisateur doit contenir entre 3 et 16 caractères.",
-    "en": "The user name must be between 3 and 16 characters long."
+    "en": "The username must be between 3 and 16 characters long."
   },
   "error:notsamepass": {
     "fr": "Les deux mots de passe ne sont pas identiques.",
-    "en": "The two passwords are not the same."
+    "en": "Both passwords do not match."
   },
   "error:passlenght": {
     "fr": "Le mot de passe doit contenir entre 3 et 32 caractères.",
@@ -181,38 +181,38 @@
   },
   "error:namenotunique": {
     "fr": "Ce pseudonyme est déjà utilisé. Veuillez en choisir un autre.",
-    "en": "This pseudonym is already taken. Please choose another one."
+    "en": "This pseudo is already taken. Please choose another one."
   },
   "error:invalidpass": {
-    "fr": "Votre mot de passe n'est pas valide, veuillez reesayer.",
+    "fr": "Votre mot de passe est invalide, veuillez réesayer.",
     "en": "Your password is invalid, please try again."
   },
   "text:smalldescribe": {
-    "fr": "Mad Runner est un jeu de course gratuit dans lequel le but est de courir le plus rapidement possible une certaine distance, ou de courir la plus grande distance possible.",
-    "en": "SOON !"
+    "fr": "Mad Runner est un jeu de course gratuit dans lequel le but est de courir le plus rapidement possible une certaine distance, ou de courir la plus grande distance possible dans le but d'améliorer les capacités du personnage avec lequel vous courrez. Appuyez sur les touches qui s'affichent pour booster votre personnage et appuyez sur Espace pour sauter !",
+    "en": "Mad Runner is a free-to-play game which consists in running the as fast as possible a certain distance, or running as far as possible in order to improve your character's running performance. Press the keys that appear to boost your character and press the Space bar to jump !"
   },
   "text:fulldescribe": {
     "fr": "Mad Runner est un jeu de course gratuit et open-source développé par ADAM Ahmet et CIMBARO Mathéo, réalisé pour un projet en cours d'Informatique et Sciences du Numérique (ISN). Le but du projet en question était de créer un jeu drôle et divertissant. Le jeu a été créé avec le language de programmation Python et en utilisant le module Pygame, permettant la création de jeux.",
-    "en": "SOON !"
+    "en": "Mad Runner is a free-to-play running game and open-source developed by ADAM Ahmet and CIMBARO Mathéo, made for a project in Computering Science. The objective of this project was to make a funny and entertaining game. The game was made using the programming language Python and by using the module Pygame, which enables game creation."
   },
   "text:history": {
-    "fr": "Le développement du jeu a commencé le 1er janvier 2018, et la première version beta est sortie le 5 mars. La dernière version officielle est sortie le 5 mai 2018 (v1.0).",
-    "en": "SOON !"
+    "fr": "Le développement du jeu a commencé le 1er janvier 2018, et la première version beta est sortie le 5 mars. La permière version officielle est sortie le 5 mai 2018 (v1.0).",
+    "en": "The development of the game strated on the 1st of January 2018, and the first beta version was released the 5th of March. The first official version was released the 5th of May 2018 (v1.0)."
   },
   "text:loginwhyt": {
     "fr": "La connexion, à quoi ça sert ?",
-    "en": "Login, why ?"
+    "en": "Login for what ?"
   },
   "text:loginwhy": {
     "fr": "La connexion vous permet d'acceder à un espace personnel contenant des informations sur votre personnage. Vous pourrez également y trouvez vos classements et les confronter à ceux de vos amis.",
-    "en": "SOON !"
+    "en": "Logging in enables you to access a personal space which contains informations about your character. You can also find your rakings and compare them with your friends' one."
   },
   "text:registerwhyt": {
     "fr": "Pourquoi s'inscire ?",
-    "en": "Registration, why ?"
+    "en": "Why register ?"
   },
   "text:registerwhy": {
-    "fr": "L'inscription vous permet de sauvegarder vos meilleurs en ligne et ainsi de les comparer facilement avec les autres. Cela vous permet également d'apparaitre dans le classement général des meilleurs joueurs de Mad Runner.\n\nVotre inscription est totalement anonyme et sécurisé. Nous ne vous demanderons jamais votre nom ni prénom, vous utilisez un pseudonyme de votre choix pour tout le jeu. Ce dèrnier est unique et permet de vous reconnaitre. Pour la sécurité, notre site dispose d'un certificat officiel ce qui signique que vos données ne transittent jamais en clair.",
-    "en": "SOON !"
+    "fr": "L'inscription vous permet de sauvegarder vos meilleurs scores en ligne et ainsi de les comparer facilement avec les autres. Cela vous permet également d'apparaitre dans le classement général des meilleurs joueurs de Mad Runner.\n\nVotre inscription est totalement anonyme et sécurisé. Nous ne vous demanderons jamais votre nom ni prénom, vous utilisez un pseudonyme de votre choix pour tout le jeu. Ce dèrnier est unique et permet de vous reconnaitre. Pour la sécurité, notre site dispose d'un certificat officiel ce qui signique que vos données ne transitent jamais en clair.",
+    "en": "Registering enables you to save your best scores online, and so to compare them easily with others. It also enables you to appear in the general ranking of the best Mad Runner players.\n\nYour registration is completely anonymous and safe. We will never ask your first name, neither your last name, you use a pseudo of your choice for the entire game. It's a unique one et enables you be recognized. For the safety, our site has an official certificate, which means that your data is never revealed."
   }
 }

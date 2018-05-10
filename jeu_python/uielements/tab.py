@@ -11,11 +11,12 @@ from uielements import image as image
 class Tab(uielement.UIelement):
     tabs = []
 
-    def __init__(self, textb, antialias, couleur_text, backgroundtextcolor, font, font_size, centeredx, centeredy,
+    def __init__(self, name, textb, antialias, couleur_text, backgroundtextcolor, font, font_size, centeredx, centeredy,
                  backgroundselectcolor, backgroundunselectcolor, offset, imagepath, *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Tab")
 
+        self.name = name
         self.text = textb
         self.antialias = antialias
         self.textcolor = couleur_text
@@ -51,7 +52,7 @@ class Tab(uielement.UIelement):
     def getOtherSelectedTabs(self):
         othertabs = []
         for tab in Tab.getTabs():
-            if tab.selected and tab.text != self.text:
+            if tab.selected and tab.name != self.name:
                 othertabs.append(tab)
         return othertabs
 
@@ -110,7 +111,7 @@ class Tab(uielement.UIelement):
     def linktabs(cls, *tabs):
         for tab in tabs:
             for othertab in tabs:
-                if tab.text != othertab.text:  # on suppose que les tabs ne sont pas identiques s'il n'ont pas le même texte
+                if tab.name != othertab.name:
                     tab.linkedtabs.append(othertab)
 
     getTabs = classmethod(getTabs)
@@ -122,7 +123,7 @@ class TMeilleurScoreLocal(Tab):
         Tab.__init__(*arguments)
 
     def button1down(self):
-        level = self.getOtherSelectedTabs()[0].text
+        level = self.getOtherSelectedTabs()[0].name
         functions.displaybestscore("Personnel", level)
 
 
@@ -131,7 +132,7 @@ class TMeilleurScoreEnLigne(Tab):
         Tab.__init__(*arguments)
 
     def button1down(self):
-        level = self.getOtherSelectedTabs()[0].text
+        level = self.getOtherSelectedTabs()[0].name
         functions.displaybestscore("Global", level)
 
 
@@ -140,7 +141,7 @@ class TFacile(Tab):
         Tab.__init__(*arguments)
 
     def button1down(self):
-        stype = self.getOtherSelectedTabs()[0].text
+        stype = self.getOtherSelectedTabs()[0].name
         functions.displaybestscore(stype, "Facile")
 
 
@@ -149,7 +150,7 @@ class TMoyen(Tab):
         Tab.__init__(*arguments)
 
     def button1down(self):
-        stype = self.getOtherSelectedTabs()[0].text
+        stype = self.getOtherSelectedTabs()[0].name
         functions.displaybestscore(stype, "Moyen")
 
 
@@ -158,5 +159,5 @@ class TDifficile(Tab):
         Tab.__init__(*arguments)
 
     def button1down(self):
-        stype = self.getOtherSelectedTabs()[0].text
+        stype = self.getOtherSelectedTabs()[0].name
         functions.displaybestscore(stype, "Difficile")
