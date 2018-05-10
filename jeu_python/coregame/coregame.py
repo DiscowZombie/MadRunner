@@ -167,8 +167,7 @@ class Countdown(image.Image):
                             "name": "y",
                             "value": - int(end_height / 2),
                         },
-                    ],
-                    fige
+                    ]
                 )
         elif state_time <= 5000:  # 2
             if self.displayed == 3:
