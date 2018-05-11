@@ -219,7 +219,7 @@ class BParam(Button):
         SCALE_X = 0.5
         SCALE_Y = 0.5
         LARGEUR = 400
-        HAUTEUR = 175
+        HAUTEUR = 200
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
         POSITION_X = - int(LARGEUR / 2)
@@ -259,6 +259,137 @@ class BParam(Button):
         BLangue(functions.translate("language"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        POSITION_Y += 75
+        BUpdate(functions.translate("update"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = None
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+
+class BUpdate(Button):
+
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        statemanager.StateManager.setstate(statemanager.StateEnum.UPDATE_MENU)
+        functions.delete_menu_obj()
+
+        model_obj = model.Model.model
+
+        if model_obj.latest_version_got:
+            if model_obj.version == model_obj.latest_version:
+                ANTIALIAS = True
+                COULEUR = constantes.BLACK
+                FONT = "Arial"
+                TAILLE_FONT = 24
+                CENTRE_X = True
+                CENTRE_Y = True
+                ARRIERE_PLAN = None
+                ECART = 0
+                SEUL = True
+                LARGEUR = 550
+                HAUTEUR = 30
+                POSITION_X = - int(LARGEUR / 2)
+                POSITION_Y = - int(HAUTEUR / 2)
+                SCALE_X = 0.5
+                SCALE_Y = 0.5
+                SCALE_WIDTH = 0
+                SCALE_HEIGHT = 0
+                COULEUR_ARRIERE = constantes.WHITE
+                BORDURE = 0
+
+                text.Text(functions.translate("has_update"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                                        SEUL,view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+            else:
+                ANTIALIAS = True
+                COULEUR = constantes.RED
+                FONT = "Arial"
+                TAILLE_FONT = 24
+                CENTRE_X = True
+                CENTRE_Y = True
+                ARRIERE_PLAN = None
+                ECART = 0
+                SEUL = True
+                LARGEUR = 550
+                HAUTEUR = 30
+                POSITION_X = - int(LARGEUR / 2)
+                POSITION_Y = - HAUTEUR
+                SCALE_X = 0.5
+                SCALE_Y = 0.5
+                SCALE_WIDTH = 0
+                SCALE_HEIGHT = 0
+                COULEUR_ARRIERE = constantes.WHITE
+                BORDURE = 0
+
+                text.Text(functions.translate("hasnt_update"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                                        SEUL,view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+                POSITION_Y += HAUTEUR
+                debut_texte = text.Text(functions.translate("download_latest") + " ", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                                        SEUL,view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+
+                COULEUR = None
+                COULEUR_TEXTE = constantes.LIGHT_BLUE
+                ARRIERE_PLAN_TEXTE = None
+                CENTRE_X = False
+
+                fin_texte = BRedirect(constantes.WEBSITE_URI, functions.translate("here"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                        ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                fin_texte.width = fin_texte.textobj.textreferance.size(fin_texte.text)[0]
+                current_x = functions.centretexte(debut_texte.textreferance.size(debut_texte.text), (debut_texte.abswidth, debut_texte.absheight))[0]
+                new_x = functions.centretexte(debut_texte.textreferance.size(debut_texte.text + fin_texte.text), (debut_texte.abswidth, debut_texte.absheight))[0]
+                debut_texte.originalx += new_x - current_x
+                fin_texte.x = debut_texte.x + new_x - current_x + debut_texte.textreferance.size(debut_texte.text)[0]
+        else:
+            ANTIALIAS = True
+            COULEUR = constantes.RED
+            FONT = "Arial"
+            TAILLE_FONT = 24
+            CENTRE_X = True
+            CENTRE_Y = True
+            ARRIERE_PLAN = None
+            ECART = 0
+            SEUL = True
+            LARGEUR = 550
+            HAUTEUR = 30
+            POSITION_X = - int(LARGEUR / 2)
+            POSITION_Y = - int(HAUTEUR / 2)
+            SCALE_X = 0.5
+            SCALE_Y = 0.5
+            SCALE_WIDTH = 0
+            SCALE_HEIGHT = 0
+            COULEUR_ARRIERE = constantes.WHITE
+            BORDURE = 0
+
+            text.Text(functions.translate("update_error"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+                                    SEUL,view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -294,7 +425,7 @@ class BLangue(Button):
         functions.delete_menu_obj()
 
         LARGEUR = 400
-        HAUTEUR = 175
+        HAUTEUR = 125
         POSITION_X = -int(LARGEUR / 2)
         POSITION_Y = -int(HAUTEUR / 2)
         SCALE_X = 0.5
@@ -371,10 +502,6 @@ class BLanguage(Button):
     def button1click(self):
         current_settings = settings.SettingsManager.current_settings
         current_settings["game_settings"]["language"] = self.language
-
-        f = open(settings.FILE_PATH, "w")
-        f.write(str(current_settings).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('None', 'null'))
-        f.close()
 
         settings.SettingsManager.update_settings()
         BRetour.button1click(None)
@@ -546,9 +673,9 @@ class BConnexion(Button):
             SEUL = True
             LARGEUR = 400
             HAUTEUR = 20
-            POSITION_X = 0
+            POSITION_X = - int(LARGEUR / 2)
             POSITION_Y = 200
-            SCALE_X = 0
+            SCALE_X = 0.5
             SCALE_Y = 0
             SCALE_WIDTH = 0
             SCALE_HEIGHT = 0
@@ -560,28 +687,19 @@ class BConnexion(Button):
                       SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
-            POSITION_X = debut_texte.x + debut_texte.textreferance.size(debut_texte.text)[0]
-            POSITION_Y = 200
-            SCALE_X = 0
-            SCALE_Y = 0
-            LARGEUR = 15
-            HAUTEUR = 20
-            SCALE_WIDTH = 0
-            SCALE_HEIGHT = 0
             COULEUR = None
-            ANTIALIAS = True
             COULEUR_TEXTE = constantes.LIGHT_BLUE
             ARRIERE_PLAN_TEXTE = None
-            FONT = "Arial"
-            TAILLE_FONT = 20
             CENTRE_X = False
-            CENTRE_Y = True
-            ECART = 0
-            BORDURE = 0  # rempli
 
-            BSinscrire(functions.translate("here"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            fin_texte = BRedirect(constantes.WEBSITE_URI + "register", functions.translate("here"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                     ECART, surface_box, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+            fin_texte.width = fin_texte.textobj.textreferance.size(fin_texte.text)[0]
+            current_x = functions.centretexte(debut_texte.textreferance.size(debut_texte.text), (debut_texte.abswidth, debut_texte.absheight))[0]
+            new_x = functions.centretexte(debut_texte.textreferance.size(debut_texte.text + fin_texte.text), (debut_texte.abswidth, debut_texte.absheight))[0]
+            debut_texte.originalx += new_x - current_x
+            fin_texte.x = debut_texte.x + new_x - current_x + debut_texte.textreferance.size(debut_texte.text)[0]
 
         POSITION_X = 100
         POSITION_Y = 100
@@ -645,12 +763,13 @@ class BSeConnecter(Button):  # enfait, il permet aussi de se déconnecter si on 
             self.errorobj = functions.login(self)
 
 
-class BSinscrire(Button):
-    def __init__(*arguments):
-        Button.__init__(*arguments)
+class BRedirect(Button):
+    def __init__(self, redirect_url, *arguments):
+        Button.__init__(self, *arguments)
+        self.redirect_url = redirect_url
 
     def button1click(self):
-        webbrowser.open(constantes.WEBSITE_URI + "register")
+        webbrowser.open(self.redirect_url)
 
 
 class BStats(Button):
@@ -665,7 +784,7 @@ class BStats(Button):
         SCALE_X = 0.5
         SCALE_Y = 0.5
         LARGEUR = 400
-        HAUTEUR = 175
+        HAUTEUR = 125
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
         POSITION_X = - int(LARGEUR / 2)
@@ -1414,6 +1533,38 @@ class BRafraichir(Button):
                 functions.displaybestscore("Global", tabb.name)
 
 
+class BYesUpdate(Button):
+
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        functions.delete_menu_obj()
+        webbrowser.open(constantes.WEBSITE_URI)
+        model.Model.main_menu(True)
+
+
+class BLaterUpdate(Button):
+
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        functions.delete_menu_obj()
+        model.Model.main_menu(True)
+
+
+class BNoUpdate(Button):
+
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        functions.delete_menu_obj()
+        functions.ignore_update(model.Model.model.latest_version)
+        model.Model.main_menu(True)
+
+
 menu_states = [  # les états du jeu qui font retourner au menu principal lorsqu'on clique sur retour
     statemanager.StateEnum.PLAYERNUM,
     statemanager.StateEnum.STATS_MENU,
@@ -1435,7 +1586,7 @@ class BRetour(Button):
             BJouer.button1click(None)  # C'est comme si on avait cliqué sur jouer
         elif game_state == statemanager.StateEnum.BEST_SCORE or game_state == statemanager.StateEnum.AUTRE_STATS:
             BStats.button1click(None)  # C'est comme si on avait cliqué sur statistiques
-        elif game_state == statemanager.StateEnum.CONNEXION_MENU or game_state == statemanager.StateEnum.LANGUAGE_MENU:
+        elif game_state == statemanager.StateEnum.CONNEXION_MENU or game_state == statemanager.StateEnum.LANGUAGE_MENU or game_state == statemanager.StateEnum.UPDATE_MENU:
             BParam.button1click(None)  # C'est comme si on avait cliqué sur paramètres
 
 

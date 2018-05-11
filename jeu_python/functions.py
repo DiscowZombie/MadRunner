@@ -10,6 +10,7 @@ import uielements.textbox as textbox
 import translations
 import constantes
 import userstatistics
+import model
 import view
 import onlineconnector
 import settings
@@ -47,6 +48,41 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
 def translate(textid):
     language = settings.SettingsManager.current_settings["game_settings"]["language"]
     return translations.translations[textid][language]
+
+
+def set_latest_version():
+    try:
+        def response(response_obj):
+            json_response = response_obj.readjson()
+            if json_response is not None and json_response is not False and json_response != "":
+                if type(json_response) == str:
+                    import json
+                    json_response = json.loads(json_response)
+                model.Model.model.latest_version = json_response["tag_name"]
+                model.Model.model.latest_version_got = True
+
+        settings.CurlManager("https://api.github.com/repos/DiscowZombie/MadRunner/releases/latest", False, None, response)
+    except:
+        return  # tant pis pour la mis à jour si ça fail !
+
+
+def can_update(current, latest):
+    if current != latest:
+        json_settings = settings.SettingsManager.current_settings
+        if "ignored_updates" in json_settings["game_settings"]:
+            if not latest in json_settings["game_settings"]["ignored_updates"]:
+                return True
+        else:
+            return True
+    return False
+
+
+def ignore_update(version):
+    json_settings = settings.SettingsManager.current_settings
+    if not "ignored_updates" in json_settings["game_settings"]:
+        json_settings["game_settings"]["ignored_updates"] = []
+    json_settings["game_settings"]["ignored_updates"].append(version)
+    settings.SettingsManager.update_settings()
 
 
 def setfps():

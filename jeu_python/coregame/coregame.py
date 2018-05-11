@@ -596,10 +596,11 @@ class CoreGame:
                     self.lignedepartobj.x = pos_x_ligne_depart
 
             # Mis à jour de la taille et la couleur de la barre d'énergie
-            self.barre_energie_in.scalew = char.energy / char.characterfeatures["initenergy"]
-            if char.energy >= 70:
+            energy_ratio = char.energy / char.characterfeatures["initenergy"]
+            self.barre_energie_in.scalew = energy_ratio
+            if energy_ratio >= 0.7:
                 color = constantes.GREEN
-            elif char.energy >= 30:
+            elif energy_ratio >= 0.3:
                 color = constantes.YELLOW
             else:
                 color = constantes.RED

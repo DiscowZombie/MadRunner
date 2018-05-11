@@ -2,8 +2,11 @@ import json
 import pycurl
 import socket
 import os
+import certifi
 from io import BytesIO
 from threading import Thread
+
+
 import settings
 
 DEBUG = False
@@ -55,6 +58,9 @@ class CurlManager(Thread):
             cu.setopt(cu.POSTFIELDS, self.postfields)
         if settings.DEBUG:  # Afficher pleins d'infos utiles pour debug
             cu.setopt(cu.VERBOSE, True)
+        cu.setopt(pycurl.SSL_VERIFYPEER, 1)
+        cu.setopt(pycurl.SSL_VERIFYHOST, 2)
+        cu.setopt(pycurl.CAINFO, certifi.where())
         cu.perform()
         cu.close()
         self.jsonresp = buffer.getvalue().decode('iso-8859-1')
@@ -94,16 +100,18 @@ class SettingsManager:
             language_id = language_code[:language_code.find("_")]
             if not language_id in translations.translations["play"]:  # si la langue du système n'est pas disponible, met le jeu en anglais
                 language_id = "en"
-
             readable_dict["game_settings"]["language"] = language_id
 
-            file = open(FILE_PATH, "w")
-            file.write(str(readable_dict).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('None', 'null'))
-            file.close()
+            SettingsManager.current_settings = readable_dict
+            SettingsManager.update_settings()
+            return
 
         SettingsManager.current_settings = readable_dict
 
-    def update_settings(cls):  # à appeler à chaque fois qu'on change un paramètre !
+    def update_settings(cls):  # à appeler à chaque fois qu'on change un quelque chose dans les settings pour enregistrer les changements !
+        f = open(FILE_PATH, "w")
+        f.write(str(SettingsManager.current_settings).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('None', 'null'))
+        f.close()
         SettingsManager()
 
     update_settings = classmethod(update_settings)

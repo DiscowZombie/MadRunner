@@ -16,13 +16,13 @@ class StateEnum(Enum):
     SETTINGS_MENU = "settings_menu"
     LANGUAGE_MENU = "language_menu"
     CONNEXION_MENU = "connexion_menu"
+    UPDATE_MENU = "update_menu"
     PLAYING = "playing"
 
 
 class StateManager:
     laststate = StateEnum.INITIALISATION
     statetime = 0
-    referancetimer = 0
 
     """
     :param state - L'état de jeu (un StateEnum ou None)

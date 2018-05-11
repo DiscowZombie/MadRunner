@@ -53,13 +53,9 @@ class OnlineConnector:
                 if self.save:  # On sauvegarde les identifiants en config
                     json_rep = settings.SettingsManager.current_settings
                     json_rep["account_settings"][
-                        "username"] = "null" if self.username is None else self.username
+                        "username"] = None if self.username is None else self.username
                     json_rep["account_settings"][
-                        "password"] = "null" if self.password is None else self.password
-
-                    f = open(settings.FILE_PATH, "w")
-                    f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('None', 'null'))
-                    f.close()
+                        "password"] = None if self.password is None else self.password
                     settings.SettingsManager.update_settings()
                 self.connected = True
             elif json_response is False:
@@ -104,9 +100,4 @@ class OnlineConnector:
                 "username"] = "null"
             json_rep["account_settings"][
                 "password"] = "null"
-
-            f = open(settings.FILE_PATH, "w")
-            f.write(str(json_rep).replace('False', 'false').replace('True', 'true').replace("'", '"').replace('"null"',
-                                                                                                              'null'))
-            f.close()
             settings.SettingsManager.update_settings()
