@@ -266,5 +266,45 @@ translations = {
     "language": {
         "en": "Language",
         "fr": "Langue",
+    },
+    "update": {
+        "en": "Update",
+        "fr": "Mise à jour",
+    },
+    "update_1": {
+        "en": "An update of the game is available",
+        "fr": "Une mise à jour du jeu est disponible",
+    },
+    "update_2": {
+        "en": "Would you like to download it ?",
+        "fr": "Voulez-vous la télécharger ?",
+    },
+    "yes": {
+        "en": "Yes",
+        "fr": "Oui",
+    },
+    "no": {
+        "en": "No",
+        "fr": "Non",
+    },
+    "later": {
+        "en": "Later",
+        "fr": "Plus tard",
+    },
+    "has_update": {
+        "en": "You have the latest version of the game.",
+        "fr": "Vous avez la dernière version du jeu.",
+    },
+    "hasnt_update": {
+        "en": "You haven't the latest version of the game.",
+        "fr": "Vous n'avez pas la dernière version du jeu.",
+    },
+    "download_latest": {
+        "en": "You can download the latest version by clicking",
+        "fr": "Vous pouvez télécharger la dernière version en cliquant",
+    },
+    "update_error": {
+        "en": "Failed to obtain the latest version of the game.",
+        "fr": "Échec de l'obtention de la dernière version du jeu.",
     }
 }

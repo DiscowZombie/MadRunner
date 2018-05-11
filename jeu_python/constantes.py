@@ -121,16 +121,16 @@ CharactersFeatures = {
     "gros": {
         "image": "assets\img\personnages\gros\idle.png",
         "initspeed": 3,  # la vitesse à laquelle court le personnage à l'état initial, en m/s
-        "initenergy": 80  # la quantité d'énergie initiale du personnage (et maximale)
+        "initenergy": 50  # la quantité d'énergie initiale du personnage (et maximale)
     },
     "normal": {
         "image": "assets/img/personnages/normal/idle.png",
         "initspeed": 4,
-        "initenergy": 100
+        "initenergy": 70
     },
     "athlete": {
         "image": "assets/img/personnages/athlete/idle.png",
         "initspeed": 5,
-        "initenergy": 130
+        "initenergy": 100
     }
 }
