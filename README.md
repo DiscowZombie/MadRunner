@@ -13,14 +13,15 @@ Téléchargement :
 
 | OS                 | Dernière version |
 |:------------------:| ---------------- |                                                       
-| Windows (64 bits)  | [![GitHub release](https://img.shields.io/github/release/DiscowZombie/MadRunner.svg)](https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.exe) |
-| Windows (32 bits)  | [![GitHub release](https://img.shields.io/github/release/DiscowZombie/MadRunner.svg)](https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.32.bits.x86.exe) |
+| Windows (64 bits)  | [![GitHub release](https://img.shields.io/github/release/DiscowZombie/MadRunner.svg)](https://github.com/DiscowZombie/MadRunner/releases/download/1.1/Mad_Runner_v1.1_64bits.exe) |
+| Windows (32 bits)  | [![GitHub release](https://img.shields.io/github/release/DiscowZombie/MadRunner.svg)](https://github.com/DiscowZombie/MadRunner/releases/download/1.1/Mad_Runner_v1.1_32bits.exe) |
 | Autre              | Pas encore supporté :'( |
 
 ### Fonctionnalités 
 
 Le jeu regroupe plusieurs fonctionnalités pour une bonne expérience de jeu:
 - Différents modes de jeux, niveaux et difficultés ;
+- Evolution du personnage ;
 - Interface utilisateur simple et en français ;
 - Musique pour une meilleure expérience ;
 - Possibilité de jouer en ligne et hors ligne ;
