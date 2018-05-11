@@ -43,9 +43,9 @@
 
         <h3><?= readtext("general:download"); ?></h3>
         <br/>
-		<a class="btn btn-primary" href="https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.32.bits.x86.exe" role="button">Windows
+		<a class="btn btn-primary" href="https://github.com/DiscowZombie/MadRunner/releases/download/1.1/Mad_Runner_v1.1_32bits.exe" role="button">Windows
             (32 bits)</a>
-        <a class="btn btn-primary" href="https://github.com/DiscowZombie/MadRunner/releases/download/1.0/Mad.Runner.1.0.exe" role="button">Windows
+        <a class="btn btn-primary" href="https://github.com/DiscowZombie/MadRunner/releases/download/1.1/Mad_Runner_v1.1_64bits.exe" role="button">Windows
             (64 bits)</a>
     </div>
 
