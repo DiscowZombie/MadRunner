@@ -9,6 +9,7 @@ jeu_python/test.py
 jeu_python/dist/
 jeu_python/build/
 jeu_python/buildWin64.spec
+jeu_python/buildWin32.spec
 
 # Configurations
 serveur_web/config/config.json
