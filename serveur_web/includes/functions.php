@@ -196,7 +196,8 @@ if (!function_exists('readtext')) {
     {
         if ($lang == null) {
             if (empty($_SESSION["lang"])) {
-                $pays = json_decode(file_get_contents('http://freegeoip.net/json/' . get_ip()), true)['country_name'];
+                $apitoken = json_decode(file_get_contents("config/config.json"))->IPSTACK_APIKEY;
+				$pays = json_decode(file_get_contents('http://api.ipstack.com/' . get_ip() .'?access_key=' . $apitoken), true)['country_name'];
                 $_SESSION["lang"] = ($pays == "France" ? "fr" : "en");
             }
             $lang = $_SESSION["lang"];

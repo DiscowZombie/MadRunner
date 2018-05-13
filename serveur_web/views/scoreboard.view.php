@@ -37,13 +37,12 @@
                     <table class="table table-bordered table-responsive" id="scoreboard">
                         <thead>
                         <tr>
-                            <!-- Cette partie peut-encore être amméliorer dans le futur. Utilisez le classement Bootstrap 3 avec le JS ? -->
-                            <th onclick="sortTable(0)"><?= readtext("general:pseudo"); ?></th>
-                            <th onclick="sortTable(1)"><?= readtext("general:coursetype"); ?></th>
-                            <th onclick="sortTable(2)"><?= readtext("general:difficulty"); ?></th>
-                            <th onclick="sortTable(3)"><?= readtext("general:score"); ?></th>
-                            <th onclick="sortTable(4)"><?= readtext("general:timedist"); ?></th>
-                            <th onclick="sortTable(5)"><?= readtext("general:completdate"); ?></th>
+                            <th><?= readtext("general:pseudo"); ?> <a onclick="sortTable(0)">&darr;&uarr;</a></th>
+                            <th><?= readtext("general:coursetype"); ?> <a onclick="sortTable(1)">&darr;&uarr;</a></th>
+                            <th><?= readtext("general:difficulty"); ?> <a onclick="sortTable(2)">&darr;&uarr;</a></th>
+                            <th><?= readtext("general:score"); ?> <a onclick="sortTable(3)">&darr;&uarr;</a></th>
+                            <th><?= readtext("general:timedist"); ?> <a onclick="sortTable(4)">&darr;&uarr;</a></th>
+                            <th><?= readtext("general:completdate"); ?> <a onclick="sortTable(5)">&darr;&uarr;</a></th>
                         </tr>
                         </thead>
                         <tbody>

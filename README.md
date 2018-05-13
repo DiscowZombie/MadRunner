@@ -46,6 +46,8 @@ Ce projet utilise plusieurs dépendances:
 - [pygame](https://github.com/pygame/pygame), distribué sous licence [GNU LGPL version 2.1](https://www.gnu.org/copyleft/lesser.html)
 - [pyinstaller](https://github.com/pyinstaller/pyinstaller), distribué sous licence [GNU GPL version 2](https://gnu.org/licenses/gpl-2.0.html)
 - [pycurl](https://github.com/pycurl/pycurl), distribué sous licence [LGPL and an MIT/X derivative license](https://github.com/pycurl/pycurl#license)
+- [requests](http://docs.python-requests.org/en/master/), distribué sous licence [Apache 2](https://www.apache.org/licenses/LICENSE-2.0)
+- [certifi](https://pypi.org/project/certifi/), distribué sous licence [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0/)
 
 
 ### Licence
