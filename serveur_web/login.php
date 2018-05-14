@@ -36,7 +36,7 @@ if(!empty($_POST["pseudo"]) && !empty($_POST["password"])) {
         $_SESSION["username"] = $pseudo;
         $_SESSION["user_id"] = get_id($pdo, $pseudo);
         $langdb = langfromDB($pdo, $pseudo);
-        if($langdb == null) {
+        if($langdb != null) {
             $_SESSION["lang"] = $langdb;
         }
 
