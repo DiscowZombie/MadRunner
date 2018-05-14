@@ -35,6 +35,10 @@ if(!empty($_POST["pseudo"]) && !empty($_POST["password"])) {
     if($login_success == True) {
         $_SESSION["username"] = $pseudo;
         $_SESSION["user_id"] = get_id($pdo, $pseudo);
+        $langdb = langfromDB($pdo, $pseudo);
+        if($langdb == null) {
+            $_SESSION["lang"] = $langdb;
+        }
 
         // On le redirige vers l'accueil
         header("Location: index.php");

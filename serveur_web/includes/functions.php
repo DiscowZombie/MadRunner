@@ -208,3 +208,13 @@ if (!function_exists('readtext')) {
         return $mess;
     }
 }
+
+if(!function_exists('langfromDB')) {
+    function langfromDB($pdo, $pseudo) {
+        $q = $pdo->prepare("SELECT id, lang FROM `user` WHERE pseudo = ?");
+        $q->execute([$pseudo]);
+        $row = $q->fetch(PDO::FETCH_OBJ);
+
+        return $row->lang;
+    }
+}

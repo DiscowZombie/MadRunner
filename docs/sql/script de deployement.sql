@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `madrunner`.`user` (
   `id` INT(10) UNSIGNED NOT NULL,
   `pseudo` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
+  `lang` ENUM('fr', 'en') NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC))
 ENGINE = InnoDB;
