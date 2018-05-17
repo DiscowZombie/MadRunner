@@ -1598,7 +1598,7 @@ class BPause(Button):
 
     def button1click(self):
         core = coregame.CoreGame.current_core
-        if not core.started:  # pas possible de faire pause avant que la partie aie commencée !
+        if not core.started or core.finished:  # pas possible de faire pause avant que la partie aie commencée ou après la fin de la course
             return
         self.on = not self.on
         core.pause = self.on
