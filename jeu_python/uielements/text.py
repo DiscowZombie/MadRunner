@@ -31,9 +31,11 @@ class Text(uielement.UIelement):
 
         Text.texts.append(self)
 
-    def __setattr__(self, key, value):  # pour des raisons de performances, on va vérifier certaines choses lorqu'on affecte une valeur à un attribut
+    def __setattr__(self, key,
+                    value):  # pour des raisons de performances, on va vérifier certaines choses lorqu'on affecte une valeur à un attribut
         if hasattr(self, key):
-            if (key == "font" or key == "fontsize") and getattr(self, key) != value:  # si l'un de ces attributs est changé et que la nouvelle valeur est différente
+            if (key == "font" or key == "fontsize") and getattr(self,
+                                                                key) != value:  # si l'un de ces attributs est changé et que la nouvelle valeur est différente
                 self.recreate = True
         self.__dict__[key] = value
 
@@ -62,7 +64,8 @@ class Text(uielement.UIelement):
     def draw(self):
         if self.recreate:
             self.recreate = False
-            self.textreferance = pygame.font.Font(open(f.resource_path("assets/fonts/" + self.font + ".ttf"), "rb"), int(self.fontsize))
+            self.textreferance = pygame.font.Font(open(f.resource_path("assets/fonts/" + self.font + ".ttf"), "rb"),
+                                                  int(self.fontsize))
         if self.alone:  # si l'objet texte fait partie d'un autre objet (ex: bouton), on laisse l'autre objet se charger de l'apparition du texte
             self.referance = self.create()
 

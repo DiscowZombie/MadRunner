@@ -56,45 +56,46 @@ class View:
                         if classname == "Button":  # exception pour les boutons qui ne vont pas être blité comme les autres...
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
-                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
-                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
                         elif classname == "Checkbox":  # ... et les checkbox aussi...
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
-                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x + obj.boxsize),
-                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x + obj.boxsize),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
                             if obj.checked:
                                 obj.parentsurface.referance.blit(obj.checkreferance, (
-                                int(obj.parentsurface.abswidth * obj.scalex + obj.x + obj.x),
-                                int(obj.parentsurface.absheight * obj.scaley + obj.y) + int(
-                                    obj.height / 2 - obj.boxsize / 2)))
+                                    int(obj.parentsurface.abswidth * obj.scalex + obj.x + obj.x),
+                                    int(obj.parentsurface.absheight * obj.scaley + obj.y) + int(
+                                        obj.height / 2 - obj.boxsize / 2)))
                         elif classname == "Tab":  # ... et les tabs aussi...
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
-                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
-                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
                             if obj.imagereferance:
                                 obj.parentsurface.referance.blit(obj.imagereferance, (obj.x + 10, obj.y + 5))
                         elif classname == "Textbox":  # ... et les textbox aussi
                             textobj = obj.textobj
                             obj.parentsurface.referance.blit(textobj.referance, (
-                            int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
-                            int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x + textobj.x),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y + textobj.y)))
                         elif classname == "Text":
                             if obj.alone:
                                 obj.parentsurface.referance.blit(obj.referance, (
-                                int(obj.parentsurface.abswidth * obj.scalex + obj.x),
-                                int(obj.parentsurface.absheight * obj.scaley + obj.y)))
+                                    int(obj.parentsurface.abswidth * obj.scalex + obj.x),
+                                    int(obj.parentsurface.absheight * obj.scaley + obj.y)))
                         else:
                             obj.parentsurface.referance.blit(obj.referance, (
-                            int(obj.parentsurface.abswidth * obj.scalex + obj.x),
-                            int(obj.parentsurface.absheight * obj.scaley + obj.y)))
+                                int(obj.parentsurface.abswidth * obj.scalex + obj.x),
+                                int(obj.parentsurface.absheight * obj.scaley + obj.y)))
 
         if "Surface" in UIelements:
             for surface in UIelements["Surface"]:
                 if surface.visible:
                     surface.parentsurface.referance.blit(surface.referance, (
-                    surface.parentsurface.abswidth * surface.scalex + surface.x, surface.parentsurface.absheight * surface.scaley + surface.y))
+                        surface.parentsurface.abswidth * surface.scalex + surface.x,
+                        surface.parentsurface.absheight * surface.scaley + surface.y))
 
         # Dessine le personnage en dernier (si le jeu n'est pas fini)
         if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING and not coregame.CoreGame.current_core.finished:
@@ -103,7 +104,8 @@ class View:
                 character.absy = int(View.screen.absheight * character.scaley + character.y)
                 attrname = character.state + "sprite"
                 state_sprite = character.__getattribute__(attrname)
-                View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (character.absx + state_sprite.x, character.absy + state_sprite.y))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
+                View.screen.referance.blit(state_sprite.strip[state_sprite.compteur], (character.absx + state_sprite.x,
+                                                                                       character.absy + state_sprite.y))  # On suppose pour l'instant qu'on ne va dessiner les sprites que sur la surface de l'écran
 
         pygame.display.update()
         View.screen.updated = False

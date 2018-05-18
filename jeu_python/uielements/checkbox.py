@@ -25,7 +25,8 @@ class Checkbox(uielement.UIelement):
     :param *UIargs - Tous les paramètres d'un élément graphique (voir classe "UIelement")
     """
 
-    def __init__(self, boxsize, name, textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset,
+    def __init__(self, boxsize, name, textb, antialias, couleur_text, font, font_size, centeredx, centeredy,
+                 backgroundcolor, offset,
                  *UIargs):
 
         uielement.UIelement.__init__(self, *UIargs, "Checkbox")
@@ -44,7 +45,8 @@ class Checkbox(uielement.UIelement):
         self.imagepath = f.resource_path("assets/img/coche.png")
         self.checked = False
         self.linkedcheckboxes = []  # ceci est une liste des checkbox qui sont "liés" à celui-ci, c'est à dire, si ce checkbox est coché mais qu'un des checkbox lié est coché, l'autre ce checkbox va être décoché.
-        self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor, offset, False, *UIargs)
+        self.textobj = text.Text(textb, antialias, couleur_text, font, font_size, centeredx, centeredy, backgroundcolor,
+                                 offset, False, *UIargs)
         self.checkreferance = image.Image.create(self, True, self.boxsize, self.boxsize)
         self.referance = self.create()  # ATTENTION: La référence est la surface sur laquelle le rectangle du bouton est dessiné
 
@@ -56,8 +58,8 @@ class Checkbox(uielement.UIelement):
             checkbox.checked = False
 
     def create(self):
-        posx = self.parentsurface.abswidth*self.scalex + self.x
-        posy = self.parentsurface.absheight*self.scaley + self.y + int(self.height/2 - self.boxsize/2)
+        posx = self.parentsurface.abswidth * self.scalex + self.x
+        posy = self.parentsurface.absheight * self.scaley + self.y + int(self.height / 2 - self.boxsize / 2)
         pygame.draw.rect(
             self.parentsurface.referance,
             constantes.WHITE,
@@ -83,7 +85,8 @@ class Checkbox(uielement.UIelement):
     def getCheckboxes(cls):
         return Checkbox.checkboxes
 
-    def linkcheckboxes(cls, *checkboxes):  # méthode pour lier des checkbox. Il faut passer les objets checkbox qu'on veut lier
+    def linkcheckboxes(cls,
+                       *checkboxes):  # méthode pour lier des checkbox. Il faut passer les objets checkbox qu'on veut lier
         for checkbox in checkboxes:
             for othercheckbox in checkboxes:
                 if checkbox.name != othercheckbox.name:

@@ -12,8 +12,8 @@ import random
 class Grid:
 
     def __init__(self):
-        nb_key_x = view.View.screen.abswidth//(Key.keysize + 5) or 1  # espacemet de 5 pixels entre les boutons
-        nb_key_y = coregame.CoreGame.current_core.surface_boutons.absheight//(Key.keysize + 5) or 1
+        nb_key_x = view.View.screen.abswidth // (Key.keysize + 5) or 1  # espacemet de 5 pixels entre les boutons
+        nb_key_y = coregame.CoreGame.current_core.surface_boutons.absheight // (Key.keysize + 5) or 1
 
         self.maxx = nb_key_x
         self.maxy = nb_key_y
@@ -26,15 +26,15 @@ class Grid:
 
     def updatecontent(self):
         if view.View.screen.updated:
-            self.maxx = view.View.screen.abswidth//(Key.keysize + 5) or 1
-            self.maxy = coregame.CoreGame.current_core.surface_boutons.absheight//(Key.keysize + 5) or 1
+            self.maxx = view.View.screen.abswidth // (Key.keysize + 5) or 1
+            self.maxy = coregame.CoreGame.current_core.surface_boutons.absheight // (Key.keysize + 5) or 1
         for keyinfo in self.keys:
             num_x = keyinfo["position"] % self.maxx
             num_y = keyinfo["position"] // self.maxx
             if num_y > self.maxy:
                 num_y = self.maxy  # bon, ça va faire bizarre ça quand même, mais bon... (les touches en dessous vont être "téléportées" plus haut
-            pos_x = 5 + num_x*(Key.keysize + 5)
-            pos_y = 5 + num_y*(Key.keysize + 5)
+            pos_x = 5 + num_x * (Key.keysize + 5)
+            pos_y = 5 + num_y * (Key.keysize + 5)
             rectref = keyinfo["key"].rectreferance
             textref = keyinfo["key"].textreferance
             rectref.x, textref.originalx = pos_x, pos_x
@@ -74,9 +74,11 @@ class MediumGrid(Grid):  # les touches apparaissent n'importe où dans la grille
         Grid.__init__(self)
 
     def addkey(self, key_obj):
-        possible_pos = list(range(0, self.maxx * self.maxy - 1))  # les positions possibles pour la touche, sous forme de liste
+        possible_pos = list(
+            range(0, self.maxx * self.maxy - 1))  # les positions possibles pour la touche, sous forme de liste
         for keyinfo in self.keys:
-            if keyinfo["position"] in possible_pos:  # il se peut que la position n'existe pas dans la liste des positions possibles (si 2 touches sur superposées)
+            if keyinfo[
+                "position"] in possible_pos:  # il se peut que la position n'existe pas dans la liste des positions possibles (si 2 touches sur superposées)
                 possible_pos.remove(keyinfo["position"])
         if len(possible_pos) == 0:  # si la grille est rempli...
             pos_grille = 0
@@ -91,11 +93,11 @@ class MediumGrid(Grid):  # les touches apparaissent n'importe où dans la grille
 
 
 class Key:
-
     keys = []  # les touches qui sont affiché à l'écran (et qu'il faut appuyer)
     grid = None  # la grille pour éviter le superposage de 2 touches (facile et moyen seulement)
     keysize = 30  # la taille d'une touche (carré)
-    availablekeys = list(constantes.ALPHABET)  # les touches qui peuvent être affichées (pour éviter d'avoir 2 fois la même touches)
+    availablekeys = list(
+        constantes.ALPHABET)  # les touches qui peuvent être affichées (pour éviter d'avoir 2 fois la même touches)
     avantages = ["energy", "speed"]  # les avantages possible (augmente la vitesse ou l'énergie)
     avantages_bonus = {  # l'intervalle d'augmentation possible de chaque avantage
         "energy": [5, 15],
@@ -214,7 +216,8 @@ class Key:
         if not exists:  # soustrait l'avantage (car la touche n'existe pas)
             avantage_amount = -avantage_amount
 
-        coregame.Character.getCharacters()[0].boost(avantage, avantage_amount)  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
+        coregame.Character.getCharacters()[0].boost(avantage,
+                                                    avantage_amount)  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
         userstatistics.UserStatistics.stats.increment(prefix + "_letters", 1)
 
     getKeys = classmethod(getKeys)

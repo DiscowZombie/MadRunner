@@ -10,11 +10,10 @@ from uielements import image as image
 haies_dist = []  # la distance à laquelle les haies sont
 
 for i in range(10):
-    haies_dist.append(45 + 35*i)
+    haies_dist.append(45 + 35 * i)
 
 
 class Haie:
-
     haies = []
 
     def __init__(self, distance):
@@ -40,8 +39,8 @@ class Haie:
         BORDURE = 0
 
         image_haie = image.Image(REPERTOIRE, v.View.screen, POSITION_X,
-                                  POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                  BORDURE)
+                                 POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                 BORDURE)
         image_haie.mask = pygame.mask.from_surface(image_haie.referance)
         self.image = image_haie
 
@@ -58,7 +57,7 @@ class Haie:
             [
                 {
                     "name": "y",
-                    "value": self.image.y + self.image.absheight//2
+                    "value": self.image.y + self.image.absheight // 2
                 },
                 {
                     "name": "rotation",
@@ -83,14 +82,14 @@ class Haie:
 
 
 class _400mHaie:
-
     dist_to_travel = 400
     disp_function = None
     score_text = "time"
     coursetype = "QH"
 
     def __init__(self):
-        img_haie = pygame.image.load(functions.resource_path("assets/img/decors/" + coregame.CoreGame.current_core.carte + "/obstacle.png"))
+        img_haie = pygame.image.load(
+            functions.resource_path("assets/img/decors/" + coregame.CoreGame.current_core.carte + "/obstacle.png"))
         self.dimension_haie = (img_haie.get_width(), img_haie.get_height())
         _400mHaie.disp_function = functions.computetime
 
@@ -110,12 +109,15 @@ class _400mHaie:
                     if not haie.touched:
                         attrname = char.state + "sprite"
                         state_sprite = char.__getattribute__(attrname)
-                        offset = (int(haie.image.absx - (char.absx + state_sprite.x)), int(haie.image.absy - (char.absy + state_sprite.y)))
-                        num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(haie.image.mask, offset)  # le nombre de pixels de collision entre la haie et le personnage
+                        offset = (int(haie.image.absx - (char.absx + state_sprite.x)),
+                                  int(haie.image.absy - (char.absy + state_sprite.y)))
+                        num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(haie.image.mask,
+                                                                                             offset)  # le nombre de pixels de collision entre la haie et le personnage
                         if num_pix_col and num_pix_col > 15:  # si le personnage touche la haie de plus de 15 pixels (car bon, toucher la haie de 1 pixel...)
                             haie.tombe()
-                            char.speed -= (coregame.CoreGame.current_core.level_obj.hitpenality/100) * char.speed
-                    delta_pix = (haie.distance - distance) * 25  # nombre de pixel avant la haie par rapport au personnage
+                            char.speed -= (coregame.CoreGame.current_core.level_obj.hitpenality / 100) * char.speed
+                    delta_pix = (
+                                            haie.distance - distance) * 25  # nombre de pixel avant la haie par rapport au personnage
                     pos_x_haie = char.absx - delta_pix
                     haie.image.x = pos_x_haie
             else:
@@ -123,7 +125,9 @@ class _400mHaie:
                 pos_x_haie = char.absx - delta_pix
 
                 if pos_x_haie > - self.dimension_haie[0]:
-                    haie.show(pos_x_haie, char.y + 49 - self.dimension_haie[1], self.dimension_haie[0], self.dimension_haie[1])  # on va supposer que le personnage a toujours une hauteur de 98 pixels)
+                    haie.show(pos_x_haie, char.y + 49 - self.dimension_haie[1], self.dimension_haie[0],
+                              self.dimension_haie[
+                                  1])  # on va supposer que le personnage a toujours une hauteur de 98 pixels)
 
     def computescore(self):  # le score dépend du temps et du nombre de haies non renversées
         nb_passed = 0  # nombre de haies passé (càd sans le renverser)
@@ -131,7 +135,7 @@ class _400mHaie:
         for haie in Haie.getHaies():
             if not haie.touched and dist >= haie.distance:
                 nb_passed += 1
-        return 100000000 / coregame.CoreGame.current_core.time + nb_passed*100
+        return 100000000 / coregame.CoreGame.current_core.time + nb_passed * 100
 
     def isrecord(self, level, gm_score):
         return gm_score < userstatistics.UserStatistics.stats.best_gm_score[level]["400m haie"]

@@ -10,19 +10,20 @@ class Foret:
 
         self.bg_surfaces = []
 
-        taille_ecran = (view.View.screen.abswidth,view.View.screen.absheight)
+        taille_ecran = (view.View.screen.abswidth, view.View.screen.absheight)
 
         # Mis en place des arbres
         # On va creer autant d'image d'arbres que nécessaire pour remplir la largeur et la hauteur de la surface
-        num_ligne = int(taille_ecran[1]*0.3)//88
-        for y in range(int(taille_ecran[1]*0.3)//88):  # RAPPEL: *0.3 car la taille y de l'endoit où se trouve les arbres est 0.3 fois la taille y de l'écran
+        num_ligne = int(taille_ecran[1] * 0.3) // 88
+        for y in range(int(taille_ecran[
+                               1] * 0.3) // 88):  # RAPPEL: *0.3 car la taille y de l'endoit où se trouve les arbres est 0.3 fois la taille y de l'écran
             self.ligne_arbre(y)
 
         # la ligne vide qui compense le vide entre les arbres et la piste
         LARGEUR = 0
-        HAUTEUR = int(taille_ecran[1]*0.3) - num_ligne*88
+        HAUTEUR = int(taille_ecran[1] * 0.3) - num_ligne * 88
         POSITION_X = 0
-        POSITION_Y = num_ligne*88
+        POSITION_Y = num_ligne * 88
         SCALE_X = 0
         SCALE_Y = 0.05
         SCALE_WIDTH = 1
@@ -32,9 +33,10 @@ class Foret:
         ALPHA = 255  # opaque
         CONVERT_ALPHA = False
 
-        self.ligne_vide = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                    BORDURE)
+        self.ligne_vide = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                          SCALE_Y, LARGEUR,
+                                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                          BORDURE)
 
         # hors piste bas
         LARGEUR = 0
@@ -51,18 +53,19 @@ class Foret:
         CONVERT_ALPHA = False
 
         surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                    BORDURE)
+                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                        BORDURE)
 
     def refresh(self):
 
-        taille_ecran = (view.View.screen.abswidth,view.View.screen.absheight)
+        taille_ecran = (view.View.screen.abswidth, view.View.screen.absheight)
 
         # RAFAÎCHISSMENT DES ARBRES
         max_y = 0
 
         for surfaceimg in self.bg_surfaces:
-            if surfaceimg.absy + surfaceimg.absheight > taille_ecran[1]*0.35:  # on enlève dans un premier temps les lignes d'arbres qui ne sont plus visibles
+            if surfaceimg.absy + surfaceimg.absheight > taille_ecran[
+                1] * 0.35:  # on enlève dans un premier temps les lignes d'arbres qui ne sont plus visibles
                 self.bg_surfaces.remove(surfaceimg)
                 surfaceimg.unreferance()
             else:
@@ -76,23 +79,24 @@ class Foret:
                         max_x = max(max_x, image.x + image.abswidth)
                         min_x = min(min_x, image.x)
 
-                nbnouvarbre = (surfaceimg.abswidth - max_x)//150  # nombre de nouveaux arbres par ligne (à droite)
+                nbnouvarbre = (surfaceimg.abswidth - max_x) // 150  # nombre de nouveaux arbres par ligne (à droite)
 
                 for i in range(nbnouvarbre):  # ajout d'arbres s'il y a de la place à droite
-                    self.arbre(surfaceimg, max_x + i*150)
+                    self.arbre(surfaceimg, max_x + i * 150)
 
                 if min_x >= 0:  # ajout d'arbres s'il y a de la place à gauche
-                    for i in range((min_x//150) + 1):
+                    for i in range((min_x // 150) + 1):
                         self.arbre(surfaceimg, min_x - 150)
 
         nbligne = len(self.bg_surfaces)
-        nbnouvligne = int((taille_ecran[1]*0.3 - max_y)//88)
+        nbnouvligne = int((taille_ecran[1] * 0.3 - max_y) // 88)
 
         for y in range(nbligne, nbligne + nbnouvligne):  # ajout de colonnes d'arbres s'il y a de la place
             self.ligne_arbre(y)
 
-        self.ligne_vide.y = len(self.bg_surfaces)*88
-        self.ligne_vide.height = (int(taille_ecran[1]*0.3) - self.ligne_vide.y) + 1  # le +1 au cas ou ça arrondi en dessous (et donc ça créer un pixel d'écart blanc dégeulasse)
+        self.ligne_vide.y = len(self.bg_surfaces) * 88
+        self.ligne_vide.height = (int(taille_ecran[
+                                          1] * 0.3) - self.ligne_vide.y) + 1  # le +1 au cas ou ça arrondi en dessous (et donc ça créer un pixel d'écart blanc dégeulasse)
 
     def unreferance(self):
         for surf in self.bg_surfaces:
@@ -122,14 +126,14 @@ class Foret:
         BORDURE = 0
 
         image.Image(REPERTOIRE, bg_surface, POSITION_X,
-                            POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+                    POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     def ligne_arbre(self, y):
 
         LARGEUR = 0
         HAUTEUR = 88
         POSITION_X = 0
-        POSITION_Y = 88*y
+        POSITION_Y = 88 * y
         SCALE_X = 0
         SCALE_Y = 0.05
         SCALE_WIDTH = 1
@@ -139,11 +143,12 @@ class Foret:
         ALPHA = 255  # transparent
         CONVERT_ALPHA = False
 
-        bg_surface = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                    BORDURE)  # creation de la l'objet surface où on va mettre les arbres
+        bg_surface = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                                     LARGEUR,
+                                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                     BORDURE)  # creation de la l'objet surface où on va mettre les arbres
 
         self.bg_surfaces.append(bg_surface)
 
-        for i in range((bg_surface.abswidth//150) + 1):
-            self.arbre(bg_surface, i*150 - 75*(len(self.bg_surfaces)%2))
+        for i in range((bg_surface.abswidth // 150) + 1):
+            self.arbre(bg_surface, i * 150 - 75 * (len(self.bg_surfaces) % 2))

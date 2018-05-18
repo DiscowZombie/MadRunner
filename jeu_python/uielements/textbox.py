@@ -60,7 +60,8 @@ class Textbox(uielement.UIelement):
                 parentsurface.referance,
                 self.color,
                 [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
-                 parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height],
+                 parentsurface.abswidth * self.scalew + self.width,
+                 parentsurface.absheight * self.scaleh + self.height],
                 self.bordersize
             )
             if self.boxbordersize > 0:
@@ -68,9 +69,10 @@ class Textbox(uielement.UIelement):
                     parentsurface.referance,
                     self.boxbordercolor,
                     [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y,
-                     parentsurface.abswidth * self.scalew + self.width - 1, parentsurface.absheight * self.scaleh + self.height - 1],
+                     parentsurface.abswidth * self.scalew + self.width - 1,
+                     parentsurface.absheight * self.scaleh + self.height - 1],
                     self.boxbordersize
-            )
+                )
         else:
             rectangle = None
         if self.mdp:
@@ -97,8 +99,10 @@ class Textbox(uielement.UIelement):
                 pygame.draw.line(
                     parentsurface.referance,
                     constantes.BLACK,
-                    (parentsurface.abswidth * self.scalex + self.x + self.textoffset + text_size[0], parentsurface.absheight * self.scaley + self.y + self.boxbordersize + 3),
-                    (parentsurface.abswidth * self.scalex + self.x + self.textoffset + text_size[0], parentsurface.absheight * self.scaley + self.y + self.absheight - self.boxbordersize - 3),
+                    (parentsurface.abswidth * self.scalex + self.x + self.textoffset + text_size[0],
+                     parentsurface.absheight * self.scaley + self.y + self.boxbordersize + 3),
+                    (parentsurface.abswidth * self.scalex + self.x + self.textoffset + text_size[0],
+                     parentsurface.absheight * self.scaley + self.y + self.absheight - self.boxbordersize - 3),
                     2
                 )
 

@@ -40,7 +40,7 @@ def checkmousebouton(mousepos, buttonx, buttony, buttonwidth,
     posx, posy = mousepos[0], mousepos[1]
     minx, maxx = buttonx, buttonx + buttonwidth
     miny, maxy = buttony, buttony + buttonheight
-    if posx >= minx and posx <= maxx and posy >= miny and posy <= maxy:
+    if minx <= posx <= maxx and miny <= posy <= maxy:
         return True
     return False
 
@@ -61,7 +61,8 @@ def set_latest_version():
                 model.Model.model.latest_version = json_response["tag_name"]
                 model.Model.model.latest_version_got = True
 
-        settings.CurlManager("https://api.github.com/repos/DiscowZombie/MadRunner/releases/latest", False, None, response)
+        settings.CurlManager("https://api.github.com/repos/DiscowZombie/MadRunner/releases/latest", False, None,
+                             response)
     except:
         return  # tant pis pour la mis à jour si ça fail !
 
@@ -70,7 +71,7 @@ def can_update(current, latest):
     if current != latest:
         json_settings = settings.SettingsManager.current_settings
         if "ignored_updates" in json_settings["game_settings"]:
-            if not latest in json_settings["game_settings"]["ignored_updates"]:
+            if latest not in json_settings["game_settings"]["ignored_updates"]:
                 return True
         else:
             return True
@@ -79,7 +80,7 @@ def can_update(current, latest):
 
 def ignore_update(version):
     json_settings = settings.SettingsManager.current_settings
-    if not "ignored_updates" in json_settings["game_settings"]:
+    if "ignored_updates" not in json_settings["game_settings"]:
         json_settings["game_settings"]["ignored_updates"] = []
     json_settings["game_settings"]["ignored_updates"].append(version)
     settings.SettingsManager.update_settings()
@@ -255,19 +256,22 @@ def displaybestscore(stype, level):
     BORDURE = 0  # rempli
     SEUL = True
 
-    text.Text(translate("400m") + ": " + str(suffix400), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("400m") + ": " + str(suffix400), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+              CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 50
 
-    text.Text(translate("400m_hurdles") + ": " + str(suffix400h), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("400m_hurdles") + ": " + str(suffix400h), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+              CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
     POSITION_Y += 50
 
-    text.Text(translate("infinite_run") + ": " + str(suffixci), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("infinite_run") + ": " + str(suffixci), ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+              CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -291,7 +295,8 @@ def displaybestscore(stype, level):
     BORDURE = 0  # rempli
     SEUL = True
 
-    text.Text(translate("time") + "/" + translate("distance") + " :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+    text.Text(translate("time") + "/" + translate("distance") + " :", ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT,
+              CENTRE_X, CENTRE_Y,
               ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
               LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -357,9 +362,10 @@ def displaybestscore(stype, level):
             ECART = 0
             BORDURE = 0  # rempli
 
-            button.BRafraichir(translate("refresh"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                     ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                     HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+            button.BRafraichir(translate("refresh"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                               CENTRE_X, CENTRE_Y,
+                               ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                               HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         SCALE_X = 0.5
         SCALE_Y = 0
@@ -382,16 +388,14 @@ def displaybestscore(stype, level):
         SEUL = True
 
         text_to_dislay = \
-            translate("not_logged_1") \
-                if not connection.connected \
-                else translate("logged_as") + " " + connection.username + "."
+            translate("not_logged_1") if not connection.connected else translate(
+                "logged_as") + " " + connection.username + "."
         text.Text(
             text_to_dislay,
             ANTIALIAS, COULEUR_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
             ARRIERE_PLAN, ECART, SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
-        # TODO: Temporaire en attendant d'avoir le /n dans Text()
         if not connection.connected:
             POSITION_Y += 20
 
@@ -429,7 +433,6 @@ def login(bouton_connection):
 
     if len(textbox_nom.text) >= 3:
         if len(textbox_mdp.text) >= 3:
-
             bouton_connection.visible = False
 
             ANTIALIAS = True
@@ -458,7 +461,7 @@ def login(bouton_connection):
                       SCALE_WIDTH, SCALE_HEIGHT,
                       COULEUR_ARRIERE, BORDURE)
 
-            view.View.updatescreen()  # oui !
+            view.View.updatescreen()  # On met à jour l'écran pour que l'affichage change bien !
 
             # Essaye de se connecter
             occlass = onlineconnector.OnlineConnector(textbox_nom.text,

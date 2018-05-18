@@ -1,12 +1,9 @@
 import constantes as c
 import settings
-import pycurl
-import json
 
 
 class OnlineConnector:
     # Never None, sauf si on y accede "directement" sans instance de class
-
     current_connection = None
 
     """
@@ -14,7 +11,6 @@ class OnlineConnector:
     Si username et password sont None, on va prendre ceux de la config
     Si save vaut True, on sauvegarde username et password s'ils sont corrects (= qu'il n'y a pas eu d'erreur)
     """
-
     def __init__(self, username=None, password=None, save=False):
         self.connected = False
         self.internet = True
@@ -38,7 +34,6 @@ class OnlineConnector:
     Retourne "True" si la connexion s'est oppéré sans soucis, sinon une exception (pycurl.error ou Exception)
     Se connecter genère une clé unique de session
     """
-
     def connect(self):
         # S'ils sont encore nulles, on s'arrete ici
         if self.username is None or self.password is None:
@@ -72,7 +67,6 @@ class OnlineConnector:
     """
     Retourne True si les stats se sont bien chargés, sinon une Exception()
     """
-
     def loadstatistiques(self):
 
         def response(response_obj):
@@ -90,7 +84,6 @@ class OnlineConnector:
     Si clearidentifiants vaut True, on met à null ses identifiants en config
     Disconnect va forcement détuire l'objet
     """
-
     def disconnect(self, clearidentifiants=False):
         self.connected = False
 

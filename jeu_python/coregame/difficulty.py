@@ -2,7 +2,6 @@ from coregame.gameobjects import key as key
 
 
 class Facile:
-
     identifier = "F"
 
     def __init__(self):
@@ -15,7 +14,6 @@ class Facile:
 
 
 class Moyen:
-
     identifier = "M"
 
     def __init__(self):
@@ -28,7 +26,6 @@ class Moyen:
 
 
 class Difficile:
-
     identifier = "D"
 
     def __init__(self):

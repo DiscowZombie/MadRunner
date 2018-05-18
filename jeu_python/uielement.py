@@ -15,7 +15,8 @@ class UIelement:
     :param bordersize - Le taille de la bordure en pixel de l'élément graphique (s'il vaut 0, l'élément est repli)
     """
 
-    def __init__(self, surface_obj, posx, posy, scalex, scaley, width, height, scalew, scaleh, color, bordersize, classname,
+    def __init__(self, surface_obj, posx, posy, scalex, scaley, width, height, scalew, scaleh, color, bordersize,
+                 classname,
                  alpha=255, isscreen=False):
         self.x = posx
         self.y = posy
@@ -25,10 +26,11 @@ class UIelement:
             self.abswidth = width
             self.absheight = height
         else:
-            self.absx = int(surface_obj.absx + surface_obj.abswidth*scalex + posx)  # position "absolue", càd, position par rapport à la fenêtre, et non la surface où on dessine l'élément
-            self.absy = int(surface_obj.absy + surface_obj.absheight*scaley + posy)
-            self.abswidth = int(surface_obj.abswidth*scalew + width)
-            self.absheight = int(surface_obj.absheight*scaleh + height)
+            self.absx = int(
+                surface_obj.absx + surface_obj.abswidth * scalex + posx)  # position "absolue", càd, position par rapport à la fenêtre, et non la surface où on dessine l'élément
+            self.absy = int(surface_obj.absy + surface_obj.absheight * scaley + posy)
+            self.abswidth = int(surface_obj.abswidth * scalew + width)
+            self.absheight = int(surface_obj.absheight * scaleh + height)
 
         self.scalex = scalex
         self.scaley = scaley
@@ -47,10 +49,12 @@ class UIelement:
         self.children = []  # pour ajouter des éléments graphiques dans d'autres
 
         if not isscreen:
-            surface_obj.addchild(self)  # appeler cette méthode va ajouter un attribut appelé "parentsurface" qui permet d'avoir une référence vers l'objet parent
+            surface_obj.addchild(
+                self)  # appeler cette méthode va ajouter un attribut appelé "parentsurface" qui permet d'avoir une référence vers l'objet parent
             if not classname in UIelement.UIelements:
                 UIelement.UIelements[classname] = []
-            UIelement.UIelements[classname].append(self)  # on l'ajoute aux éléments UI, en les triant par leur "classname"
+            UIelement.UIelements[classname].append(
+                self)  # on l'ajoute aux éléments UI, en les triant par leur "classname"
 
     def addchild(self, child):  # pour ajouter un élément graphique dans un autre (ex: un bouton dans une surface)
         self.children.append(child)
@@ -59,8 +63,10 @@ class UIelement:
     def rotate(self, degree):  # faire la rotation d'une surface
         self.rotation += degree
 
-    def tween(self, duration, attributes, endfunction=None):  # transition linéaire d'attributs d'un objet, "duration" en secondes
-        self.tweendata = {  # pour ajouter des attributs à transitionner, mettre dans dans une liste un dictionnaire avec son nom ["name"] et sa valeur finale ["value"]
+    def tween(self, duration, attributes,
+              endfunction=None):  # transition linéaire d'attributs d'un objet, "duration" en secondes
+        # Pour ajouter des attributs à transitionner, mettre dans dans une liste un dictionnaire avec son nom ["name"] et sa valeur finale ["value"]
+        self.tweendata = {
             "duration": duration,
             "passed": 0,
             "attributes": [],
@@ -86,7 +92,8 @@ class UIelement:
 
         for attributdict in tweendata["attributes"]:
             attrname = attributdict["attrname"]
-            self.__setattr__(attrname, attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio)
+            self.__setattr__(attrname,
+                             attributdict[attrname + " start"] + attributdict["delta " + attrname] * advanceratio)
 
     def remove(self):
         for child in list(self.children):  # ne pas oublier d'effacer également les objets descendants de celui-ci

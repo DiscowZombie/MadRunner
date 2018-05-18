@@ -15,9 +15,9 @@ class Athenes:
 
         # Mis en place du haut de l'arrière plan (gradins)
         # On va creer autant d'image du haut du gradin que nécessaire pour remplir la largeur et la hauteur de la surface
-        nbbanc = (taille_ecran[0]//170) + 1  # espacement de 20 pixels entre les bancs
+        nbbanc = (taille_ecran[0] // 170) + 1  # espacement de 20 pixels entre les bancs
         for i in range(nbbanc):
-            self.colonne_banc(i*170)
+            self.colonne_banc(i * 170)
 
         # Mis en place du bas du gradin
         LARGEUR = 0
@@ -42,8 +42,8 @@ class Athenes:
 
         # On va creer autant d'image du bas de gradin que nécessaire pour remplir la largeur de la surface
 
-        for i in range((taille_ecran[0]//200) + 1):
-            self.panneau(i*200)
+        for i in range((taille_ecran[0] // 200) + 1):
+            self.panneau(i * 200)
 
         # Mis en place du hors piste (avec une surface :p)
         # haut
@@ -61,8 +61,8 @@ class Athenes:
         CONVERT_ALPHA = False
 
         surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                    BORDURE)
+                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                        BORDURE)
 
         # bas
         LARGEUR = 0
@@ -79,8 +79,8 @@ class Athenes:
         CONVERT_ALPHA = False
 
         surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                    BORDURE)
+                        HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                        BORDURE)
 
     def refresh(self):
 
@@ -112,10 +112,11 @@ class Athenes:
                     for surfaceimg in self.bg_surfaces:
                         self.banc(surfaceimg, i)
 
-        nbnouvcolonne = ((taille_ecran[0] - max_x)//170) + 1
+        nbnouvcolonne = ((taille_ecran[0] - max_x) // 170) + 1
 
-        for i in range(nbnouvcolonne):  # ajout de colonnes de bancs s'il y a de la place à droite (redimension de l'écran)
-            self.colonne_banc(max_x + i*170)
+        for i in range(
+                nbnouvcolonne):  # ajout de colonnes de bancs s'il y a de la place à droite (redimension de l'écran)
+            self.colonne_banc(max_x + i * 170)
 
         if min_x >= -20:
             self.colonne_banc(min_x - 150)
@@ -125,7 +126,8 @@ class Athenes:
         min_x = taille_ecran[0]
 
         for surfaceimg in self.bas_surfaces:
-            if surfaceimg.absx > taille_ecran[0]:  # on enlève dans un premier temps les panneaux qui ne sont plus visibles
+            if surfaceimg.absx > taille_ecran[
+                0]:  # on enlève dans un premier temps les panneaux qui ne sont plus visibles
                 self.bas_surfaces.remove(surfaceimg)
                 surfaceimg.unreferance()
             else:
@@ -133,10 +135,10 @@ class Athenes:
                             surfaceimg.x + surfaceimg.abswidth)  # pour ajouter des colonnes de bancs si jamais l'écran est redimensionné (plus grand)
                 min_x = min(min_x, surfaceimg.x)
 
-        nbnouvcolonne = ((taille_ecran[0] - max_x)//200) + 1
+        nbnouvcolonne = ((taille_ecran[0] - max_x) // 200) + 1
 
         for i in range(nbnouvcolonne):  # ajout de colonnes de bancs s'il y a de la place
-            self.panneau(max_x + i*200)
+            self.panneau(max_x + i * 200)
 
         if min_x >= 0:
             self.panneau(min_x - 200)
@@ -204,5 +206,6 @@ class Athenes:
         BORDURE = 0
 
         self.bas_surfaces.append(image.Image(REPERTOIRE, self.surface_panneau, POSITION_X,
-                                        POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                        BORDURE))
+                                             POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                                             COULEUR,
+                                             BORDURE))

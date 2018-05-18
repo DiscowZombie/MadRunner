@@ -11,7 +11,6 @@ from uielements import image as image
 
 
 class Obstacle:
-
     obstacles = []
 
     def __init__(self, distance):
@@ -38,8 +37,8 @@ class Obstacle:
         BORDURE = 0
 
         image_obstacle = image.Image(REPERTOIRE, v.View.screen, POSITION_X,
-                                  POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                  BORDURE)
+                                     POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                     BORDURE)
         image_obstacle.mask = pygame.mask.from_surface(image_obstacle.referance)
         self.image = image_obstacle
 
@@ -51,7 +50,7 @@ class Obstacle:
             [
                 {
                     "name": "y",
-                    "value": self.image.y + self.image.absheight//2
+                    "value": self.image.y + self.image.absheight // 2
                 },
                 {
                     "name": "rotation",
@@ -73,20 +72,20 @@ class Obstacle:
 
 
 class CourseInfinie:
-
     dist_to_travel = None
     disp_function = None
     score_text = "distance"
     coursetype = "I"
 
     def __init__(self):
-        img_obstacle = pygame.image.load(functions.resource_path("assets/img/decors/" + coregame.CoreGame.current_core.carte + "/obstacle.png"))
+        img_obstacle = pygame.image.load(
+            functions.resource_path("assets/img/decors/" + coregame.CoreGame.current_core.carte + "/obstacle.png"))
         self.dimension_obstacle = (img_obstacle.get_width(), img_obstacle.get_height())
         self.farthest = 20  # la distace de l'obstacle le plus éloigné de la ligne de départ
         self.nb_passed = 0  # nombre d'obstacles passés (càd sans le renverser)
         CourseInfinie.disp_function = functions.computedistance
         Obstacle(self.farthest)  # premier obstacle à 20 mètres de la ligne de départ
-        self.next_obstacle = self.farthest + 35*random.randint(5, 10)/10
+        self.next_obstacle = self.farthest + 35 * random.randint(5, 10) / 10
         self.caught = False
 
         POSITION_X = 0
@@ -95,8 +94,9 @@ class CourseInfinie:
         SCALE_Y = 0.35
         INITDIST = - 9  # le départ prend 7 secondes, et le poursuiveur court au début à 1 m/s, donc -9 m est convenable (inférieur à -8.75 m est convenable)
 
-        self.courseur = coregame.Character(constantes.CharactersFeatures["normal"], constantes.Animations["poursuiveur"], POSITION_X, POSITION_Y,
-                  SCALE_X, SCALE_Y, INITDIST)
+        self.courseur = coregame.Character(constantes.CharactersFeatures["normal"],
+                                           constantes.Animations["poursuiveur"], POSITION_X, POSITION_Y,
+                                           SCALE_X, SCALE_Y, INITDIST)
         self.courseur.run()
         self.courseur.speed = 1
 
@@ -120,12 +120,16 @@ class CourseInfinie:
                     if not obstacle.touched:
                         attrname = char.state + "sprite"
                         state_sprite = char.__getattribute__(attrname)
-                        offset = (int(obstacle.image.absx - (char.absx + state_sprite.x)), int(obstacle.image.absy - (char.absy + state_sprite.y)))
-                        num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(obstacle.image.mask, offset)  # le nombre de pixels de collision entre l'obstacle et le personnage
+                        offset = (int(obstacle.image.absx - (char.absx + state_sprite.x)),
+                                  int(obstacle.image.absy - (char.absy + state_sprite.y)))
+                        num_pix_col = state_sprite.masks[state_sprite.compteur].overlap_area(obstacle.image.mask,
+                                                                                             offset)  # le nombre de pixels de collision entre l'obstacle et le personnage
                         if num_pix_col and num_pix_col > 15:  # si le personnage touche l'obstacle de plus de 15 pixels (car bon, toucher l'obstacle de 1 pixel...)
                             obstacle.tombe()
-                            char.speed -= (coregame.CoreGame.current_core.level_obj.hitpenality/100) * char.speed  # se prendre un obstacle réduit la vitesse de 35%
-                    delta_pix = (obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
+                            char.speed -= (
+                                                      coregame.CoreGame.current_core.level_obj.hitpenality / 100) * char.speed  # se prendre un obstacle réduit la vitesse de 35%
+                    delta_pix = (
+                                            obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
                     pos_x_obs = char.absx - delta_pix
                     obstacle.image.x = pos_x_obs
                     if not obstacle.passed and obstacle.image.absx >= char.absx + 40:  # on va supposer que le personnage a toujours une largeur de 80 pixels
@@ -133,20 +137,23 @@ class CourseInfinie:
                         if not obstacle.touched:
                             self.nb_passed += 1
             else:
-                delta_pix = (obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
+                delta_pix = (
+                                        obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
                 pos_x_obstacle = char.absx - delta_pix
 
                 if pos_x_obstacle > - self.dimension_obstacle[0]:
-                    obstacle.show(pos_x_obstacle, char.y + 49 - self.dimension_obstacle[1], self.dimension_obstacle[0], self.dimension_obstacle[1])  # on va supposer que le personnage a toujours une hauteur de 98 pixels
+                    obstacle.show(pos_x_obstacle, char.y + 49 - self.dimension_obstacle[1], self.dimension_obstacle[0],
+                                  self.dimension_obstacle[
+                                      1])  # on va supposer que le personnage a toujours une hauteur de 98 pixels
 
         distleft = distance + (char.absx / 25)  # distance à gauche de l'écran de la ligne de départ
         if distleft >= self.next_obstacle:
             Obstacle(self.next_obstacle)
             self.farthest = self.next_obstacle
-            self.next_obstacle = self.farthest + 35*random.randint(5, 15)/10
+            self.next_obstacle = self.farthest + 35 * random.randint(5, 15) / 10
 
         if coregame.CoreGame.current_core.started:
-            self.courseur.speed = distance**(0.275 + coregame.CoreGame.current_core.level_obj.courseurspeed/100)
+            self.courseur.speed = distance ** (0.275 + coregame.CoreGame.current_core.level_obj.courseurspeed / 100)
 
     def computescore(self):  # le score dépend de la distance parcourue et du nombre d'obstacles non renversées
         dist = coregame.CoreGame.current_core.distance

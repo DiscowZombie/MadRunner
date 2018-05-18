@@ -68,14 +68,13 @@ except BaseException:
 
 try:
     occlass.loadstatistiques()
-except:
+except BaseException:
     pass
 
 passed = 0
 running = True
 
 while running:
-
     # Les événements:
     running = controller.Controller.checkevents()  # vérifie les interactions pour peut être modifier des infos du model
 

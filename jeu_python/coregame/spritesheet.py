@@ -10,7 +10,8 @@ class SpriteSheet:
     def __init__(self, filename):
         self.sheet = pygame.image.load(f.resource_path(filename)).convert_alpha()
 
-    def load(self, nombre_images, taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement et qu'ils ont la même taille x
+    def load(self, nombre_images,
+             taille_frame):  # on va supposer pour l'instant que tous nos sprites défilent uniquement horizontalement et qu'ils ont la même taille x
         # Clear Strip
         strip = []
         masks = []
@@ -28,7 +29,7 @@ class SpriteSheet:
         return strip, masks
 
     # Load a specific image from a specific rectangle
-    def image_at(self, rectangle, colorkey = None):
+    def image_at(self, rectangle, colorkey=None):
         # Loads image from x,y,x+offset,y+offset
         rect = pygame.Rect(rectangle)
         image = pygame.Surface(rect.size, pygame.SRCALPHA, 32).convert_alpha()
@@ -41,13 +42,12 @@ class SpriteSheet:
 
 
 class SpriteStripAnim(SpriteSheet):
-
     sprite_anims = []
 
     def __init__(self, spriteinfos):
         SpriteSheet.__init__(self, spriteinfos["image"])
-        self.x = spriteinfos["framesize"][0]//2
-        self.y = spriteinfos["framesize"][1]//2
+        self.x = spriteinfos["framesize"][0] // 2
+        self.y = spriteinfos["framesize"][1] // 2
         self.speedcounter = 0
         self.compteur = 0
         self.totalcompteur = 0
@@ -62,7 +62,7 @@ class SpriteStripAnim(SpriteSheet):
         SpriteStripAnim.sprite_anims.append(self)
 
     def next(self, passed):  # calcule et dessine la prochaine image (ou pas !)
-        if self.speedcounter >= 60//self.speed:
+        if self.speedcounter >= 60 // self.speed:
             self.speedcounter = 0
             self.compteur += 1
         else:
@@ -75,8 +75,8 @@ class SpriteStripAnim(SpriteSheet):
         self.time += passed
 
     def updatepos(self, x, y):  # mis à jour de la position du sprite (par rapport à la position du personnage)
-        self.x = -int(self.framesize[0]/2) + x
-        self.y = -int(self.framesize[1]/2) + y
+        self.x = -int(self.framesize[0] / 2) + x
+        self.y = -int(self.framesize[1] / 2) + y
 
     def reset(self):
         self.totalcompteur = 0

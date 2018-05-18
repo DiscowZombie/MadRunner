@@ -5,7 +5,6 @@ import userstatistics
 
 
 class _400m:
-
     dist_to_travel = 400
     disp_function = None  # va être mis plus tard lors de l'initialisation
     score_text = "time"

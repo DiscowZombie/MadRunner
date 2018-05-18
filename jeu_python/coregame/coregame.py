@@ -31,10 +31,6 @@ import json
 
 import random
 
-"""
-Ne fonctionne pour pour 60 fps pour le moment
-"""
-
 
 class Character:
     characters = []
@@ -112,8 +108,8 @@ class Countdown(image.Image):
         COULEUR = constantes.WHITE
         BORDURE = 0
 
-        image.Image.__init__(self, REPERTOIRE, v.View.screen, POSITION_X,POSITION_Y, SCALE_X, SCALE_Y,
-                             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,BORDURE)
+        image.Image.__init__(self, REPERTOIRE, v.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y,
+                             LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         self.displayed = None
         self.rotation = -150
@@ -141,7 +137,7 @@ class Countdown(image.Image):
                 self.currentimg = 0
                 end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
                 self.tween(
-                    0.3 - (state_time - 3000)/1000,  # plus précis que de mettre juste 0.3
+                    0.3 - (state_time - 3000) / 1000,  # plus précis que de mettre juste 0.3
                     [
                         {
                             "name": "rotation",
@@ -181,7 +177,7 @@ class Countdown(image.Image):
                 self.alpha = 0
                 end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
                 self.tween(
-                    0.3 - (state_time - 4000)/1000,
+                    0.3 - (state_time - 4000) / 1000,
                     [
                         {
                             "name": "rotation",
@@ -221,7 +217,7 @@ class Countdown(image.Image):
                 self.alpha = 0
                 end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
                 self.tween(
-                    0.3 - (state_time - 5000)/1000,
+                    0.3 - (state_time - 5000) / 1000,
                     [
                         {
                             "name": "rotation",
@@ -260,7 +256,7 @@ class Countdown(image.Image):
                 self.alpha = 0
                 end_width, end_height = self.rects[self.currentimg][2], self.rects[self.currentimg][3]
                 self.tween(
-                    0.3 - (state_time - 6000)/1000,
+                    0.3 - (state_time - 6000) / 1000,
                     [
                         {
                             "name": "alpha",
@@ -481,8 +477,9 @@ class CoreGame:
 
         self.personnage = functions.getrunner()  # le personnage avec lequel le joueur va jouer
 
-        char = Character(constantes.CharactersFeatures[self.personnage], constantes.Animations[self.personnage], POSITION_X, POSITION_Y,
-                  SCALE_X, SCALE_Y, INITDIST)
+        char = Character(constantes.CharactersFeatures[self.personnage], constantes.Animations[self.personnage],
+                         POSITION_X, POSITION_Y,
+                         SCALE_X, SCALE_Y, INITDIST)
 
         # Dessine la ligne de départ
         LARGEUR = 4
@@ -550,7 +547,8 @@ class CoreGame:
             if self.dist_to_travel:
                 """Détermination de s'il faut dessiner la ligne d'arrivée ou pas"""
                 # Calcul de la position x absolue du personnage
-                delta_pix_arrive = (self.dist_to_travel - new_distance) * 25  # nb de pixels avant la ligne d'arrivé (par rapport à la position du personnage)
+                delta_pix_arrive = (
+                                           self.dist_to_travel - new_distance) * 25  # nb de pixels avant la ligne d'arrivé (par rapport à la position du personnage)
                 pos_x_ligne_arrive = char.absx - delta_pix_arrive
 
                 if pos_x_ligne_arrive > -2:
@@ -581,7 +579,7 @@ class CoreGame:
 
                 # Est-ce la fin du jeu ?
                 if new_distance >= self.dist_to_travel:
-                    trop = int((new_distance - self.dist_to_travel)/(charspeed/1000))
+                    trop = int((new_distance - self.dist_to_travel) / (charspeed / 1000))
                     self.time -= trop  # c'est plus précis comme ça
                     self.end(True)
                     return
@@ -653,7 +651,7 @@ class CoreGame:
                     new_state = "run"
                     character.runsprite.adjustspeed(character.speed * 6)
                 elif character.jumping:
-                    t = character.jumpsprite.time/1000
+                    t = character.jumpsprite.time / 1000
                     z = (1 / 2) * 9.81 * t ** 2 - 8 * t  # physique
                     y = z * 25
                     if y > 0:
@@ -728,7 +726,8 @@ class CoreGame:
             if userstatistics.UserStatistics.stats.best_gm_score[self.level][self.modejeu]:
                 if self.gamemode_obj.isrecord(self.level, self.num_gm_score):
                     new_gm_record = True
-                    userstatistics.UserStatistics.stats.set("best_gm_score", self.num_gm_score, self.level, self.modejeu)
+                    userstatistics.UserStatistics.stats.set("best_gm_score", self.num_gm_score, self.level,
+                                                            self.modejeu)
             else:
                 userstatistics.UserStatistics.stats.set("best_gm_score", self.num_gm_score, self.level, self.modejeu)
         else:
@@ -809,7 +808,8 @@ class CoreGame:
             COULEUR_ARRIERE = None
             BORDURE = 0
 
-            text.Text(functions.translate("new_record").upper(), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+            text.Text(functions.translate("new_record").upper(), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X,
+                      CENTRE_Y, ARRIERE_PLAN,
                       ECART, SEUL,
                       surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
@@ -862,7 +862,8 @@ class CoreGame:
             COULEUR_ARRIERE = None
             BORDURE = 0
 
-            text.Text(functions.translate("new_record").upper(), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+            text.Text(functions.translate("new_record").upper(), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X,
+                      CENTRE_Y, ARRIERE_PLAN,
                       ECART, SEUL,
                       surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
@@ -921,12 +922,13 @@ class CoreGame:
             ECART = 0
             BORDURE = 0  # rempli
 
-            bouton_menu = button.BRetourMenu(functions.translate("return_menu"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
-                               CENTRE_Y, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
-                               SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+            bouton_menu = button.BRetourMenu(functions.translate("return_menu"), ANTIALIAS, COULEUR_TEXTE,
+                                             ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+                                             CENTRE_Y, ECART, surf, POSITION_X, POSITION_Y, SCALE_X,
+                                             SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             bouton_menu.visible = self.personnage == new_runner
 
-            if new_score_record or new_gm_record or new_runner != self.personnage and completed: # bon, si jamais il débloque un personnage en ayant perdu, on ne va pas l'applaudir quand même !
+            if new_score_record or new_gm_record or new_runner != self.personnage and completed:  # bon, si jamais il débloque un personnage en ayant perdu, on ne va pas l'applaudir quand même !
                 pygame.mixer.Sound(functions.resource_path("assets/sounds/applaudissements.ogg")).play()  # Bravo !
 
             if self.personnage != new_runner:  # le personnage a-t-il évoluer ?
@@ -951,7 +953,8 @@ class CoreGame:
                 COULEUR_ARRIERE = None
                 BORDURE = 0
 
-                text.Text(functions.translate("improved_character"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                text.Text(functions.translate("improved_character"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X,
+                          CENTRE_Y, ARRIERE_PLAN,
                           ECART, SEUL,
                           surf, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                           HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
@@ -971,9 +974,9 @@ class CoreGame:
                 CONVERT_ALPHA = False
 
                 surf_pers = surface.Surface(ALPHA, CONVERT_ALPHA, v.View.screen, POSITION_X, POSITION_Y,
-                                       SCALE_X, SCALE_Y, LARGEUR,
-                                       HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                       BORDURE)
+                                            SCALE_X, SCALE_Y, LARGEUR,
+                                            HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
+                                            BORDURE)
 
                 REPERTOIRE = constantes.CharactersFeatures[self.personnage]["image"]
                 LARGEUR = 150
@@ -988,15 +991,16 @@ class CoreGame:
                 BORDURE = 0
 
                 self.old_pers = image.Image(REPERTOIRE, surf_pers, POSITION_X,
-                                          POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                          BORDURE)
+                                            POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                                            COULEUR,
+                                            BORDURE)
 
                 self.old_pers.tween(
                     2,
                     [
-                       {
-                           "name": "width",
-                           "value": 0
+                        {
+                            "name": "width",
+                            "value": 0
                         },
                         {
                             "name": "height",
@@ -1031,8 +1035,9 @@ class CoreGame:
                     BORDURE = 0
 
                     new_pers = image.Image(REPERTOIRE, surf_pers, POSITION_X,
-                                              POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR,
-                                              BORDURE)
+                                           POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT,
+                                           COULEUR,
+                                           BORDURE)
 
                     new_pers.tween(
                         2,
@@ -1111,7 +1116,8 @@ class CoreGame:
             if key is None:
                 return
 
-            content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (key, self.score, gamemode, self.num_gm_score, lvl)
+            content = "key=%s&score=%s&coursetype=%s&time=%s&difficulty=%s" % (
+                key, self.score, gamemode, self.num_gm_score, lvl)
 
             def response(response_obj):
                 pass

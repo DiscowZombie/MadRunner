@@ -68,8 +68,10 @@ class Tab(uielement.UIelement):
             rectangle = pygame.draw.rect(
                 self.parentsurface.referance,
                 color,
-                [parentsurface.abswidth * self.scalex + self.x, parentsurface.absheight * self.scaley + self.y + yoffset,
-                 parentsurface.abswidth * self.scalew + self.width, parentsurface.absheight * self.scaleh + self.height - yoffset],
+                [parentsurface.abswidth * self.scalex + self.x,
+                 parentsurface.absheight * self.scaley + self.y + yoffset,
+                 parentsurface.abswidth * self.scalew + self.width,
+                 parentsurface.absheight * self.scaleh + self.height - yoffset],
                 self.bordersize
             )
 
