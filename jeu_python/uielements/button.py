@@ -141,7 +141,7 @@ class BJouer(Button):
         SCALE_X = 0.5
         SCALE_Y = 0.5
         LARGEUR = 400
-        HAUTEUR = 175
+        HAUTEUR = 125
         SCALE_WIDTH = 0
         SCALE_HEIGHT = 0
         POSITION_X = - int(LARGEUR / 2)
@@ -179,10 +179,9 @@ class BJouer(Button):
                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
         POSITION_Y += 75
 
-        """
-        B2Joueurs(functions.translate("2players"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BMultijoueur(functions.translate("multiplayer"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                   ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
+                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
         POSITION_X = 0
         POSITION_Y = 0
@@ -854,11 +853,11 @@ class BStats(Button):
 
 class B1Joueur(Button):
 
-    def __init__(*arguments):
-        Button.__init__(*arguments)
+    def __init__(self, *arguments):
+        Button.__init__(self, *arguments)
 
-    def button1click(self):
-        statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
+    def button1click(self, is_multiplayer=False):
+        statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF_MULTI) if is_multiplayer else statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF_SINGLE)
         functions.delete_menu_obj()
 
         SCALE_X = 1 / 6
@@ -1128,7 +1127,7 @@ class B1Joueur(Button):
         ECART = 0
         BORDURE = 0  # rempli
 
-        BCommencer(functions.translate("start"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+        BCommencer(is_multiplayer, False, functions.translate("start"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                    ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -1156,15 +1155,120 @@ class B1Joueur(Button):
                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
-"""
-Mode deux joueurs :
-class B2Joueurs(Button):
+class BMultijoueur(Button):
     def __init__(*arguments):
         Button.__init__(*arguments)
 
-    def button1click(
-            self):  # on défini une specilisation de ce bouton ! cette fonction est executé lorsqu'on clique sur ce bouton
-        statemanager.StateManager.setstate(statemanager.StateEnum.MAP_AND_DIFF)
+    def button1click(self):
+        statemanager.StateManager.setstate(statemanager.StateEnum.MULTIPLAYER_MENU)
+        functions.delete_menu_obj()
+
+        SCALE_X = 0.5
+        SCALE_Y = 0.5
+        LARGEUR = 400
+        HAUTEUR = 125
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        POSITION_X = - int(LARGEUR / 2)
+        POSITION_Y = - int(HAUTEUR / 2)
+        COULEUR = constantes.WHITE
+        BORDURE = 0  # rempli
+        ALPHA = 255  # opaque
+        CONVERT_ALPHA = True
+
+        surface_boutons = surface.Surface(ALPHA, CONVERT_ALPHA, view.View.screen, POSITION_X, POSITION_Y, SCALE_X,
+                                          SCALE_Y, LARGEUR,
+                                          HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 400
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = None
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        B2JoueursLocal(functions.translate("local_multiplayer"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                 ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                 HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+        POSITION_Y += 75
+
+        BMultijoueursEnLigne(functions.translate("online_multiplayer"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                  ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                  HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+        POSITION_X = 0
+        POSITION_Y = 0
+        SCALE_X = 0
+        SCALE_Y = 0
+        LARGEUR = 100
+        HAUTEUR = 50
+        SCALE_WIDTH = 0
+        SCALE_HEIGHT = 0
+        COULEUR = constantes.GRAY
+        ANTIALIAS = True
+        COULEUR_TEXTE = constantes.BLACK
+        ARRIERE_PLAN_TEXTE = None
+        FONT = "Arial"
+        TAILLE_FONT = 24
+        CENTRE_X = True
+        CENTRE_Y = True
+        ECART = 0
+        BORDURE = 0  # rempli
+
+        BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+                ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+
+
+class BCommencer(Button):
+    def __init__(self, is_multiplayer, is_online, *arguments):
+        Button.__init__(self, *arguments)
+        self.is_multiplayer = is_multiplayer
+        self.is_online = is_online
+
+    def button1click(self):
+        carte = None
+        modejeu = None
+        level = None
+
+        for checkboxe in checkbox.Checkbox.getCheckboxes():
+            if checkboxe.checked:
+                if carte is None:
+                    carte = checkboxe
+                elif modejeu is None:
+                    modejeu = checkboxe
+                else:
+                    level = checkboxe
+
+        coregame.CoreGame(self.is_multiplayer, self.is_online, carte.name, modejeu.name, level.name)
+
+
+class B2JoueursLocal(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        B1Joueur.button1click(None, True)
+
+
+class BMultijoueursEnLigne(Button):
+    def __init__(*arguments):
+        Button.__init__(*arguments)
+
+    def button1click(self):
+        statemanager.StateManager.setstate(statemanager.StateEnum.MULTI_SERVERS_MENU)
         functions.delete_menu_obj()
 
         POSITION_X = 0
@@ -1188,28 +1292,7 @@ class B2Joueurs(Button):
 
         BRetour(functions.translate("return"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
                 ECART, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)"""
-
-
-class BCommencer(Button):
-    def __init__(*arguments):
-        Button.__init__(*arguments)
-
-    def button1click(self):
-        carte = None
-        modejeu = None
-        level = None
-
-        for checkboxe in checkbox.Checkbox.getCheckboxes():
-            if checkboxe.checked:
-                if carte is None:
-                    carte = checkboxe
-                elif modejeu is None:
-                    modejeu = checkboxe
-                else:
-                    level = checkboxe
-
-        coregame.CoreGame(carte.name, modejeu.name, level.name)
+                HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
 
 class BMeilleurScore(Button):
@@ -1582,8 +1665,10 @@ class BRetour(Button):
         game_state = statemanager.StateManager.getstate()
         if game_state in menu_states:
             model.Model.main_menu(True)
-        elif game_state == statemanager.StateEnum.MAP_AND_DIFF:
+        elif game_state == statemanager.StateEnum.MAP_AND_DIFF_SINGLE or game_state == statemanager.StateEnum.MULTIPLAYER_MENU:
             BJouer.button1click(None)  # C'est comme si on avait cliqué sur jouer
+        elif game_state == statemanager.StateEnum.MAP_AND_DIFF_MULTI or game_state == statemanager.StateEnum.MULTI_SERVERS_MENU:
+            BMultijoueur.button1click(None)
         elif game_state == statemanager.StateEnum.BEST_SCORE or game_state == statemanager.StateEnum.AUTRE_STATS:
             BStats.button1click(None)  # C'est comme si on avait cliqué sur statistiques
         elif game_state == statemanager.StateEnum.CONNEXION_MENU or game_state == statemanager.StateEnum.LANGUAGE_MENU or game_state == statemanager.StateEnum.UPDATE_MENU:

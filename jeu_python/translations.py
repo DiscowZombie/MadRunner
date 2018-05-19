@@ -15,9 +15,9 @@ translations = {
         "en": "1 player",
         "fr": "1 joueur",
     },
-    "2players": {
-        "en": "2 players",
-        "fr": "2 joueurs",
+    "multiplayer": {
+        "en": "Multiplayer",
+        "fr": "Multijoueur",
     },
     "return": {
         "en": "Return",
@@ -306,5 +306,13 @@ translations = {
     "update_error": {
         "en": "Failed to obtain the latest version of the game.",
         "fr": "Échec de l'obtention de la dernière version du jeu.",
+    },
+    "local_multiplayer": {
+        "en": "Local - 2 players",
+        "fr": "Local - 2 joueurs",
+    },
+    "online_multiplayer": {
+        "en": "Online",
+        "fr": "En ligne",
     }
 }

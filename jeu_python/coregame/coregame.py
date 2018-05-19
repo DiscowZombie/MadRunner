@@ -13,6 +13,9 @@ import coregame.spritesheet as sprit
 import coregame.gameobjects.key as key
 import coregame.difficulty as difficulty
 
+import coregame.gametypes.singleplayer as sp
+import coregame.gametypes.doubleplayers as dp
+
 import coregame.mapscripts.jeuxolympiques as jo
 import coregame.mapscripts.foret as foret
 import coregame.mapscripts.athenes as athenes
@@ -293,7 +296,7 @@ class Countdown(image.Image):
 class CoreGame:
     current_core = None  # l'objet core (la partie en gros)
 
-    def __init__(self, carte, modejeu, level):
+    def __init__(self, is_multiplayer, is_online, carte, modejeu, level):
         """
         :param carte - La carte sélectionnée. Valeurs possibles: Jeux Olympiques, Athènes, Forêt
         :param modejeu - Le mode de jeu sélectionné. Valeurs possibles: 400m, 400m haie, Course infinie
