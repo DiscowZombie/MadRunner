@@ -3,7 +3,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/DiscowZombie/MadRunner/total.svg)](https://github.com/DiscowZombie/MadRunner/releases/latest)
 [![license](https://img.shields.io/github/license/DiscowZombie/MadRunner.svg)](https://github.com/DiscowZombie/MadRunner/blob/dev/LICENSE)
 
-# Mad Runner - Projet ISN
+# Mad Runner - Projet ISN [![](https://img.shields.io/badge/Click%20to%20Read%20in-ENGLISH-blue.svg)](https://github.com/DiscowZombie/MadRunner/blob/dev/README_en.md)
 
 ### Jouer
 
