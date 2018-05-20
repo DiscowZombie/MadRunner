@@ -184,15 +184,19 @@ class Key:
             Key.availablekeys.append(key_maj)  # la lettre peut ainsi réapparaître
         Key.keys.remove(self)
 
+    @classmethod
     def getKeys(cls):
         return Key.keys
 
+    @classmethod
     def canCreateKey(cls):  # peut-on créer un objet lettre ?
         return len(Key.keys) < coregame.CoreGame.current_core.level_obj.maxkey
 
+    @classmethod
     def makegrid(cls, surface_boutons):
         print("make grid")
 
+    @classmethod
     def updatekeys(cls, passed):
         for key in Key.keys:
             key.time += passed
@@ -200,6 +204,7 @@ class Key:
                 key.unreferance()
                 userstatistics.UserStatistics.stats.increment("missed_letters", 1)
 
+    @classmethod
     def keypressed(cls, pressed_key):
         exists = False
         prefix = "wrong"
@@ -219,9 +224,3 @@ class Key:
         coregame.Character.getCharacters()[0].boost(avantage,
                                                     avantage_amount)  # ATENTION: NE MARCHE QU'EN MODE 1 JOUEUR !!!
         userstatistics.UserStatistics.stats.increment(prefix + "_letters", 1)
-
-    getKeys = classmethod(getKeys)
-    canCreateKey = classmethod(canCreateKey)
-    makegrid = classmethod(makegrid)
-    updatekeys = classmethod(updatekeys)
-    keypressed = classmethod(keypressed)

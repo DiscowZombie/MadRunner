@@ -73,7 +73,6 @@ class Text(uielement.UIelement):
         Text.texts.remove(self)
         self.remove()
 
+    @classmethod
     def getTexts(cls):
         return Text.texts
-
-    getTexts = classmethod(getTexts)

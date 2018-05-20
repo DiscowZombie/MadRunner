@@ -149,7 +149,6 @@ class Intro:
 
 
 class Model:
-
     model = None
     last_passed = 0
 
@@ -163,6 +162,7 @@ class Model:
 
         Model.model = self
 
+    @classmethod
     def updatemodel(cls, passed):
 
         Model.last_passed = passed
@@ -198,6 +198,7 @@ class Model:
         elif currentstate == statemanager.StateEnum.PLAYING:
             coregame.CoreGame.current_core.loop(passed)
 
+    @classmethod
     def mousebutton1down(cls, position):  # click gauche
         for bouton in list(button.Button.getButtons()):
             bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.abswidth, bouton.absheight)
@@ -217,15 +218,18 @@ class Model:
             else:
                 textboxe.unfocus()
 
+    @classmethod
     def mousebutton1up(cls):
         for bouton in list(button.Button.getButtons()):
             if bouton.mousein and bouton.clicking:
                 bouton.unclick()
 
+    @classmethod
     def mousebutton1move(cls, position):
         for bouton in list(button.Button.getButtons()):
             bouton.mousein = f.checkmousebouton(position, bouton.absx, bouton.absy, bouton.abswidth, bouton.absheight)
 
+    @classmethod
     def keydown(cls, event):
         if statemanager.StateManager.getstate() == statemanager.StateEnum.PLAYING:
             coregame.CoreGame.keypressed(event)
@@ -236,6 +240,7 @@ class Model:
                     if textboxe.focused:
                         textboxe.addchar(char)
 
+    @classmethod
     def main_menu(cls, from_return=False):
 
         if not from_return:  # la fuite de mémoire était causé par le fait qu'on faisait un nouvel objet image en cliquant sur retour...
@@ -295,16 +300,19 @@ class Model:
             ECART = 0
             BORDURE = 0  # rempli
 
-            button.BJouer(f.translate("play"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            button.BJouer(f.translate("play"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                          CENTRE_X, CENTRE_Y,
                           ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                           SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             POSITION_Y += 75
-            button.BStats(f.translate("statistics"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X,
+            button.BStats(f.translate("statistics"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                          CENTRE_X,
                           CENTRE_Y,
                           ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                           SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             POSITION_Y += 75
-            button.BParam(f.translate("settings"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
+            button.BParam(f.translate("settings"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                          CENTRE_X, CENTRE_Y,
                           ECART, surface_boutons, POSITION_X, POSITION_Y, SCALE_X,
                           SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
 
@@ -328,9 +336,10 @@ class Model:
             COULEUR_ARRIERE = constantes.WHITE
             BORDURE = 0
 
-            text.Text("V" + self.version, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
-                                    SEUL,view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
-                                    HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
+            text.Text("V" + self.version, ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART,
+                      SEUL, view.View.screen, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR,
+                      HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
         else:
             self.update_reminded = True
 
@@ -378,11 +387,13 @@ class Model:
             TAILLE_FONT = 22
             POSITION_Y += 75
 
-            text.Text(f.translate("update_1") + " (V" + self.latest_version + ").", ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+            text.Text(f.translate("update_1") + " (V" + self.latest_version + ").", ANTIALIAS, COULEUR, FONT,
+                      TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
                       SEUL, surface_update, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                       SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
             POSITION_Y += 25
-            text.Text(f.translate("update_2"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN, ECART,
+            text.Text(f.translate("update_2"), ANTIALIAS, COULEUR, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y, ARRIERE_PLAN,
+                      ECART,
                       SEUL, surface_update, POSITION_X, POSITION_Y, SCALE_X, SCALE_Y, LARGEUR, HAUTEUR,
                       SCALE_WIDTH, SCALE_HEIGHT, COULEUR_ARRIERE, BORDURE)
 
@@ -405,22 +416,17 @@ class Model:
             ECART = 0
             BORDURE = 0  # rempli
 
-            button.BYesUpdate(f.translate("yes"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                  ECART, surface_update, POSITION_X, POSITION_Y, SCALE_X,
-                  SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+            button.BYesUpdate(f.translate("yes"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                              CENTRE_X, CENTRE_Y,
+                              ECART, surface_update, POSITION_X, POSITION_Y, SCALE_X,
+                              SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             POSITION_X += LARGEUR + 20
-            button.BLaterUpdate(f.translate("later"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                  ECART, surface_update, POSITION_X, POSITION_Y, SCALE_X,
-                  SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
+            button.BLaterUpdate(f.translate("later"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                                CENTRE_X, CENTRE_Y,
+                                ECART, surface_update, POSITION_X, POSITION_Y, SCALE_X,
+                                SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
             POSITION_X += LARGEUR + 20
-            button.BNoUpdate(f.translate("no"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT, CENTRE_X, CENTRE_Y,
-                  ECART, surface_update, POSITION_X, POSITION_Y, SCALE_X,
-                  SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)
-
-    updatemodel = classmethod(updatemodel)
-    mousebutton1down = classmethod(mousebutton1down)
-    mousebutton1up = classmethod(mousebutton1up)
-    mousebutton1move = classmethod(mousebutton1move)
-    keydown = classmethod(keydown)
-
-    main_menu = classmethod(main_menu)
+            button.BNoUpdate(f.translate("no"), ANTIALIAS, COULEUR_TEXTE, ARRIERE_PLAN_TEXTE, FONT, TAILLE_FONT,
+                             CENTRE_X, CENTRE_Y,
+                             ECART, surface_update, POSITION_X, POSITION_Y, SCALE_X,
+                             SCALE_Y, LARGEUR, HAUTEUR, SCALE_WIDTH, SCALE_HEIGHT, COULEUR, BORDURE)

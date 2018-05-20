@@ -18,6 +18,7 @@ class View:
         image_menu = pygame.image.load(f.resource_path("assets\img\menu_fond.png")).convert_alpha()
         pygame.display.set_icon(image_menu)  # Icône du jeu
 
+    @classmethod
     def updatewindow(cls, newsize):  # quand la fenêtre est redimensionnée, ou initialisée
         old_screen_obj = View.screen
 
@@ -34,6 +35,7 @@ class View:
                 if obj.parentsurface == old_screen_obj:  # tous les objets qui ont pour référence l'ancien objet écran sont mis à jour
                     screen.addchild(obj)
 
+    @classmethod
     def updatescreen(cls):
         a = pygame.Surface(View.screensize)  # une surface pour reset l'écran
         a.fill((255, 255, 255))
@@ -109,6 +111,3 @@ class View:
 
         pygame.display.update()
         View.screen.updated = False
-
-    updatewindow = classmethod(updatewindow)
-    updatescreen = classmethod(updatescreen)

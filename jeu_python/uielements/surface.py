@@ -29,7 +29,6 @@ class Surface(uielement.UIelement):
         Surface.surfaces.remove(self)
         self.remove()
 
+    @classmethod
     def getSurfaces(cls):
         return Surface.surfaces
-
-    getSurfaces = classmethod(getSurfaces)

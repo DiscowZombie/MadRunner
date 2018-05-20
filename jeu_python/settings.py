@@ -105,6 +105,11 @@ class SettingsManager:
 
         SettingsManager.current_settings = readable_dict
 
+    """
+    @classmethod est l'annotation permettant équivalente à 'update_settings = classmethod(update_settings)'
+    Une méthode de class est comme une méthode static sauf qu'elle prends un object de class en paramètre et fonctionne donc avec la class
+    """
+    @classmethod
     def update_settings(
             cls):  # à appeler à chaque fois qu'on change un quelque chose dans les settings pour enregistrer les changements !
         f = open(FILE_PATH, "w")
@@ -114,5 +119,3 @@ class SettingsManager:
             'None', 'null'))
         f.close()
         SettingsManager()
-
-    update_settings = classmethod(update_settings)

@@ -82,15 +82,14 @@ class Checkbox(uielement.UIelement):
         Checkbox.checkboxes.remove(self)
         self.remove()
 
+    @classmethod
     def getCheckboxes(cls):
         return Checkbox.checkboxes
 
+    @classmethod
     def linkcheckboxes(cls,
                        *checkboxes):  # méthode pour lier des checkbox. Il faut passer les objets checkbox qu'on veut lier
         for checkbox in checkboxes:
             for othercheckbox in checkboxes:
                 if checkbox.name != othercheckbox.name:
                     checkbox.linkedcheckboxes.append(othercheckbox)
-
-    getCheckboxes = classmethod(getCheckboxes)
-    linkcheckboxes = classmethod(linkcheckboxes)

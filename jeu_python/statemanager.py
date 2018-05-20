@@ -28,20 +28,19 @@ class StateManager:
     :param state - L'état de jeu (un StateEnum ou None)
     """
 
+    @classmethod
     def setstate(cls, newstate):
         StateManager.laststate = newstate
         StateManager.statetime = 0
 
+    @classmethod
     def getstate(cls):
         return StateManager.laststate
 
+    @classmethod
     def setstatetime(cls, passed):
         StateManager.statetime += passed
 
+    @classmethod
     def getstatetime(cls):
         return StateManager.statetime
-
-    setstate = classmethod(setstate)
-    getstate = classmethod(getstate)
-    setstatetime = classmethod(setstatetime)
-    getstatetime = classmethod(getstatetime)

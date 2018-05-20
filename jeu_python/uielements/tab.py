@@ -107,17 +107,16 @@ class Tab(uielement.UIelement):
         Tab.tabs.remove(self)
         self.remove()
 
+    @classmethod
     def getTabs(cls):
         return Tab.tabs
 
+    @classmethod
     def linktabs(cls, *tabs):
         for tab in tabs:
             for othertab in tabs:
                 if tab.name != othertab.name:
                     tab.linkedtabs.append(othertab)
-
-    getTabs = classmethod(getTabs)
-    linktabs = classmethod(linktabs)
 
 
 class TMeilleurScoreLocal(Tab):

@@ -86,10 +86,9 @@ class Character:
             self.__getattribute__(spritename + "sprite").unreferance()
         Character.characters.remove(self)
 
+    @classmethod
     def getCharacters(cls):
         return Character.characters
-
-    getCharacters = classmethod(getCharacters)
 
 
 class Countdown(image.Image):
@@ -1141,6 +1140,7 @@ class CoreGame:
         statemanager.StateManager.setstate(statemanager.StateEnum.MAIN_MENU)
         model.Model.main_menu()
 
+    @classmethod
     def keypressed(cls, event):
         if not CoreGame.current_core.pause and not CoreGame.current_core.finished and CoreGame.current_core.started:
             if event.key == pygame.K_SPACE:
@@ -1149,5 +1149,3 @@ class CoreGame:
                 cap = event.dict["unicode"].capitalize()
                 if cap in constantes.ALPHABET:
                     key.Key.keypressed(cap)
-
-    keypressed = classmethod(keypressed)

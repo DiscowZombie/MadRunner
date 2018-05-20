@@ -123,10 +123,9 @@ class Button(uielement.UIelement):
         Button.boutons.remove(self)
         self.remove()
 
+    @classmethod
     def getButtons(cls):
         return Button.boutons
-
-    getButtons = classmethod(getButtons)
 
 
 class BJouer(Button):

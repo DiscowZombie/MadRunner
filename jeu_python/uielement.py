@@ -103,7 +103,6 @@ class UIelement:
         self.parentsurface.children.remove(self)  # on l'enlève également de la table des descendants de son parent
         UIelement.UIelements[self.classname].remove(self)
 
+    @classmethod
     def getUIelements(cls):
         return UIelement.UIelements
-
-    getUIelements = classmethod(getUIelements)

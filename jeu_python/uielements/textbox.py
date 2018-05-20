@@ -110,7 +110,6 @@ class Textbox(uielement.UIelement):
         Textbox.textboxes.remove(self)
         self.remove()
 
+    @classmethod
     def getTextboxes(cls):
         return Textbox.textboxes
-
-    getTextboxes = classmethod(getTextboxes)

@@ -65,10 +65,9 @@ class Obstacle:
             self.image = None
         Obstacle.obstacles.remove(self)
 
+    @classmethod
     def getObstacles(cls):
         return Obstacle.obstacles
-
-    getObstacles = classmethod(getObstacles)
 
 
 class CourseInfinie:
@@ -127,9 +126,9 @@ class CourseInfinie:
                         if num_pix_col and num_pix_col > 15:  # si le personnage touche l'obstacle de plus de 15 pixels (car bon, toucher l'obstacle de 1 pixel...)
                             obstacle.tombe()
                             char.speed -= (
-                                                      coregame.CoreGame.current_core.level_obj.hitpenality / 100) * char.speed  # se prendre un obstacle réduit la vitesse de 35%
+                                                  coregame.CoreGame.current_core.level_obj.hitpenality / 100) * char.speed  # se prendre un obstacle réduit la vitesse de 35%
                     delta_pix = (
-                                            obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
+                                        obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
                     pos_x_obs = char.absx - delta_pix
                     obstacle.image.x = pos_x_obs
                     if not obstacle.passed and obstacle.image.absx >= char.absx + 40:  # on va supposer que le personnage a toujours une largeur de 80 pixels
@@ -138,7 +137,7 @@ class CourseInfinie:
                             self.nb_passed += 1
             else:
                 delta_pix = (
-                                        obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
+                                    obstacle.distance - distance) * 25  # nombre de pixel avant l'obstacle par rapport au personnage
                 pos_x_obstacle = char.absx - delta_pix
 
                 if pos_x_obstacle > - self.dimension_obstacle[0]:
@@ -166,8 +165,7 @@ class CourseInfinie:
         for obstacle in list(Obstacle.getObstacles()):
             obstacle.unreferance()
 
+    @classmethod
     def computekeychance(cls):
         distance = coregame.CoreGame.current_core.distance
         return 1 + int(distance ** 0.25 / distance * 500)
-
-    computekeychance = classmethod(computekeychance)

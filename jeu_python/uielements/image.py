@@ -60,7 +60,6 @@ class Image(uielement.UIelement):
         Image.images.remove(self)
         self.remove()
 
+    @classmethod
     def getImages(cls):
         return Image.images
-
-    getImages = classmethod(getImages)

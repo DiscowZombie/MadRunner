@@ -25,7 +25,6 @@ class _400m:
     def unreferance(self):
         pass
 
+    @classmethod
     def computekeychance(cls):
         return int(1000 / coregame.CoreGame.current_core.distance)
-
-    computekeychance = classmethod(computekeychance)

@@ -90,7 +90,6 @@ class SpriteStripAnim(SpriteSheet):
     def unreferance(self):
         SpriteStripAnim.sprite_anims.remove(self)
 
+    @classmethod
     def getSpriteAnims(cls):
         return SpriteStripAnim.sprite_anims
-
-    getSpriteAnims = classmethod(getSpriteAnims)

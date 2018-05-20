@@ -75,10 +75,9 @@ class Haie:
             self.image = None
         Haie.haies.remove(self)
 
+    @classmethod
     def getHaies(cls):
         return Haie.haies
-
-    getHaies = classmethod(getHaies)
 
 
 class _400mHaie:
@@ -117,7 +116,7 @@ class _400mHaie:
                             haie.tombe()
                             char.speed -= (coregame.CoreGame.current_core.level_obj.hitpenality / 100) * char.speed
                     delta_pix = (
-                                            haie.distance - distance) * 25  # nombre de pixel avant la haie par rapport au personnage
+                                        haie.distance - distance) * 25  # nombre de pixel avant la haie par rapport au personnage
                     pos_x_haie = char.absx - delta_pix
                     haie.image.x = pos_x_haie
             else:

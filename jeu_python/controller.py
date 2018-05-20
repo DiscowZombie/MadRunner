@@ -9,6 +9,7 @@ class Controller:
     def __init__(self):
         self.initialised = True
 
+    @classmethod
     def checkevents(cls):
         for event in pygame.event.get():
             # Si on appuie sur la croix pour fermer le programme
@@ -40,8 +41,6 @@ class Controller:
                 model.Model.keydown(event)
         return True
 
+    @classmethod
     def getpressingbuttons(cls):
         return Controller.pressing_buttons
-
-    checkevents = classmethod(checkevents)
-    getpressingbuttons = classmethod(getpressingbuttons)
