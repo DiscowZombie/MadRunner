@@ -214,5 +214,9 @@
   "text:registerwhy": {
     "fr": "L'inscription vous permet de sauvegarder vos meilleurs scores en ligne et ainsi de les comparer facilement avec les autres. Cela vous permet également d'apparaitre dans le classement général des meilleurs joueurs de Mad Runner.\n\nVotre inscription est totalement anonyme et sécurisé. Nous ne vous demanderons jamais votre nom ni prénom, vous utilisez un pseudonyme de votre choix pour tout le jeu. Ce dèrnier est unique et permet de vous reconnaitre. Pour la sécurité, notre site dispose d'un certificat officiel ce qui signique que vos données ne transitent jamais en clair.",
     "en": "Registering enables you to save your best scores online, and so to compare them easily with others. It also enables you to appear in the general ranking of the best Mad Runner players.\n\nYour registration is completely anonymous and safe. We will never ask your first name, neither your last name, you use a pseudo of your choice for the entire game. It's a unique one et enables you be recognized. For the safety, our site has an official certificate, which means that your data is never revealed."
+  },
+  "footer:licence": {
+    "fr": "Ce site est distribué sous licence GNU GPL version 3.",
+    "en": "This website is licenced under the GNU GPL version 3."
   }
 }
