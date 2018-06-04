@@ -1,4 +1,5 @@
-/*
+<?php
+/**
  *     Mad Runner - Projet ISN
  *     Copyright (c) 2018  Ahmet ADAM, Mathéo CIMBARO
  *
@@ -16,14 +17,10 @@
  *     along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#alerts, #main {
-    padding-left: 10%;
-    padding-right: 10%;
-}
+session_start();
+require("includes/constants.php");
+require("includes/functions.php");
 
-#footer {
-    background-color: lightskyblue;
+$page_title = "Mentions légales";
 
-    padding-left: 10%;
-    padding-right: 10%;
-}
+include("views/legal.view.php");

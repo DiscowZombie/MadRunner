@@ -37,10 +37,6 @@
     </div>
 </nav>
 
-<header>
-
-</header>
-
 <div id="alerts">
     <?php if (!empty($_SESSION['infobar'])) {
     $level = !empty($_SESSION['infobar']['level']) ? $_SESSION['infobar']['level'] : "info";
